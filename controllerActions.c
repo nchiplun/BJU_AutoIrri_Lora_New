@@ -3110,13 +3110,15 @@ void deepSleep(void) {
         } else if (Irri_Motor == ON) { // Motor is ON without any external/Internal interrupt
             saveActiveSleepCountIntoEeprom(); // Save current valve on time
             // check Motor Dry run condition after each sleep count
-            if (isMotorInNoLoad() && dryRunCheckCount > 2) {
-                if (dryRunDetected) {
-                    doDryRunAction();
-                } else if (lowPhaseCurrentDetected) {
-                    doLowPhaseAction();
-                    sleepCount = 65500; // undefined sleep until phase comes back
-                }
+            if (dryRunCheckCount > 2) {
+                if (isMotorInNoLoad()) {							
+					if (dryRunDetected) {
+						doDryRunAction();
+					} else if (lowPhaseCurrentDetected) {
+						doLowPhaseAction();
+						sleepCount = 65500; // undefined sleep until phase comes back
+					}
+				}
             } else {
 #ifdef LCD_DISPLAY_ON_H 
                 lcdClear();
