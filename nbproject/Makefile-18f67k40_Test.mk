@@ -106,8 +106,8 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-18f67k40_Test.mk ${DISTDIR}/BJU_AutoIrri_Lora_DevBranch_New.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 	@echo "--------------------------------------"
-	@echo "User defined post-build step: [gnumkdir -p ${ProjectDir}\bin && cp ${ImagePath} ${ProjectDir}\bin\${PROJECTNAME}[${ConfName}]v${Major}.${Minor}.$(shell gdate +%d%m%y).hex ]"
-	@gnumkdir -p ${ProjectDir}\bin && cp ${ImagePath} ${ProjectDir}\bin\${PROJECTNAME}[${ConfName}]v${Major}.${Minor}.$(shell gdate +%d%m%y).hex 
+	@echo "User defined post-build step: [gnumkdir -p ${ProjectDir}\bin && cp ${ImagePath} ${ProjectDir}\bin\${PROJECTNAME}[${ConfName}]v${Major}.${Minor1}.${Minor2}.$(shell gdate +%d%m%y).hex ]"
+	@gnumkdir -p ${ProjectDir}\bin && cp ${ImagePath} ${ProjectDir}\bin\${PROJECTNAME}[${ConfName}]v${Major}.${Minor1}.${Minor2}.$(shell gdate +%d%m%y).hex 
 	@echo "--------------------------------------"
 
 MP_PROCESSOR_OPTION=18F67K40

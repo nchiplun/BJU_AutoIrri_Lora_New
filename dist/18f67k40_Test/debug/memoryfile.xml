@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <executable name="dist/18f67k40_Test/debug\BJU_AutoIrri_Lora_DevBranch_New.X.debug.hex">
+    <memory name="program">
+      <units>bytes</units>
+      <length>131072</length>
+      <used>63787</used>
+      <free>67285</free>
+    </memory>
+    <memory name="data">
+      <units>bytes</units>
+      <length>3562</length>
+      <used>1694</used>
+      <free>1868</free>
+    </memory>
+  </executable>
+</project>

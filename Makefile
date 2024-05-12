@@ -49,8 +49,9 @@ CP=cp
 CCADMIN=CCadmin
 RANLIB=ranlib
 
-Major= 0
-Minor= 4
+Major = 0
+Minor1= 6
+Minor2= 4
 
 
 # build

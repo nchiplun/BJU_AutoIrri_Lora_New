@@ -1603,7 +1603,7 @@ void extractReceivedSms(void) {
                     //********Debug log#end**************//
 #endif
                     return;
-                }//#xx>......InjectTestData.......//
+                }//#18>......InjectTestData.......//
                     // INJECT<Space><HR><Space><MIN><Space><trigger>
                 else if (strncmp(decodedString, inject, 6) == 0) {
                     digit = CLEAR;
@@ -1685,6 +1685,43 @@ void extractReceivedSms(void) {
                     //********Debug log#end**************//
 #endif
                     return;
+                }
+                //#19>......MapFieldData.......//
+                //               4,5     6,7     8,9     10,11     12,13   14,15   16,17    18,19    20,21
+                // MAP<Space><FieldNo.><SlaveNo><IONo.><FieldNo.><SlaveNo><IONo.><FieldNo.><SlaveNo><IONo.><Space>
+                else if (strncmp(decodedString, map, 3) == 0) {
+                    unsigned char index = 4;
+                    while (decodedString[index] != space) {
+                        iterator = fetchFieldNo(index);
+                        sprintf(temporaryBytesArray,"No: %d",iterator+1);
+                        lcdWriteStringAtCenter(temporaryBytesArray, 4);
+                        __delay_ms(1000);
+                        fieldMap[iterator*2] = fetchFieldNo(index+2) + 1;// Slave No.
+                        sprintf(temporaryBytesArray,"No: %d",fieldMap[iterator*2]);
+                        lcdWriteStringAtCenter(temporaryBytesArray, 4);
+                        __delay_ms(1000);
+                        fieldMap[(iterator*2)+1] = fetchFieldNo(index+4) + 1;// IO Pin No.
+                        sprintf(temporaryBytesArray,"No: %d",fieldMap[(iterator*2)+1]);
+                        lcdWriteStringAtCenter(temporaryBytesArray, 4);
+                        __delay_ms(1000);
+                        index = index +6;
+                    }
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClear();
+                    lcdWriteStringAtCenter("Field Mapping", 2);
+                    lcdWriteStringAtCenter("Completed", 3);
+#endif                    
+                    msgIndex = CLEAR;
+                    /***************************/
+                    sendSms(SmsIrr10, userMobileNo, newAdmin); //To notify old Admin about new Admin.
+#ifdef SMS_DELIVERY_REPORT_ON_H
+                    sleepCount = 2; // Load sleep count for SMS transmission action
+                    sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission
+                    //setBCDdigit(0x05, 0);
+                    deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
+                    //setBCDdigit(0x0F, 0); // Blank "." BCD Indication for Normal Condition
+#endif
+                    /***************************/
                 }
             }//#1>......Register New Admin.......//
                 // set admin format (AU 123456)
@@ -2683,6 +2720,7 @@ _Bool isRTCBatteryDrained(void) {
     transmitStringToDebug("isRTCBatteryDrained_IN\r\n");
     //********Debug log#end**************//
 #endif
+	rtcBatteryLevelChecked = true;							  
     selectChannel(RTCchannel);
     RTC_Trigger = ENABLED;
     __delay_ms(50);
@@ -4559,7 +4597,7 @@ void deleteGsmResponse(void) {
     //********Debug log#end**************//
 #endif
     // Iterate over the range [0, N]
-    for (iterator = 0; iterator < 220; iterator++) {
+    for (iterator = 0; iterator < 200; iterator++) {
         gsmResponse[iterator] = '\0';
     }
     msgIndex = CLEAR;
@@ -4587,7 +4625,7 @@ void deleteStringToDecode(void) {
     //********Debug log#end**************//
 #endif
     // Iterate over the range [0, N]
-    for (iterator = 0; iterator < 220; iterator++) {
+    for (iterator = 0; iterator < 200; iterator++) {
         stringToDecode[iterator] = '\0';
     }
     /***************************/
@@ -4614,7 +4652,7 @@ void deleteDecodedString(void) {
     //********Debug log#end**************//
 #endif
     // Iterate over the range [0, N]
-    for (iterator = 0; iterator < 220; iterator++) {
+    for (iterator = 0; iterator < 200; iterator++) {
         decodedString[iterator] = '\0';
     }
     /***************************/

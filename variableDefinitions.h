@@ -344,10 +344,10 @@ unsigned char dryRunCheckCount = CLEAR; // To store dry run check count
 //#pragma idata stringToEncode
 //unsigned char stringToEncode[10] = {'\0'};
 #pragma idata stringToDecode
-unsigned char stringToDecode[220] = {'\0'};
+unsigned char stringToDecode[200] = {'\0'};
 #endif
 #pragma idata decodedString
-unsigned char decodedString[220] = {'\0'};
+unsigned char decodedString[200] = {'\0'};
 /***** Data Encryption and Decryption#end *********************/
 
 /***** SMS prototype definition#start *************************/
@@ -365,6 +365,7 @@ const char time[5] = "TIME"; // To get current time from RTC
 const char feed[5] = "FEED"; // To Set current time into RTC
 const char fdata[6] = "FDATA"; // To get filtration cycle data
 const char inject[7] = "INJECT"; // To Inject Test Data
+const char map[4] = "MAP"; // To map Field valve with Lora Slaves
 const char ct[3] = "CT"; // To set motor load readings
 const char setct[4] = "SCT"; // To set motor load condition thrpugh diagnostic
 const char secret[12] = "12345678912"; //Secret code to fetch unique factory password
@@ -395,15 +396,16 @@ const char SmsPwd1[32] = "Login code changed successfully"; // Acknowledge user 
 const char SmsPwd2[23] = "Login code not changed";
 const char SmsPwd3[23] = "Wrong login code found"; // Acknowledge user about successful motor off action
 
-const char SmsIrr1[36] = "Irrigation configured for field no."; // Acknowledge user about successful Irrigation configuration
-const char SmsIrr2[48] = "Irrigation configuration disabled for field no."; // Acknowledge user about successful Irrigation configuration disable action
-const char SmsIrr3[40] = "Irrigation not configured for field no."; // Acknowledge user about  Irrigation not configured
-const char SmsIrr4[33] = "Irrigation started for field no."; // Acknowledge user about successful Irrigation started action
-const char SmsIrr5[33] = "Irrigation stopped for field no."; // Acknowledge user about successful Irrigation stopped action
-const char SmsIrr6[60] = "Wet field detected.\r\nIrrigation not started for field no."; // Acknowledge user about Irrigation not started due to wet field detection
-const char SmsIrr7[15] = "Irrigation No:"; // Send diagnostic data fro irrigation
-const char SmsIrr8[51] = "Irrigation skipped with no response from field no:"; // Acknowledge user about Irrigation skipped due to no response
-const char SmsIrr9[51] = "Irrigation stopped without response from field no."; // Acknowledge user about Irrigation stopped without response
+const char SmsIrr1[36]  = "Irrigation configured for field no."; // Acknowledge user about successful Irrigation configuration
+const char SmsIrr2[48]  = "Irrigation configuration disabled for field no."; // Acknowledge user about successful Irrigation configuration disable action
+const char SmsIrr3[40]  = "Irrigation not configured for field no."; // Acknowledge user about  Irrigation not configured
+const char SmsIrr4[33]  = "Irrigation started for field no."; // Acknowledge user about successful Irrigation started action
+const char SmsIrr5[33]  = "Irrigation stopped for field no."; // Acknowledge user about successful Irrigation stopped action
+const char SmsIrr6[60]  = "Wet field detected.\r\nIrrigation not started for field no."; // Acknowledge user about Irrigation not started due to wet field detection
+const char SmsIrr7[15]  = "Irrigation No:"; // Send diagnostic data fro irrigation
+const char SmsIrr8[51]  = "Irrigation skipped with no response from field no:"; // Acknowledge user about Irrigation skipped due to no response
+const char SmsIrr9[51]  = "Irrigation stopped without response from field no."; // Acknowledge user about Irrigation stopped without response
+const char SmsIrr10[36] = "Irrigation field mapped with valves"; // Acknowledge user about Irrigation valves mapped with respective fields
 
 const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for field no."; // Acknowledge user about Fertigation not configured due to disabled irrigation
 const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for field no."; // Acknowledge user about Fertigation not configured due to incorrect values
@@ -473,7 +475,8 @@ const char SmsMS3[40] = "Moisture sensor is failed for field no."; // Acknowledg
 
 /***** statically allocated initialized user variables#start **/
 #pragma idata gsmResponse 
-unsigned char gsmResponse[220] = "HELLO"; // To store the received message from GSM -- message can be command response or SMS
+unsigned char gsmResponse[200] = "HELLO"; // To store the received message from GSM -- message can be command response or SMS
+unsigned char fieldMap[24] = {'\0'}; // To store mapped valves with field no.
 /***** statically allocated initialized user variables#end ****/
 
 /***** statically allocated initialized user variables#start **/

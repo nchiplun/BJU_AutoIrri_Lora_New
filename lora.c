@@ -79,6 +79,7 @@ This function is called to send cmd to Lora as per received action to given fiel
 
  **************************************************************************************************************************/
 void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
+    unsigned char SlaveNo,IoPin;
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
     transmitStringToDebug("sendCmdToLora_IN\r\n");
@@ -87,33 +88,37 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
     //setBCDdigit(0x06,1);  // (6) BCD indication for sendCmdToLora action
     checkLoraConnection = true;
     LoraConnectionFailed = false;
-    // for field no. 01 to 09
-    if (FieldNo<9){
-        temporaryBytesArray[0] = 48; // To store field no. of valve in action 
-        temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
-    }// for field no. 10 to 12
-    else if (FieldNo > 8 && FieldNo < 12) {
-        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
-        temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
-    }
+    //------IO PIN NO
+        IoPin = fieldMap[(FieldNo*2)+1];
+        // Only two digits i.e. 01 to 04
+        temporaryBytesArray[0] = ((IoPin / 10) + 48);
+        temporaryBytesArray[1] = ((IoPin % 10) + 48);
+        //
+    //------IO PIN NO
+    //--------Slave No.
+        SlaveNo = fieldMap[(FieldNo*2)];
+        // Only two digits i.e. 01 to 04
+        temporaryBytesArray[2] = ((SlaveNo / 10) + 48);
+        temporaryBytesArray[3] = ((SlaveNo % 10) + 48);
+    //--------Slave No.
     __delay_ms(100);
     controllerCommandExecuted = false;
     timer3Count = 10; // 10 second window
     T3CONbits.TMR3ON = ON; // Start timer thread to unlock system if GSM fails to respond within 5 min
     switch (Action) {
     case 0x00:
-        transmitStringToLora("#ON01TIME");
+        transmitStringToLora("#ON");
         __delay_ms(10);
+        //------IO PIN NO
+        transmitNumberToLora(temporaryBytesArray,2);
+        transmitStringToLora("TIME");
+        //--------On Period
         if (fieldValve[FieldNo].onPeriod > 0 && fieldValve[FieldNo].onPeriod < 995) {
             lower8bits = fieldValve[FieldNo].onPeriod + 5; // 5 count extra to lora auto timeout // fieldValve[FieldNo].onPeriod  Need to calculate on period for interrupted valve
         }
         else {
             lower8bits = fieldValve[FieldNo].onPeriod;
         }
-        //temporaryBytesArray[2] = (unsigned char) ((lower8bits / 10000) + 48);
-        //lower8bits = lower8bits % 10000;
-        //temporaryBytesArray[3] = (unsigned char) ((lower8bits / 1000) + 48);
-        //lower8bits = lower8bits % 1000;
         // Only last three digits i.e. 001 to 999
         temporaryBytesArray[4] = (unsigned char) ((lower8bits / 100) + 48);
         lower8bits = lower8bits % 100;
@@ -121,21 +126,35 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
         lower8bits = lower8bits % 10;
         temporaryBytesArray[6] = (unsigned char) (lower8bits + 48);
         transmitNumberToLora(temporaryBytesArray+4,3);
+        //--------On Period
         transmitStringToLora("SLAVE");
-        transmitNumberToLora(temporaryBytesArray,2);
+        //--------Slave No.
+        transmitNumberToLora(temporaryBytesArray+2,2);
+        //----End of MSG
         transmitStringToLora("$");
+        //----End of MSG
         __delay_ms(100);
         break;
     case 0x01:
-        transmitStringToLora("#OFF01SLAVE");
+        transmitStringToLora("#OFF");
+        __delay_ms(10);
+        //------IO PIN NO
         transmitNumberToLora(temporaryBytesArray,2);
+        transmitStringToLora("SLAVE");
+        //--------Slave No.
+        transmitNumberToLora(temporaryBytesArray+2,2);
+        //----End of MSG
         transmitStringToLora("$");
+        //----End of MSG
         __delay_ms(100);
         break;
     case 0x02:
         transmitStringToLora("#GETSENSOR01SLAVE");
-        transmitNumberToLora(temporaryBytesArray,2);
+        //--------Slave No.
+        transmitNumberToLora(temporaryBytesArray+2,2);
+        //----End of MSG
         transmitStringToLora("$");
+        //----End of MSG
         __delay_ms(100);
         break;
     }
@@ -150,7 +169,7 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
         //********Debug log#end**************//
         #endif   
     }
-    else if (isLoraResponseAck(Action,FieldNo)) {  // correct response from lora slave
+    else if (isLoraResponseAck(Action,SlaveNo)) {  // correct response from lora slave
         LoraConnectionFailed = false;
         loraAttempt = 99;
         #ifdef DEBUG_MODE_ON_H
@@ -184,25 +203,25 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
 This function is called to send cmd to Lora as per received action to given field no.
 
  **************************************************************************************************************************/
-_Bool isLoraResponseAck(unsigned char Action, unsigned char FieldNo) {
+_Bool isLoraResponseAck(unsigned char Action, unsigned char SlaveNo) {
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
     transmitStringToDebug("isLoraResponseAck_IN\r\n");
     //********Debug log#end**************//
 #endif
-    unsigned char field = 99;
+    unsigned char slave_num = 99;
     unsigned char index = 6;   //default index for "#65535SLAVE01$"
     __delay_ms(100);
     switch (Action) {
     case 0x00:    // check for Valve ON ack response
-        field = fetchFieldNo(10);
-        if(strncmp(decodedString+1, on, 2) == 0 && strncmp(decodedString+12, ack, 3) == 0 && field == FieldNo) {  //#ON01SLAVE01ACK$
+        slave_num = fetchFieldNo(10)+1; // fetchFieldNo response 0 for 01
+        if(strncmp(decodedString+1, on, 2) == 0 && strncmp(decodedString+12, ack, 3) == 0 && slave_num == SlaveNo) {  //#ON01SLAVE01ACK$
             return true;
         }
         break;
     case 0x01:    // check for Valve OFF ack response
-        field = fetchFieldNo(11);
-        if(strncmp(decodedString+1, off, 3) == 0 && strncmp(decodedString+13, ack, 3) == 0 && field == FieldNo) {  //#OFF01SLAVE01ACK$
+        slave_num = fetchFieldNo(11)+1; // fetchFieldNo response 0 for 01
+        if(strncmp(decodedString+1, off, 3) == 0 && strncmp(decodedString+13, ack, 3) == 0 && slave_num == SlaveNo) {  //#OFF01SLAVE01ACK$
             return true;
         }
         break;
@@ -228,8 +247,8 @@ _Bool isLoraResponseAck(unsigned char Action, unsigned char FieldNo) {
                 break;
             }
         }
-        field = fetchFieldNo(index+5);
-        if(strncmp(decodedString+index, slave, 5) == 0 && field == FieldNo) {  //"#65535SLAVE01$"
+        slave_num = fetchFieldNo(index+5)+1; // fetchFieldNo response 0 for 01
+        if(strncmp(decodedString+index, slave, 5) == 0 && slave_num == SlaveNo) {  //"#65535SLAVE01$"
             return true;
         }
         else if(strncmp(decodedString+1, sensor, 6) == 0 && strncmp(decodedString+7, error, 5) == 0 && strncmp(decodedString+12, slave, 5) == 0) {  //"#SENSORERRORSLAVE01$"

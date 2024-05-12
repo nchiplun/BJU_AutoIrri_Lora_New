@@ -75,12 +75,12 @@ void __interrupt(high_priority)rxANDiocInterrupt_handler(void) {
             if (rxCharacter == '+' && msgIndex == 0) {
                 gsmResponse[msgIndex] = rxCharacter; // Load received byte into storage buffer
                 msgIndex++; // point to next location for storing next received byte
-            } else if (msgIndex > 0 && msgIndex <=220) { // Cascade received data to stored response after receiving first character '+'
+            } else if (msgIndex > 0 && msgIndex <=200) { // Cascade received data to stored response after receiving first character '+'
                 gsmResponse[msgIndex] = rxCharacter; // Load received byte into storage buffer
                 if (gsmResponse[msgIndex - 1] == 'O' && gsmResponse[msgIndex] == 'K') { // Cascade till 'OK'  is found
                     controllerCommandExecuted = true; // GSM response to µc command is completed
                     msgIndex = CLEAR; // Reset message storage index to first character to start reading for next received byte of cmd
-                } else if (msgIndex <= 220) { // Read bytes till 500 characters
+                } else if (msgIndex <= 200) { // Read bytes till 200 characters
                     msgIndex++;
                 }
             }
@@ -454,7 +454,6 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
                     if (isRTCBatteryDrained()){
                         /***************************/
                         sendSms(SmsRTC1, userMobileNo, noInfo); // Acknowledge user about replace RTC battery
-                        rtcBatteryLevelChecked = true;
                         #ifdef SMS_DELIVERY_REPORT_ON_H
                         sleepCount = 2; // Load sleep count for SMS transmission action
                         sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission

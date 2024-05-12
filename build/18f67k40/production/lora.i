@@ -24700,10 +24700,10 @@ unsigned char dryRunCheckCount = 0;
 
 
 #pragma idata stringToDecode
-unsigned char stringToDecode[220] = {'\0'};
+unsigned char stringToDecode[200] = {'\0'};
 
 #pragma idata decodedString
-unsigned char decodedString[220] = {'\0'};
+unsigned char decodedString[200] = {'\0'};
 
 
 
@@ -24721,6 +24721,7 @@ const char time[5] = "TIME";
 const char feed[5] = "FEED";
 const char fdata[6] = "FDATA";
 const char inject[7] = "INJECT";
+const char map[4] = "MAP";
 const char ct[3] = "CT";
 const char setct[4] = "SCT";
 const char secret[12] = "12345678912";
@@ -24760,6 +24761,7 @@ const char SmsIrr6[60] = "Wet field detected.\r\nIrrigation not started for fiel
 const char SmsIrr7[15] = "Irrigation No:";
 const char SmsIrr8[51] = "Irrigation skipped with no response from field no:";
 const char SmsIrr9[51] = "Irrigation stopped without response from field no.";
+const char SmsIrr10[36] = "Irrigation field mapped with valves";
 
 const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for field no.";
 const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for field no.";
@@ -24829,7 +24831,8 @@ const char SmsMS3[40] = "Moisture sensor is failed for field no.";
 
 
 #pragma idata gsmResponse
-unsigned char gsmResponse[220] = "HELLO";
+unsigned char gsmResponse[200] = "HELLO";
+unsigned char fieldMap[24] = {'\0'};
 
 
 
@@ -24970,6 +24973,7 @@ void transmitNumberToLora(unsigned char *number, unsigned char index) {
 
 
 void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
+    unsigned char SlaveNo,IoPin;
 
 
 
@@ -24979,22 +24983,32 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
     checkLoraConnection = 1;
     LoraConnectionFailed = 0;
 
-    if (FieldNo<9){
-        temporaryBytesArray[0] = 48;
-        temporaryBytesArray[1] = FieldNo + 49;
-    }
-    else if (FieldNo > 8 && FieldNo < 12) {
-        temporaryBytesArray[0] = 49;
-        temporaryBytesArray[1] = FieldNo + 39;
-    }
+        IoPin = fieldMap[(FieldNo*2)+1];
+
+        temporaryBytesArray[0] = ((IoPin / 10) + 48);
+        IoPin = IoPin % 10;
+        temporaryBytesArray[1] = (IoPin + 48);
+
+
+
+        SlaveNo = fieldMap[(FieldNo*2)];
+
+        temporaryBytesArray[2] = ((SlaveNo / 10) + 48);
+        SlaveNo = SlaveNo % 10;
+        temporaryBytesArray[3] = (SlaveNo + 48);
+
     _delay((unsigned long)((100)*(64000000/4000.0)));
     controllerCommandExecuted = 0;
     timer3Count = 10;
     T3CONbits.TMR3ON = 1;
     switch (Action) {
     case 0x00:
-        transmitStringToLora("#ON01TIME");
+        transmitStringToLora("#ON");
         _delay((unsigned long)((10)*(64000000/4000.0)));
+
+        transmitNumberToLora(temporaryBytesArray,2);
+        transmitStringToLora("TIME");
+
         if (fieldValve[FieldNo].onPeriod > 0 && fieldValve[FieldNo].onPeriod < 995) {
             lower8bits = fieldValve[FieldNo].onPeriod + 5;
         }
@@ -25002,31 +25016,41 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
             lower8bits = fieldValve[FieldNo].onPeriod;
         }
 
-
-
-
-
         temporaryBytesArray[4] = (unsigned char) ((lower8bits / 100) + 48);
         lower8bits = lower8bits % 100;
         temporaryBytesArray[5] = (unsigned char) ((lower8bits / 10) + 48);
         lower8bits = lower8bits % 10;
         temporaryBytesArray[6] = (unsigned char) (lower8bits + 48);
         transmitNumberToLora(temporaryBytesArray+4,3);
+
         transmitStringToLora("SLAVE");
-        transmitNumberToLora(temporaryBytesArray,2);
+
+        transmitNumberToLora(temporaryBytesArray+2,2);
+
         transmitStringToLora("$");
+
         _delay((unsigned long)((100)*(64000000/4000.0)));
         break;
     case 0x01:
-        transmitStringToLora("#OFF01SLAVE");
+        transmitStringToLora("#OFF");
+        _delay((unsigned long)((10)*(64000000/4000.0)));
+
         transmitNumberToLora(temporaryBytesArray,2);
+        transmitStringToLora("SLAVE");
+
+        transmitNumberToLora(temporaryBytesArray+2,2);
+
         transmitStringToLora("$");
+
         _delay((unsigned long)((100)*(64000000/4000.0)));
         break;
     case 0x02:
         transmitStringToLora("#GETSENSOR01SLAVE");
-        transmitNumberToLora(temporaryBytesArray,2);
+
+        transmitNumberToLora(temporaryBytesArray+2,2);
+
         transmitStringToLora("$");
+
         _delay((unsigned long)((100)*(64000000/4000.0)));
         break;
     }
@@ -25041,7 +25065,7 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
 
 
     }
-    else if (isLoraResponseAck(Action,FieldNo)) {
+    else if (isLoraResponseAck(Action,SlaveNo)) {
         LoraConnectionFailed = 0;
         loraAttempt = 99;
 
@@ -25075,25 +25099,25 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
 
 
 
-_Bool isLoraResponseAck(unsigned char Action, unsigned char FieldNo) {
+_Bool isLoraResponseAck(unsigned char Action, unsigned char SlaveNo) {
 
 
 
 
 
-    unsigned char field = 99;
+    unsigned char slave_num = 99;
     unsigned char index = 6;
     _delay((unsigned long)((100)*(64000000/4000.0)));
     switch (Action) {
     case 0x00:
-        field = fetchFieldNo(10);
-        if(strncmp((char*)(decodedString+1),(char*)(on),(2)) == 0 && strncmp((char*)(decodedString+12),(char*)(ack),(3)) == 0 && field == FieldNo) {
+        slave_num = fetchFieldNo(10)+1;
+        if(strncmp((char*)(decodedString+1),(char*)(on),(2)) == 0 && strncmp((char*)(decodedString+12),(char*)(ack),(3)) == 0 && slave_num == SlaveNo) {
             return 1;
         }
         break;
     case 0x01:
-        field = fetchFieldNo(11);
-        if(strncmp((char*)(decodedString+1),(char*)(off),(3)) == 0 && strncmp((char*)(decodedString+13),(char*)(ack),(3)) == 0 && field == FieldNo) {
+        slave_num = fetchFieldNo(11)+1;
+        if(strncmp((char*)(decodedString+1),(char*)(off),(3)) == 0 && strncmp((char*)(decodedString+13),(char*)(ack),(3)) == 0 && slave_num == SlaveNo) {
             return 1;
         }
         break;
@@ -25119,8 +25143,8 @@ _Bool isLoraResponseAck(unsigned char Action, unsigned char FieldNo) {
                 break;
             }
         }
-        field = fetchFieldNo(index+5);
-        if(strncmp((char*)(decodedString+index),(char*)(slave),(5)) == 0 && field == FieldNo) {
+        slave_num = fetchFieldNo(index+5)+1;
+        if(strncmp((char*)(decodedString+index),(char*)(slave),(5)) == 0 && slave_num == SlaveNo) {
             return 1;
         }
         else if(strncmp((char*)(decodedString+1),(char*)(sensor),(6)) == 0 && strncmp((char*)(decodedString+7),(char*)(error),(5)) == 0 && strncmp((char*)(decodedString+12),(char*)(slave),(5)) == 0) {

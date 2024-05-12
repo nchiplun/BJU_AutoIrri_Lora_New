@@ -24700,10 +24700,10 @@ unsigned char dryRunCheckCount = 0;
 
 
 #pragma idata stringToDecode
-unsigned char stringToDecode[220] = {'\0'};
+unsigned char stringToDecode[200] = {'\0'};
 
 #pragma idata decodedString
-unsigned char decodedString[220] = {'\0'};
+unsigned char decodedString[200] = {'\0'};
 
 
 
@@ -24721,6 +24721,7 @@ const char time[5] = "TIME";
 const char feed[5] = "FEED";
 const char fdata[6] = "FDATA";
 const char inject[7] = "INJECT";
+const char map[4] = "MAP";
 const char ct[3] = "CT";
 const char setct[4] = "SCT";
 const char secret[12] = "12345678912";
@@ -24760,6 +24761,7 @@ const char SmsIrr6[60] = "Wet field detected.\r\nIrrigation not started for fiel
 const char SmsIrr7[15] = "Irrigation No:";
 const char SmsIrr8[51] = "Irrigation skipped with no response from field no:";
 const char SmsIrr9[51] = "Irrigation stopped without response from field no.";
+const char SmsIrr10[36] = "Irrigation field mapped with valves";
 
 const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for field no.";
 const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for field no.";
@@ -24829,7 +24831,8 @@ const char SmsMS3[40] = "Moisture sensor is failed for field no.";
 
 
 #pragma idata gsmResponse
-unsigned char gsmResponse[220] = "HELLO";
+unsigned char gsmResponse[200] = "HELLO";
+unsigned char fieldMap[24] = {'\0'};
 
 
 
@@ -25070,12 +25073,12 @@ void __attribute__((picinterrupt(("high_priority"))))rxANDiocInterrupt_handler(v
             if (rxCharacter == '+' && msgIndex == 0) {
                 gsmResponse[msgIndex] = rxCharacter;
                 msgIndex++;
-            } else if (msgIndex > 0 && msgIndex <=220) {
+            } else if (msgIndex > 0 && msgIndex <=200) {
                 gsmResponse[msgIndex] = rxCharacter;
                 if (gsmResponse[msgIndex - 1] == 'O' && gsmResponse[msgIndex] == 'K') {
                     controllerCommandExecuted = 1;
                     msgIndex = 0;
-                } else if (msgIndex <= 220) {
+                } else if (msgIndex <= 200) {
                     msgIndex++;
                 }
             }
@@ -25403,11 +25406,12 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
 
 
 
-                if (isRTCBatteryDrained() && !rtcBatteryLevelChecked){
+                if ( !rtcBatteryLevelChecked) {
+                    if (isRTCBatteryDrained()){
 
-                    sendSms(SmsRTC1, userMobileNo, 0);
-                    rtcBatteryLevelChecked = 1;
+                        sendSms(SmsRTC1, userMobileNo, 0);
 # 457 "main_1.c"
+                    }
                 }
             }
         }

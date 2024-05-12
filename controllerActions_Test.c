@@ -1418,10 +1418,10 @@ _Bool isRTCBatteryDrained(void) {
     transmitStringToDebug("isRTCBatteryDrained_IN\r\n");
     //********Debug log#end**************//
     #endif
+    rtcBatteryLevelChecked = true;
     selectChannel(RTCchannel);
-    __delay_ms(200);
     RTC_Trigger = ENABLED;
-    __delay_ms(200);
+    __delay_ms(50);
     batteryVoltage = getADCResult();
     RTC_Trigger = DISABLED;
     if (batteryVoltage <= batteryVoltageCutoff) {
@@ -2551,12 +2551,12 @@ void actionsOnSystemReset(void) {
     if (systemAuthenticated) {
         lcdClear();
         lcdWriteStringAtCenter("System Authenticated", 2);
-        __delay_ms(3000);
+        __delay_ms(1000);
     }
     else {
         lcdClear();
         lcdWriteStringAtCenter("System Not Authenticated", 2);
-        __delay_ms(3000);
+        __delay_ms(1000);
     }
     __delay_ms(50);
     noLoadCutOff = 10;
@@ -2571,6 +2571,11 @@ void actionsOnSystemReset(void) {
     currentMinutes = 10;
     currentSeconds = 50;
     feedTimeInRTC();
+    //Mapping Field 1 and 2 with pin 1 and 2 of slave 1
+    fieldMap[0]=1;
+    fieldMap[1]=1;
+    fieldMap[2]=1;
+    fieldMap[3]=2;        
     for (iterator = 0; iterator < 2; iterator++) {
         fieldValve[iterator].onPeriod = 15;
         fieldValve[iterator].offPeriod = 1;
@@ -2792,7 +2797,7 @@ void actionsOnSystemReset(void) {
             } 
         }   
     }
-    if (isRTCBatteryDrained()) {   
+    if (isRTCBatteryDrained()) {
         /***************************/
         sendSms(SmsRTC1, userMobileNo, noInfo); // Acknowledge user about Please replace RTC battery
         #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -3383,7 +3388,7 @@ void deleteStringToDecode(void) {
     //********Debug log#end**************//
     #endif
     // Iterate over the range [0, N]
-    for (iterator = 0; iterator < 220; iterator++) {
+    for (iterator = 0; iterator < 200; iterator++) {
         stringToDecode[iterator] = '\0'; 
     }
     /***************************/ 
@@ -3410,7 +3415,7 @@ void deleteDecodedString(void) {
     //********Debug log#end**************//
     #endif
     // Iterate over the range [0, N]
-    for (iterator = 0; iterator < 220; iterator++) {
+    for (iterator = 0; iterator < 200; iterator++) {
         decodedString[iterator] = '\0'; 
     }  
     /***************************/ 
