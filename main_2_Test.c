@@ -120,10 +120,20 @@ void __interrupt(high_priority)rxANDiocInterrupt_handler(void) {
                 //phase is on
                 IOCBF &= (IOCBF ^ 0xFF); //Clearing Interrupt Flags
                 phaseFailureDetected = false;
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(0, charmap[0]); // switch off phase icon
+        lcdSetCursor(1,17);
+        lcdWriteChar(0);
+#endif
                 ////setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
                 __delay_ms(2500);__delay_ms(2500);
                 RESET();
             } else {
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(6, charmap[6]); // phase icon
+        lcdSetCursor(1,17);
+        lcdWriteChar(6);
+#endif
                 // phase is out
                 IOCBF &= (IOCBF ^ 0xFF); //Clearing Interrupt Flags
                 phaseFailureDetected = true; //true
@@ -167,7 +177,7 @@ void __interrupt(low_priority) timerInterrupt_handler(void) {
                 transmitStringToDebug("Lora is alive\r\n");
                 //********Debug log#end**************//
                 #endif
-                sendSms("Lora is alive", userMobileNo, noInfo); // Acknowledge user about successful action
+                //sendSms("Lora is alive", userMobileNo, noInfo); // Acknowledge user about successful action
             }
             else {
                 #ifdef DEBUG_MODE_ON_H
@@ -175,7 +185,7 @@ void __interrupt(low_priority) timerInterrupt_handler(void) {
                 transmitStringToDebug("Lora is not alive\r\n");
                 //********Debug log#end**************//
                 #endif
-                sendSms("Lora is not alive", userMobileNo, noInfo); // Acknowledge user about successful action
+                //sendSms("Lora is not alive", userMobileNo, noInfo); // Acknowledge user about successful action
             }
         } 
 		// Check Fertigation Level for each one minute interrupt when Fertigation Motor is ON during Valve ON period 
@@ -360,7 +370,7 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             wetSensor = false; // reset wet sensor for first wet field detection
             __delay_ms(50);
             scanValveScheduleAndGetSleepCount(); // get sleep count for next valve action
-            sendSms("Scan", userMobileNo, noInfo); // Acknowledge user about successful action
+            //sendSms("Scan", userMobileNo, noInfo); // Acknowledge user about successful action
             __delay_ms(50);
             dueValveChecked = true;
         }
@@ -371,7 +381,7 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             //********Debug log#end**************//
             #endif
             dueValveChecked = false;
-            sendSms("due valve", userMobileNo, noInfo); // Acknowledge user about successful action
+            //sendSms("due valve", userMobileNo, noInfo); // Acknowledge user about successful action
             //isFieldMoistureSensorWet(9);
             //isFieldMoistureSensorWet(10);
             actionsOnDueValve(iterator);// Copy field no. navigated through iterator.
@@ -389,6 +399,13 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             last_Field_No = readFieldIrrigationValveNoFromEeprom();
             deActivateValve(last_Field_No);      // Successful Deactivate valve
             valveExecuted = false;
+#ifdef LCD_DISPLAY_ON_H   
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Completed", 2);
+            lcdWriteStringAtCenter("Motor Switched OFF", 3);
+#endif						  
             /***************************/
             sendSms(SmsMotor1, userMobileNo, noInfo); // Acknowledge user about successful action
             #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -407,7 +424,7 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             sleepCount = 0; // Skip Next sleep for performing hold operation
         }
         if(!LoraConnectionFailed && !wetSensor) {   //&& instead of || // Skip next block if Activate valve cmd is failed
-            sendSms("sleep", userMobileNo, noInfo); // Acknowledge user about successful action
+            //sendSms("sleep", userMobileNo, noInfo); // Acknowledge user about successful action
             /****************************/
             deepSleep(); // sleep for given sleep count (	default/calculated )
             /****************************/
@@ -425,7 +442,6 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
                 //********Debug log#end**************//
                 #endif
                 //setBCDdigit(0x02,1); // "2" BCD indication for New SMS Received 
-                __delay_ms(500);
                 newSMSRcvd = false; // received command is processed										
                 //extractReceivedSms(); // Read received SMS
                 //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
@@ -452,6 +468,13 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
                 #endif
                 if ( !rtcBatteryLevelChecked) {
                     if (isRTCBatteryDrained()){
+#ifdef LCD_DISPLAY_ON_H   
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("RTC Battery is low", 2);
+                        lcdWriteStringAtCenter("Replace RTC battery", 3);
+#endif						  
                         /***************************/
                         sendSms(SmsRTC1, userMobileNo, noInfo); // Acknowledge user about replace RTC battery
                         #ifdef SMS_DELIVERY_REPORT_ON_H

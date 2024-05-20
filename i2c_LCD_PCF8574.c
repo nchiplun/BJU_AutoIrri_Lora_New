@@ -237,11 +237,19 @@ void lcdWriteString(const char *message) {
         lcdDataWrite(*message++);
 }
 
+void lcdWriteStringIndex(unsigned char *message, unsigned char index) {
+    unsigned char i = 0;
+    while (i < index) {
+        lcdDataWrite(*message++);
+        i++;
+    }
+}
+
 void lcdWriteStringAtCenter(const char *message, unsigned char row) {
     unsigned char col;
     for(col=0; message[col]!='\0'; col++);
     col = (LCD_MAX_COLS-col);
-    col = col/2;
+    col = (col/2) + 1;
     lcdSetCursor(row,col);
     while (*message)
         lcdDataWrite(*message++);
@@ -257,6 +265,11 @@ void lcdClear(void) {
 #endif
 }
 
+void lcdClearLine(unsigned char line)
+{               
+    lcdSetCursor(line,1);
+    lcdWriteString("                    ");
+}
 void LCDhome(void) {
     lcdCommandWrite(LCD_RETURN_HOME);  // set cursor position to zero
 #ifdef USE_BUSY_FLAG
@@ -271,8 +284,7 @@ void lcdSetCursor(unsigned char row, unsigned char col) {
   if ( row > _numlines ) {
     row = _numlines-1;    // we count rows starting w/0
   }
-
-  lcdCommandWrite(LCD_DD_RAM_ADDRESS | (col + row_offsets[row-1]));
+  lcdCommandWrite(LCD_DD_RAM_ADDRESS | ((col-1) + row_offsets[row-1]));
 }
 
 // Turn the display on/off (quickly)
@@ -426,18 +438,18 @@ static void LCDwritePCF8574(unsigned char value) {
 
 
 //miscellaneous Functions
-
+/*
  void exerciseDisplay(void) {
-    //lcdDisplayScrolling("Bhoomi Jalasandharan");
-    //autoIncrement();
+    lcdDisplayScrolling("Bhoomi Jalasandharan");
+    autoIncrement();
     
-    //lcdDisplayNoScrolling("Bhoomi Jalasandharan Udyamii LLP");
+    lcdDisplayNoScrolling("Bhoomi Jalasandharan Udyamii LLP");
     lcdDisplayLeftScroll("Lora controller");
     lcdDisplayRightScroll("");
-    //displayOnOff();
-    //lcdBacklightControl();
-    //cursorControl();
-    // */
+    displayOnOff();
+    lcdBacklightControl();
+    cursorControl();
+
 }
  
 void lcdDisplayScrolling(const char *message) {
@@ -630,7 +642,4 @@ void autoIncrement(void)
         __delay_ms(3000);
     } // 6 seconds delay
 }
-
- 
-
-
+*/

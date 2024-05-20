@@ -120,10 +120,20 @@ void __interrupt(high_priority)rxANDiocInterrupt_handler(void) {
                 //phase is on
                 IOCBF &= (IOCBF ^ 0xFF); //Clearing Interrupt Flags
                 phaseFailureDetected = false;
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(0, charmap[0]); // switch off phase icon
+        lcdSetCursor(1,17);
+        lcdWriteChar(0);
+#endif	  
                 ////setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
                 __delay_ms(2500);__delay_ms(2500);
                 RESET();
             } else {
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(6, charmap[6]); // phase icon
+        lcdSetCursor(1,17);
+        lcdWriteChar(6);
+#endif	  
                 // phase is out
                 IOCBF &= (IOCBF ^ 0xFF); //Clearing Interrupt Flags
                 phaseFailureDetected = true; //true
@@ -383,15 +393,22 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             last_Field_No = readFieldIrrigationValveNoFromEeprom();
             deActivateValve(last_Field_No);      // Successful Deactivate valve
             valveExecuted = false;
+#ifdef LCD_DISPLAY_ON_H   
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);				
+            lcdWriteStringAtCenter("Irrigation Completed", 2);
+            lcdWriteStringAtCenter("Motor Switched OFF", 3);
+#endif
             /***************************/
             sendSms(SmsMotor1, userMobileNo, noInfo); // Acknowledge user about successful action
-            #ifdef SMS_DELIVERY_REPORT_ON_H
+#ifdef SMS_DELIVERY_REPORT_ON_H
             sleepCount = 2; // Load sleep count for SMS transmission action
             sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission
             //setBCDdigit(0x05,0);
             deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
             //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
-            #endif
+#endif
             /***************************/
             startFieldNo = 0;
             //goto nxtVlv;
@@ -444,15 +461,22 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
                 #endif
                 if ( !rtcBatteryLevelChecked) {
                     if (isRTCBatteryDrained()){
+#ifdef LCD_DISPLAY_ON_H   
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);				
+                        lcdWriteStringAtCenter("RTC Battery is low", 2);
+                        lcdWriteStringAtCenter("Replace RTC battery", 3);
+#endif
                         /***************************/
                         sendSms(SmsRTC1, userMobileNo, noInfo); // Acknowledge user about replace RTC battery
-                        #ifdef SMS_DELIVERY_REPORT_ON_H
+#ifdef SMS_DELIVERY_REPORT_ON_H
                         sleepCount = 2; // Load sleep count for SMS transmission action
                         sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission
                         //setBCDdigit(0x05,0);
                         deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
                         //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
-                        #endif
+#endif
                         /***************************/
                     }
                 }

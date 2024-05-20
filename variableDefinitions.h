@@ -211,15 +211,30 @@ struct FIELDVALVE {
 };
 /***************************** Field Valve structure declaration#end *****************/
 
+/***************************** LCD Char structure declaration#start ***************/
+unsigned char clock[8]     = {0x00,0x0e,0x15,0x17,0x11,0x0e,0x00,0x00};
+unsigned char bell[8]      = {0x04,0x0e,0x0e,0x0e,0x1f,0x00,0x04,0x00};
+unsigned char irri[8]      = {0x15,0x0E,0x15,0x0E,0x04,0x04,0x04,0x00};
+unsigned char fert[8]      = {0x04,0x0e,0x1f,0x1f,0x1f,0x0e,0x04,0x04};
+unsigned char sms[8]       = {0x00,0x00,0x1F,0x11,0x1B,0x15,0x1F,0x00};
+unsigned char filt[8]      = {0x04,0x07,0x1C,0x07,0x1C,0x07,0x1C,0x04};
+unsigned char dry[8]       = {0x00,0x00,0x04,0x0a,0x15,0x1f,0x00,0x00};
+unsigned char check[8]     = {0x00,0x01,0x03,0x16,0x1c,0x08,0x00,0x00};
+unsigned char phase[8]     = {0x02,0x04,0x08,0x18,0x06,0x04,0x08,0x10};
+unsigned char battery[8]   = {0x1F,0x11,0x15,0x15,0x11,0x15,0x11,0x1F};
+unsigned char blank[8]     = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+unsigned char * charmap[10] = {blank, clock, irri, filt, fert, dry, phase, battery, sms, bell};
+/***************************** LCD Char structure declaration#end ***************/
+
 /************* statically allocated initialized user variables#start *****/
 #pragma idata fieldValve
-struct FIELDVALVE fieldValve[12] = {0}; //Initialize field valve structure to zero
+struct FIELDVALVE fieldValve[16] = {0}; //Initialize field valve structure to zero
 /************* statically allocated initialized user variables#end *******/
 
 /***************************** EEPROM Address definition#start ***********************/
 /** statically allocated initialized user variables#start **/
 #pragma idata eepromAddress
-const unsigned int eepromAddress[16] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 0x00F0, 0x0120, 0x0150, 0x0180, 0x01B0, 0x01E0, 0x0210, 0x0240, 0x0270, 0x02A0, 0x2D0}; //EEPROM Address locations from 0x00 t0 0x3FF ~1024KB
+const unsigned int eepromAddress[22] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 0x00F0, 0x0120, 0x0150, 0x0180, 0x01B0, 0x01E0, 0x0210, 0x0240, 0x0270, 0x02A0, 0x02D0, 0x0300, 0x0330, 0x0360, 0x0390, 0x03C0}; //EEPROM Address locations from 0x00 t0 0x3FF ~1024KB
 /*** statically allocated initialized user variables#end ***/
 /***************************** EEPROM Address definition#end *************************/
 
@@ -236,10 +251,14 @@ const unsigned int eepromAddress[16] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 
 #define field10 9       // To store Field2 Valve data
 #define field11 10       // To store Field1 Valve data
 #define field12 11       // To store Field2 Valve data
-#define forFiltration 12    // To store filtration Valve data 
-#define forMobileNo 13  // To store 10 byte user mobile no.
-#define forPassword 14  // To store 6 byte user password
-#define forSystem 15    // To store other system values
+#define field13 12       // To store Field1 Valve data
+#define field14 13       // To store Field2 Valve data
+#define field15 14       // To store Field1 Valve data
+#define field16 15       // To store Field2 Valve data
+#define forFiltration 16    // To store filtration Valve data 
+#define forMobileNo 17  // To store 10 byte user mobile no.
+#define forPassword 18  // To store 6 byte user password //forPassword + 12 used
+#define forSystem 19    // To store other system values //forSystem + 37 used
 /***************************** Macros for EEPROM Address location#end ****************/
 
 /***************************** Macros for Fertigation stages #start ****************/
@@ -288,7 +307,7 @@ unsigned int injector4OffPeriodCnt = CLEAR; // to store injector 4 on period cou
 unsigned int noLoadCutOff = CLEAR;
 unsigned int fullLoadCutOff = CLEAR;
 unsigned char userMobileNo[11] = ""; // To store 10 byte user mobile no.
-unsigned char temporaryBytesArray[20] = ""; // To store 20 byte buffer.
+unsigned char temporaryBytesArray[26] = ""; // To store 26 byte buffer.
 unsigned char null[11] = {'\0'}; // Null.
 unsigned char pwd[7] = ""; // To store 6 byte user set password.
 unsigned char factryPswrd[7] = ""; // To store 6 byte factory password until authentication
@@ -308,7 +327,7 @@ unsigned char rxCharacter = CLEAR; // To store received 1 byte character from GS
 unsigned char msgIndex = CLEAR; // To point received character position in Message
 unsigned char temp = CLEAR; // Temporary buffer
 unsigned char iterator = CLEAR; // To navigate through iteration in for loop
-unsigned char fieldCount = 12;   // To Store no. of fields to configure
+unsigned char fieldCount = 16;   // To Store no. of fields to configure
 unsigned char resetCount = CLEAR; // To store count of reset occurred by MCLR Reset for menu option
 unsigned char startFieldNo = 0;  // To indicate starting field irrigation valve no. for scanning
 unsigned char space = 0x20; // Represents space Ascii
@@ -335,6 +354,7 @@ unsigned char filtrationDelay2 = CLEAR; // To store filtration Delay2 in minutes
 unsigned char filtrationDelay3 = CLEAR; // To store filtration Delay3 in minutes
 unsigned char filtrationOnTime = CLEAR; // To store filtration OnTime in minutes
 unsigned char dryRunCheckCount = CLEAR; // To store dry run check count
+unsigned char currentFieldNo = CLEAR; // To store running field no.
 /***** System Config definition#end *************************/
 
 /******Data Encryption and Decryption#start *****************/
@@ -463,9 +483,9 @@ const char SmsFact1[15] = "Factory Key : "; // Acknowledge user about successful
 
 const char SmsPh1[47] = "Phase failure detected, suspending all actions"; // Acknowledge user about Phase failure status
 const char SmsPh2[69] = "Low Phase current detected, actions suspended, please restart system"; // Acknowledge user about successful motor off action
-const char SmsPh3[25] = "Phase R failure detected"; // Acknowledge user about phase failure status
-const char SmsPh4[25] = "Phase Y failure detected"; // Acknowledge user about phase failure status
-const char SmsPh5[25] = "Phase B failure detected"; // Acknowledge user about phase failure status
+const char SmsPh3[25] = "Phase loss detected"; // Acknowledge user about phase failure status
+//const char SmsPh4[25] = "Phase Y failure detected"; // Acknowledge user about phase failure status
+//const char SmsPh5[25] = "Phase B failure detected"; // Acknowledge user about phase failure status
 const char SmsPh6[19] = "All Phase detected"; // Acknowledge user about phase status
 
 const char SmsMS1[60] = "Moisture sensor is failed, Irrigation started for field no."; // Acknowledge user about failure in moisture sensor

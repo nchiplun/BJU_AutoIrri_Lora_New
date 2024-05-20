@@ -354,6 +354,21 @@ nxtCycle:
                 }   // Save sleep count for nearest next valve action  
                 else if (newCount < sleepCount) {
                     sleepCount = (unsigned int)newCount;                      // calculate sleep count for upcoming due valve
+                    /*****To display next due date in lcd******/
+                    temporaryBytesArray[13] = (fieldValve[iterator].nextDueDD / 10) + 48;
+                    temporaryBytesArray[14] = (fieldValve[iterator].nextDueDD  % 10) + 48;
+                    temporaryBytesArray[15] = '/';
+                    temporaryBytesArray[16] = (fieldValve[iterator].nextDueMM  / 10) + 48;
+                    temporaryBytesArray[17] = (fieldValve[iterator].nextDueMM  % 10) + 48;
+                    temporaryBytesArray[18] = '/';
+                    temporaryBytesArray[19] = (fieldValve[iterator].nextDueYY  / 10) + 48;
+                    temporaryBytesArray[20] = (fieldValve[iterator].nextDueYY  % 10) + 48;
+                    temporaryBytesArray[21] = ' ';
+                    temporaryBytesArray[22] = (fieldValve[iterator].motorOnTimeHour  / 10) + 48;
+                    temporaryBytesArray[23] = (fieldValve[iterator].motorOnTimeHour  % 10) + 48;
+                    temporaryBytesArray[24] = ':';
+                    temporaryBytesArray[25] = (fieldValve[iterator].motorOnTimeMinute  / 10) + 48;
+                    temporaryBytesArray[26] = (fieldValve[iterator].motorOnTimeMinute  % 10) + 48;
                 }
             }
         }
@@ -560,7 +575,47 @@ unsigned char fetchFieldNo(unsigned char index) {
         transmitStringToDebug("\r\nfetchFieldNo_OUT\r\n");
         //********Debug log#end**************//
         #endif
-        return 11;    
+        return 11;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '3') {
+#ifdef DEBUG_MODE_ON_H
+        //********Debug log#start************//
+        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
+        temporaryBytesArray[1] = 50; // To store field no. of valve in action 
+        transmitNumberToDebug(temporaryBytesArray, 2);
+        transmitStringToDebug("\r\nfetchFieldNo_OUT\r\n");
+        //********Debug log#end**************//
+#endif
+        return 12;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '4') {
+#ifdef DEBUG_MODE_ON_H
+        //********Debug log#start************//
+        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
+        temporaryBytesArray[1] = 50; // To store field no. of valve in action 
+        transmitNumberToDebug(temporaryBytesArray, 2);
+        transmitStringToDebug("\r\nfetchFieldNo_OUT\r\n");
+        //********Debug log#end**************//
+#endif
+        return 13;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '5') {
+#ifdef DEBUG_MODE_ON_H
+        //********Debug log#start************//
+        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
+        temporaryBytesArray[1] = 50; // To store field no. of valve in action 
+        transmitNumberToDebug(temporaryBytesArray, 2);
+        transmitStringToDebug("\r\nfetchFieldNo_OUT\r\n");
+        //********Debug log#end**************//
+#endif
+        return 14;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '6') {
+#ifdef DEBUG_MODE_ON_H
+        //********Debug log#start************//
+        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
+        temporaryBytesArray[1] = 50; // To store field no. of valve in action 
+        transmitNumberToDebug(temporaryBytesArray, 2);
+        transmitStringToDebug("\r\nfetchFieldNo_OUT\r\n");
+        //********Debug log#end**************//
+#endif
+        return 15;
     } else {
         #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
@@ -607,7 +662,7 @@ _Bool isFieldMoistureSensorWet() {
         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
     }// for field no. 10 to 12
-    else if (FieldNo > 8 && FieldNo < 12) {
+    else if (FieldNo > 8 && FieldNo < fieldCount) {
         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
     } else {
@@ -722,7 +777,7 @@ _Bool isFieldMoistureSensorWetLora(unsigned char FieldNo) {
         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
     }// for field no. 10 to 12
-    else if (FieldNo > 8 && FieldNo < 12) {
+    else if (FieldNo > 8 && FieldNo < fieldCount) {
         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
     } else {
@@ -752,7 +807,7 @@ _Bool isFieldMoistureSensorWetLora(unsigned char FieldNo) {
         transmitStringToDebug("isFieldMoistureSensorWetLora_Yes_Out\r\n");
         //********Debug log#end**************//
         #endif
-        sendSms("wet freq of ", userMobileNo, frequencyRequired); // Acknowledge user about successful action
+        //sendSms("wet freq of ", userMobileNo, frequencyRequired); // Acknowledge user about successful action
         return true;
     } else {
         #ifdef DEBUG_MODE_ON_H
@@ -760,7 +815,7 @@ _Bool isFieldMoistureSensorWetLora(unsigned char FieldNo) {
         transmitStringToDebug("isFieldMoistureSensorWetLorat_No_Out\r\n");
         //********Debug log#end**************//
         #endif
-        sendSms("dry freq of ", userMobileNo, frequencyRequired); // Acknowledge user about successful action
+        //sendSms("dry freq of ", userMobileNo, frequencyRequired); // Acknowledge user about successful action
         return false; 
     }
     
@@ -772,7 +827,7 @@ _Bool isFieldMoistureSensorWetLora(unsigned char FieldNo) {
         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
     }// for field no. 10 to 12
-    else if (FieldNo > 8 && FieldNo < 12) {
+    else if (FieldNo > 8 && FieldNo < fieldCount) {
         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
     } else {
@@ -817,6 +872,11 @@ _Bool isMotorInNoLoad(void) {
     ctOutput = getADCResult();
     if (ctOutput > temp && ctOutput <= noLoadCutOff) {
         dryRunDetected = true; //Set Low water level
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(5, charmap[5]); // dry run icon
+        lcdSetCursor(1,19);
+        lcdWriteChar(5);
+#endif        
         #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("isMotorInNoLoad_Dry_Yes_OUT\r\n");
@@ -825,6 +885,11 @@ _Bool isMotorInNoLoad(void) {
         return true;
     } else if (ctOutput == 0 || (ctOutput > 0 && ctOutput <= temp)) {  // no phase current
         lowPhaseCurrentDetected = true; //Set phase current low
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(5, charmap[5]); // dry run icon
+        lcdSetCursor(1,19);
+        lcdWriteChar(5);
+#endif        
         #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("isMotorInNoLoad_LowPhase_Yes_OUT\r\n");
@@ -834,6 +899,11 @@ _Bool isMotorInNoLoad(void) {
     } else {
         lowPhaseCurrentDetected = false; 
         dryRunDetected = false; //Set High water level
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(0, charmap[0]); // switch of dry run icon
+        lcdSetCursor(1,19);
+        lcdWriteChar(0);
+#endif
         #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("isMotorInNoLoad_Dry_LowPhase_No_OUT\r\n");
@@ -1079,16 +1149,27 @@ void doDryRunAction(void) {
 					/***********************************************/						 
 					/***************************/
 					// for field no. 01 to 09
+                    /*
 					if (field_No<9){
 						temporaryBytesArray[0] = 48; // To store field no. of valve in action 
 						temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
 					}// for field no. 10 to 12
-					else if (field_No > 8 && field_No < 12) {
+					else if (field_No > 8 && field_No < fieldCount) {
 						temporaryBytesArray[0] = 49; // To store field no. of valve in action 
 						temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
 					}
 					/***************************/
-
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Ferti. Postponed", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
 					/***************************/
 					sendSms(SmsDR1, userMobileNo, fieldNoRequired); // Acknowledge user about dry run detected and action taken
 					#ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1110,16 +1191,27 @@ void doDryRunAction(void) {
                     /***********************************************/
                     /***************************/
                     // for field no. 01 to 09
+                    /*
                     if (field_No<9){
                         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                     }// for field no. 10 to 12
-                    else if (field_No > 8 && field_No < 12) {
+                    else if (field_No > 8 && field_No < fieldCount) {
                         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                     }
                     /***************************/
-
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Ferti. Postponed", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     /***************************/
                     sendSms(SmsDR2, userMobileNo, fieldNoRequired); // Acknowledge user about dry run detected and action taken
                     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1143,16 +1235,27 @@ void doDryRunAction(void) {
                     /***********************************************/ 
                     /***************************/
                     // for field no. 01 to 09
+                    /*
                     if (field_No<9){
                         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                     }// for field no. 10 to 12
-                    else if (field_No > 8 && field_No < 12) {
+                    else if (field_No > 8 && field_No < fieldCount) {
                         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                     }
                     /***************************/
-
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Irri. Postponed", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     /***************************/
 					sendSms(SmsDR3, userMobileNo, fieldNoRequired); // Acknowledge user about dry run detected and action taken
 					#ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1166,16 +1269,27 @@ void doDryRunAction(void) {
                 } else { // next due date
                     /***************************/
                     // for field no. 01 to 09
+                    /*
                     if (field_No<9){
                         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                     }// for field no. 10 to 12
-                    else if (field_No > 8 && field_No < 12) {
+                    else if (field_No > 8 && field_No < fieldCount) {
                         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                     }
                     /***************************/
-
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Irri. Rescheduled", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     /***************************/
 					sendSms(SmsDR4, userMobileNo, fieldNoRequired); // Acknowledge user about dry run detected and action taken
 					#ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1188,8 +1302,13 @@ void doDryRunAction(void) {
 					/***************************/
                 }
             }
+			/*							  
             if (Phase_Input) {
-                /***************************/
+#ifdef LCD_DISPLAY_ON_H
+                lcdClear();
+                lcdWriteStringAtCenter("Phase Loss Detected", 2);
+#endif
+
                 sendSms(SmsPh3, userMobileNo, noInfo); // Acknowledge user about Phase failure detected and action taken
 #ifdef SMS_DELIVERY_REPORT_ON_H
                 sleepCount = 2; // Load sleep count for SMS transmission action
@@ -1198,22 +1317,26 @@ void doDryRunAction(void) {
                 deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
                 //setBCDdigit(0x0F, 0); // Blank "." BCD Indication for Normal Condition
 #endif
-                /***************************/
+
             }
             else {
-                /***************************/
+#ifdef LCD_DISPLAY_ON_H
+                lcdClear();
+                lcdWriteStringAtCenter("All Phase Detected", 2);
+#endif	  
+
                 sendSms(SmsPh6, userMobileNo, noInfo); // Acknowledge user about Phase failure detected and action taken
-                #ifdef SMS_DELIVERY_REPORT_ON_H
+#ifdef SMS_DELIVERY_REPORT_ON_H
                 sleepCount = 2; // Load sleep count for SMS transmission action
                 sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission
                 //setBCDdigit(0x05,0);
                 deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
                 //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
-                #endif
-                /***************************/
-            }
+#endif
+
+            }*/
             
-        } else if ((currentDD == fieldValve[field_No].nextDueDD && currentMM == fieldValve[field_No].nextDueMM && currentYY == fieldValve[field_No].nextDueYY)) {
+        } else if ((currentDD == fieldValve[field_No].nextDueDD && currentMM == fieldValve[field_No].nextDueMM && currentYY == fieldValve[field_No].nextDueYY)) { // Shift all valves due today to next  date
             /******** Calculate and save Field Valve next date**********/
             fieldValve[field_No].nextDueDD = (unsigned char)dueDD;
             fieldValve[field_No].nextDueMM = dueMM;
@@ -1253,6 +1376,14 @@ void doLowPhaseAction(void) {
     transmitStringToDebug("dolowPhaseAction_IN\r\n");
     //********Debug log#end**************//
     #endif
+#ifdef LCD_DISPLAY_ON_H
+    lcdClearLine(2);
+    lcdClearLine(3);
+    lcdClearLine(4);
+    lcdWriteStringAtCenter("Low Phase Current", 2); 
+    lcdWriteStringAtCenter("Suspending Actions", 3);
+    lcdWriteStringAtCenter("Restart System", 3);
+#endif					   
     /***************************/
     sendSms(SmsPh2, userMobileNo, noInfo); // Acknowledge user about low phase current
     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1272,6 +1403,11 @@ void doLowPhaseAction(void) {
                 /************Fertigation switch off due to low phase detection***********/
                 if (fieldValve[field_No].fertigationStage == injectPeriod) {
                     Fert_Motor = OFF; // Switch off fertigation valve in case it is ON
+#ifdef LCD_DISPLAY_ON_H
+                    lcdCreateChar(0, charmap[0]); // Switch off fertigation icon
+                    lcdSetCursor(1,4);
+                    lcdWriteChar(0);
+#endif
 					//Switch off all Injectors after completing fertigation on Period
                     Irri_Out9 = OFF;
                     Irri_Out10 = OFF;
@@ -1280,16 +1416,26 @@ void doLowPhaseAction(void) {
 
                     /***************************/
                     // for field no. 01 to 09
+                    /*
                     if (field_No<9){
                         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                     }// for field no. 10 to 12
-                    else if (field_No > 8 && field_No < 12) {
+                    else if (field_No > 8 && field_No < fieldCount) {
                         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                     }
                     /***************************/
-
+#ifdef LCD_DISPLAY_ON_H   
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("For Field No.", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     /***************************/
                     sendSms(SmsFert6, userMobileNo, fieldNoRequired); // Acknowledge user about successful Fertigation stopped action due to low phase detection
                     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1325,17 +1471,19 @@ Notify user about all actions
 **************************************************************************************************************************/
 
 void doPhaseFailureAction(void) {
-    unsigned char field_No = CLEAR;
-#ifdef LCD_DISPLAY_ON_H
-    lcdClear();
-    lcdWriteStringAtCenter("Phase Failure", 1);
-    lcdWriteStringAtCenter("Detected", 2);
-#endif					   
+    unsigned char field_No = CLEAR;					   
     #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
     transmitStringToDebug("doPhaseFailureAction_IN\r\n");
     //********Debug log#end**************//
     #endif
+#ifdef LCD_DISPLAY_ON_H
+    lcdClearLine(2);
+    lcdClearLine(3);
+    lcdClearLine(4);
+    lcdWriteStringAtCenter("Phase Loss Detected", 2); 
+    lcdWriteStringAtCenter("Suspending Actions", 3);
+#endif					   
     /***************************/
     sendSms(SmsPh1, userMobileNo, noInfo); // Acknowledge user about phase failure
     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1355,6 +1503,11 @@ void doPhaseFailureAction(void) {
                 /************Fertigation switch off due to Phase failure***********/
                 if (fieldValve[field_No].fertigationStage == injectPeriod) {
                     Fert_Motor = OFF; // Switch off fertigation valve in case it is ON
+#ifdef LCD_DISPLAY_ON_H
+                    lcdCreateChar(0, charmap[0]); // Switch off fertigation icon
+                    lcdSetCursor(1,4);
+                    lcdWriteChar(0);
+#endif
 					//Switch off all Injectors after completing fertigation on Period
                     Irri_Out9 = OFF;
                     Irri_Out10 = OFF;
@@ -1363,16 +1516,26 @@ void doPhaseFailureAction(void) {
 
                     /***************************/
                     // for field no. 01 to 09
+                    /*
                     if (field_No<9){
                         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                     }// for field no. 10 to 12
-                    else if (field_No > 8 && field_No < 12) {
+                    else if (field_No > 8 && field_No < fieldCount) {
                         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                         temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                     }
                     /***************************/
-
+#ifdef LCD_DISPLAY_ON_H   
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("For Field No.", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     /***************************/
                     sendSms(SmsFert6, userMobileNo, fieldNoRequired); // Acknowledge user about successful Fertigation stopped action due to PhaseFailure
                     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1426,21 +1589,31 @@ _Bool isRTCBatteryDrained(void) {
     RTC_Trigger = DISABLED;
     if (batteryVoltage <= batteryVoltageCutoff) {
         lowRTCBatteryDetected = true;
+#ifdef LCD_DISPLAY_ON_H
+            lcdCreateChar(7, charmap[7]); // Battery icon
+            lcdSetCursor(1,18);
+            lcdWriteChar(7);
+#endif
         __delay_ms(100);
         saveRTCBatteryStatus();
         __delay_ms(100);
-        #ifdef DEBUG_MODE_ON_H
+#ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("isRTCBatteryDrained_Yes_OUT\r\n");
         //********Debug log#end**************//
-        #endif
+#endif
         return true;
     } else {
-        #ifdef DEBUG_MODE_ON_H
+#ifdef LCD_DISPLAY_ON_H
+            lcdCreateChar(0, charmap[0]); // Switch off  icon
+            lcdSetCursor(1,18);
+            lcdWriteChar(0);
+#endif
+#ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("isRTCBatteryDrained_No_OUT\r\n");
         //********Debug log#end**************//
-        #endif
+#endif
         return false;
     }
 }
@@ -1470,32 +1643,30 @@ _Bool phaseFailure(void) {
     if (!Phase_Input) { //All 3 phases are ON
         phaseFailureDetected = false;
 #ifdef LCD_DISPLAY_ON_H
-        lcdClear();
-        lcdWriteStringAtCenter("All Power Phase", 1);
-        lcdWriteStringAtCenter("Detected", 2);
-        __delay_ms(3000);
-#endif					   
+        lcdCreateChar(0, charmap[0]); //Switch off icon
+        lcdSetCursor(1,17);
+        lcdWriteChar(0);
+#endif
         #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("phaseFailure_No_OUT\r\n");
         //********Debug log#end**************//
         #endif
         return false;  //no Phase failure
-    } else { // one phase is lost
+    } else { // one phase is lost					   
+        phaseFailureDetected = true; //true
 #ifdef LCD_DISPLAY_ON_H
-        lcdClear();
-        lcdWriteStringAtCenter("Phase Failure", 1);
-        lcdWriteStringAtCenter("Detected", 2);
-        __delay_ms(3000);
-#endif					   
-        phaseFailureDetected = false; //true
+        lcdCreateChar(6, charmap[6]); // Phase icon
+        lcdSetCursor(1,17);
+        lcdWriteChar(6);
+#endif
         phaseFailureActionTaken = false;
         #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
         transmitStringToDebug("phaseFailure_Yes_OUT\r\n");
         //********Debug log#end**************//
         #endif
-        return false; //phase failure -- true
+        return true; //phase failure -- true
     }
 }
 
@@ -1518,10 +1689,20 @@ void powerOnMotor(void) {
     #endif
     __delay_ms(100);
     Irri_Motor = ON;
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(2, charmap[2]); // Irrigation icon
+        lcdSetCursor(1,2);
+        lcdWriteChar(2);
+#endif
     Timer0Overflow = 0;  
     T0CON0bits.T0EN = ON; // Start timer0 to initiate 1 min cycle
     if(filtrationEnabled) {					  
-        filtrationCycleSequence = 1;																		 
+        filtrationCycleSequence = 1;
+#ifdef LCD_DISPLAY_ON_H
+        lcdCreateChar(3, charmap[3]); // filtration icon
+        lcdSetCursor(1,3);
+        lcdWriteChar(3);
+#endif
     } else {
         filtrationCycleSequence = 99;
     }
@@ -1568,6 +1749,16 @@ void powerOffMotor(void) {
     __delay_ms(50);
     Irri_Motor = OFF; // switch off Motor
     __delay_ms(50);
+#ifdef LCD_DISPLAY_ON_H
+    lcdCreateChar(0, charmap[0]); // Switch off Irrigation icon
+    lcdSetCursor(1,2);
+    lcdWriteChar(0);
+#endif
+#ifdef LCD_DISPLAY_ON_H
+    lcdCreateChar(0, charmap[0]); // Switch off Filtration icon
+    lcdSetCursor(1,3);
+    lcdWriteChar(0);
+#endif
     
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
@@ -1594,6 +1785,8 @@ void activateValve(unsigned char FieldNo) {
     //********Debug log#end**************//
 #endif
     unsigned char action;
+    currentFieldNo = FieldNo+1;
+    sprintf(temporaryBytesArray,"%d",FieldNo+1);
     loraAttempt = 0;
     action = 0x00; // activate valve action
     do {
@@ -1610,11 +1803,12 @@ void activateValve(unsigned char FieldNo) {
         __delay_ms(100);
         /***************************/
         // for field no. 01 to 09
+        /*
         if (FieldNo<9){
             temporaryBytesArray[0] = 48; // To store field no. of valve in action 
             temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
         }// for field no. 10 to 12
-        else if (FieldNo > 8 && FieldNo < 12) {
+        else if (FieldNo > 8 && FieldNo < fieldCount) {
             temporaryBytesArray[0] = 49; // To store field no. of valve in action 
             temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
         }
@@ -1629,7 +1823,17 @@ void activateValve(unsigned char FieldNo) {
     
         if(moistureSensorFailed) {
             moistureSensorFailed = false;
-
+#ifdef LCD_DISPLAY_ON_H        
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Started", 2);
+            lcdWriteStringAtCenter("With Sensor Failure", 3);
+            lcdWriteStringAtCenter("For Field No:", 4);
+            lcdSetCursor(4,17);
+            //sprintf(temporaryBytesArray,"%d",FieldNo+1);
+            lcdWriteStringIndex(temporaryBytesArray,2);
+#endif 
             /***************************/
             sendSms(SmsMS1, userMobileNo, fieldNoRequired);
             #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1639,17 +1843,19 @@ void activateValve(unsigned char FieldNo) {
             deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
             //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
             #endif
-            /***************************/
-#ifdef LCD_DISPLAY_ON_H             
-            lcdClear();
-            lcdWriteStringAtCenter("Irrigation Started", 1);
-            lcdWriteStringAtCenter("With Sensor Failure", 2);
-            lcdWriteStringAtCenter("For Field No:", 3);
-            sprintf(temporaryBytesArray,"%d",FieldNo+1);
-            lcdWriteStringAtCenter(temporaryBytesArray, 4);
-            __delay_ms(2000);
-#endif									
+            /***************************/									
         } else {
+#ifdef LCD_DISPLAY_ON_H        
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Started", 2);
+            lcdWriteStringAtCenter("With No Response", 3);
+            lcdWriteStringAtCenter("For Field No:", 4);
+            lcdSetCursor(4,17);
+            //sprintf(temporaryBytesArray,"%d",FieldNo+1);
+            lcdWriteStringIndex(temporaryBytesArray,2);							 
+#endif
             /***************************/
             sendSms(SmsIrr4, userMobileNo, fieldNoRequired);   // Acknowledge user about successful Irrigation started action
             #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1659,16 +1865,7 @@ void activateValve(unsigned char FieldNo) {
             deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
             //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
             #endif
-            /***************************/
-#ifdef LCD_DISPLAY_ON_H             
-            lcdClear();
-            lcdWriteStringAtCenter("Irrigation Started", 1);
-            lcdWriteStringAtCenter("Successfully", 2);
-            lcdWriteStringAtCenter("For Field No:", 3);
-            sprintf(temporaryBytesArray,"%d",FieldNo+1);
-            lcdWriteStringAtCenter(temporaryBytesArray, 4);
-            __delay_ms(2000);
-#endif		 
+            /***************************/		 
         }
     } else {   //Skip current valve execution and go for next
         valveDue = false;
@@ -1691,16 +1888,27 @@ void activateValve(unsigned char FieldNo) {
 
         /***************************/
         // for field no. 01 to 09
+        /*
         if (FieldNo<9) {
             temporaryBytesArray[0] = 48; // To store field no. of valve in action 
             temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
         }// for field no. 10 to 12
-        else if (FieldNo > 8 && FieldNo < 12) {
+        else if (FieldNo > 8 && FieldNo < fieldCount) {
             temporaryBytesArray[0] = 49; // To store field no. of valve in action 
             temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
         }
         /***************************/
-
+#ifdef LCD_DISPLAY_ON_H        
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Irrigation Skipped", 2);
+        lcdWriteStringAtCenter("With No Response", 3);
+        lcdWriteStringAtCenter("For Field No:", 4);
+        lcdSetCursor(4,17);
+        //sprintf(temporaryBytesArray,"%d",FieldNo+1);
+		lcdWriteStringIndex(temporaryBytesArray,2);
+#endif									
         /***************************/
         sendSms(SmsIrr8, userMobileNo, fieldNoRequired); // Acknowledge user about Irrigation not started due to Lora connection failure						
         #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -1710,16 +1918,7 @@ void activateValve(unsigned char FieldNo) {
         deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
         //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
         #endif
-        /***************************/
-#ifdef LCD_DISPLAY_ON_H 
-        lcdClear();
-        lcdWriteStringAtCenter("Irrigation Skipped", 1);
-        lcdWriteStringAtCenter("With No Response",2);
-        lcdWriteStringAtCenter("From Field No:",3);
-        sprintf(temporaryBytesArray,"%d",FieldNo+1);
-        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-        __delay_ms(2000);
-#endif	 
+        /***************************/	 
     }
 #ifdef DEBUG_MODE_ON_H    
     //********Debug log#start************//
@@ -1753,15 +1952,17 @@ void deActivateValve(unsigned char FieldNo) {
     } while(loraAttempt<2);
     /***************************/
     // for field no. 01 to 09
+    /*
     if (FieldNo<9){
         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 49; // To store field no. of valve in action 
     }// for field no. 10 to 12
-    else if (FieldNo > 8 && FieldNo < 12) {
+    else if (FieldNo > 8 && FieldNo < fieldCount) {
         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
     }
     /***************************/
+    sprintf(temporaryBytesArray,"%d",FieldNo+1);
     if (!LoraConnectionFailed && loraAttempt == 99) {  // Successful Valve DeActivation
         
         /***************************/
@@ -1773,6 +1974,17 @@ void deActivateValve(unsigned char FieldNo) {
         //********Debug log#end**************//
         #endif
         /***************************/
+#ifdef LCD_DISPLAY_ON_H        
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Irrigation Stopped", 2);
+        lcdWriteStringAtCenter("Successfully", 3);
+        lcdWriteStringAtCenter("For Field No:", 4);
+        lcdSetCursor(4,17);
+        //sprintf(temporaryBytesArray,"%d",FieldNo+1);
+        lcdWriteStringIndex(temporaryBytesArray,2);
+#endif							   
         sendSms(SmsIrr5, userMobileNo, fieldNoRequired); // Acknowledge user about successful Irrigation stopped action
         #ifdef SMS_DELIVERY_REPORT_ON_H
         sleepCount = 2; // Load sleep count for SMS transmission action
@@ -1781,18 +1993,20 @@ void deActivateValve(unsigned char FieldNo) {
         deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
         //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
         #endif
-        /***************************/
-#ifdef LCD_DISPLAY_ON_H        
-        lcdClear();
-        lcdWriteStringAtCenter("Irrigation Stopped", 1);
-        lcdWriteStringAtCenter("Successfully",2);
-        lcdWriteStringAtCenter("For Field No:",3);
-        sprintf(temporaryBytesArray,"%d",FieldNo+1);
-        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-        __delay_ms(2000);
-#endif			
+        /***************************/			
     } else {   
         /***************************/
+#ifdef LCD_DISPLAY_ON_H        
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Irrigation Stopped", 2);
+        lcdWriteStringAtCenter("With No Response", 3);
+        lcdWriteStringAtCenter("For Field No:", 4);
+        lcdSetCursor(4,17);
+        //sprintf(temporaryBytesArray,"%d",FieldNo+1);
+        lcdWriteStringIndex(temporaryBytesArray,2);						 
+#endif
         sendSms(SmsIrr9, userMobileNo, fieldNoRequired); // Acknowledge user about Irrigation stopped with Lora connection failure						
         #ifdef SMS_DELIVERY_REPORT_ON_H
         sleepCount = 2; // Load sleep count for SMS transmission action
@@ -1801,16 +2015,7 @@ void deActivateValve(unsigned char FieldNo) {
         deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
         //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
         #endif
-        /***************************/
-#ifdef LCD_DISPLAY_ON_H        
-        lcdClear();
-        lcdWriteStringAtCenter("Irrigation Stopped", 1);
-        lcdWriteStringAtCenter("With No Response",2);
-        lcdWriteStringAtCenter("From Field No:",3);
-        sprintf(temporaryBytesArray,"%d",FieldNo+1);
-        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-        __delay_ms(2000);
-#endif	 
+        /***************************/	 
     }
 #ifdef DEBUG_MODE_ON_H    
     //********Debug log#start************//
@@ -1834,9 +2039,11 @@ void deepSleep(void) {
     while (sleepCount > 0 && !newSMSRcvd) {
         if(phaseFailureDetected) {
 #ifdef LCD_DISPLAY_ON_H   
-            lcdClear();
-            lcdWriteStringAtCenter("Phase Failure", 1);
-            lcdWriteStringAtCenter("Detected", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Phase Failure", 2);
+            lcdWriteStringAtCenter("Detected", 3);
 #endif						  
             if(!phaseFailureActionTaken) {
                 doPhaseFailureAction();
@@ -1855,47 +2062,71 @@ void deepSleep(void) {
                         sleepCount = 65500; // undefined sleep until phase comes back
                     }
                 }
-            } else {
+            }
 #ifdef LCD_DISPLAY_ON_H 
-                lcdClear();
-                lcdWriteStringAtCenter("Irrigation Running", 1);
-                lcdWriteStringAtCenter("For Field No: ", 2);
-                lcdSetCursor(2,17);
-                lcdWriteString(temporaryBytesArray);
-                //sprintf(temporaryBytesArray,"%d",FieldNo+1);     
-                //lcdWriteStringAtCenter(temporaryBytesArray, 3);
-                //setBCDdigit(0x0C, 1); // (u) BCD Indication for valve in action
-#endif						
-            }     
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Running", 2);
+            lcdWriteStringAtCenter("For Field No: ", 3);
+            lcdSetCursor(3,17);
+            sprintf(temporaryBytesArray,"%d",currentFieldNo);
+            lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
         } else if(dryRunDetected) {
 #ifdef LCD_DISPLAY_ON_H 
-            lcdClear();
-            lcdWriteStringAtCenter("Dry Run", 1);
-            lcdWriteStringAtCenter("Detected", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Dry Run", 2);
+            lcdWriteStringAtCenter("Detected", 3);
             //setBCDdigit(0x0C, 0); // (u.) BCD Indication for Dry Run Detected Error
 #endif						
         } else if(lowPhaseCurrentDetected) {
 #ifdef LCD_DISPLAY_ON_H 
-            lcdClear();
-            lcdWriteStringAtCenter("Found Low Phase", 1);
-            lcdWriteStringAtCenter("Current", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Found Low Phase", 2);
+            lcdWriteStringAtCenter("Current", 3);
             //setBCDdigit(0x03, 0); // (3.) BCD Indication for Phase Failure Error
 #endif						
         } else if(lowRTCBatteryDetected) {
 #ifdef LCD_DISPLAY_ON_H 
-            lcdClear();
-            lcdWriteStringAtCenter("Found Low RTC", 1);
-            lcdWriteStringAtCenter("Battery", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Found Low RTC", 2);
+            lcdWriteStringAtCenter("Battery", 3);
             //setBCDdigit(0x02, 0); // (2.) BCD Indication for RTC Battery Low Error
 #endif						
         } else if (systemAuthenticated) {
+#ifdef LCD_DISPLAY_ON_H 
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Next Schedule Set On", 2);
+            lcdWriteStringAtCenter("Date:", 3);
+            lcdWriteStringAtCenter(temporaryBytesArray+13, 4);
+            //setBCDdigit(0x02, 0); // (2.) BCD Indication for RTC Battery Low Error
+#endif
             //setBCDdigit(0x01,1);  // (1) BCD Indication for System Authenticated
         }
         Run_led = DARK; // Led Indication for system in Sleep/ Idle Mode
         inSleepMode = true; // Indicate in Sleep mode
         WDTCON0bits.SWDTEN = ENABLED; // Enable sleep mode timer
         if(sleepCount > 0 && !newSMSRcvd) {
+#ifdef LCD_DISPLAY_ON_H
+            lcdCreateChar(1, charmap[1]); // Clock icon
+            lcdSetCursor(1,1);
+            lcdWriteChar(1);
+#endif
             Sleep(); // CPU sleep. Wakeup when Watchdog overflows, each of 16 Seconds if value of WDTPS is 4096
+#ifdef LCD_DISPLAY_ON_H
+            lcdCreateChar(0, charmap[0]);
+            lcdSetCursor(1,1);
+            lcdWriteChar(0);
+#endif
         }
         if(valveDue) {
             __delay_ms(1500); // compensate for new sms when valve is active
@@ -2196,9 +2427,62 @@ void setFactoryPincode(void) {
     __delay_ms(50);
     if (DeviceBurnStatus == false) {
         DeviceBurnStatus = true;
+		/*********Test Data*************/
         systemAuthenticated = true;
-        __delay_ms(50);
         saveAuthenticationStatus();
+		noLoadCutOff = 10;
+		fullLoadCutOff = 200;
+		saveMotorLoadValuesIntoEeprom();
+		currentDD = 10;
+		currentMM = 10;
+		currentYY  = 10;
+		currentHour = 10;
+		currentMinutes = 10;
+		currentSeconds = 50;
+		feedTimeInRTC();
+		//Mapping Field 1 and 2 with pin 1 and 2 of slave 1
+		fieldMap[0]=1;
+		fieldMap[1]=1;
+		fieldMap[2]=1;
+		fieldMap[3]=2;
+		fieldMap[4]=1;
+		fieldMap[5]=3;
+        saveFieldMappingIntoEeprom();
+		for (iterator = 0; iterator < 3; iterator++) { //Configure 3 Valves
+			fieldValve[iterator].onPeriod = 5;
+			fieldValve[iterator].offPeriod = 1;
+			fieldValve[iterator].motorOnTimeHour = 10;
+			fieldValve[iterator].motorOnTimeMinute = 11;
+			fieldValve[iterator].nextDueDD = 10;
+			fieldValve[iterator].nextDueMM = 10;
+			fieldValve[iterator].nextDueYY = 10;
+			fieldValve[iterator].dryValue = 100;
+			fieldValve[iterator].wetValue = 30000;
+			fieldValve[iterator].priority = iterator+1;
+			fieldValve[iterator].status = OFF;
+			fieldValve[iterator].cycles = 1;
+			fieldValve[iterator].cyclesExecuted = 1;
+			fieldValve[iterator].isConfigured = true;                
+			fieldValve[iterator].fertigationDelay = 1;
+			fieldValve[iterator].fertigationONperiod = 2;
+			fieldValve[iterator].fertigationInstance = iterator+1;
+			fieldValve[iterator].fertigationStage = OFF;
+			fieldValve[iterator].fertigationValveInterrupted = false;
+			fieldValve[iterator].isFertigationEnabled = true; // true;
+
+			saveIrrigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
+			__delay_ms(100);
+			saveIrrigationValveDueTimeIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
+			__delay_ms(100);
+			saveIrrigationValveOnOffStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
+			__delay_ms(100);
+			saveIrrigationValveCycleStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
+			__delay_ms(100);
+			saveIrrigationValveConfigurationStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
+			__delay_ms(100);
+			saveFertigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
+			__delay_ms(100);
+		}
 #ifdef LCD_DISPLAY_ON_H
         lcdClear();
         lcdWriteStringAtCenter("Setting", 1);
@@ -2361,7 +2645,6 @@ void hardResetMenu() {
                 lcdClear();
                 lcdWriteStringAtCenter("Calibrating Motor", 2);
                 lcdWriteStringAtCenter("In No Load Condition", 3);
-                __delay_ms(3000);
 #endif
                 calibrateMotorCurrent(NoLoad, 0);
                 Irri_Motor = OFF; //Manual procedure off
@@ -2389,7 +2672,6 @@ void hardResetMenu() {
                 lcdClear();
                 lcdWriteStringAtCenter("Calibrating Motor", 2);
                 lcdWriteStringAtCenter("Full Load Current", 3);
-                __delay_ms(3000);
 #endif
                 calibrateMotorCurrent(FullLoad, 0);
                 msgIndex = CLEAR;
@@ -2528,7 +2810,7 @@ void actionsOnSystemReset(void) {
 #ifdef LCD_DISPLAY_ON_H
         lcdClear();
         lcdWriteStringAtCenter("System is Booting Up", 2);
-        for (int i = 0; i < 10; i++) {
+        for (unsigned char i = 0; i < 10; i++) {
             sprintf(temporaryBytesArray, "%d%c", (i+1)*10,0x25);
             lcdWriteStringAtCenter(temporaryBytesArray, 3);
             __delay_ms(2000);
@@ -2539,78 +2821,19 @@ void actionsOnSystemReset(void) {
         readResetCountFromEeprom();
         hardResetMenu(); 
     }
-	//loadDataFromEeprom(); // Read configured valve data saved in EEprom
+	loadDataFromEeprom(); // Read configured valve data saved in EEprom
 	configureGSM(); // Configure GSM in TEXT mode
     __delay_ms(1000);
-    //setGsmToLocalTime(); 
-    //deleteMsgFromSIMStorage(); // Clear GSM storage memory for new Messages
-    //systemAuthenticated = true;
-    //__delay_ms(50);
-    //saveAuthenticationStatus();
-    loadDataFromEeprom();
-    if (systemAuthenticated) {
-        lcdClear();
-        lcdWriteStringAtCenter("System Authenticated", 2);
+    setGsmToLocalTime();
+    if(gsmSetToLocalTime) {
+        //getDateFromGSM(); // Get today's date from Network
+        __delay_ms(1000);
+        //feedTimeInRTC(); // Feed fetched date from network into RTC
         __delay_ms(1000);
     }
-    else {
-        lcdClear();
-        lcdWriteStringAtCenter("System Not Authenticated", 2);
-        __delay_ms(1000);
-    }
-    __delay_ms(50);
-    noLoadCutOff = 10;
-    fullLoadCutOff = 200;
-    __delay_ms(100);
-    saveMotorLoadValuesIntoEeprom();
-    __delay_ms(100);
-    currentDD = 10;
-    currentMM = 10;
-    currentYY  = 10;
-    currentHour = 10;
-    currentMinutes = 10;
-    currentSeconds = 50;
-    feedTimeInRTC();
-    //Mapping Field 1 and 2 with pin 1 and 2 of slave 1
-    fieldMap[0]=1;
-    fieldMap[1]=1;
-    fieldMap[2]=1;
-    fieldMap[3]=2;        
-    for (iterator = 0; iterator < 2; iterator++) {
-        fieldValve[iterator].onPeriod = 15;
-        fieldValve[iterator].offPeriod = 1;
-        fieldValve[iterator].motorOnTimeHour = 10;
-        fieldValve[iterator].motorOnTimeMinute = 11;
-        fieldValve[iterator].nextDueDD = 10;
-        fieldValve[iterator].nextDueMM = 10;
-        fieldValve[iterator].nextDueYY = 10;
-        fieldValve[iterator].dryValue = 100;
-        fieldValve[iterator].wetValue = 30000;
-        fieldValve[iterator].priority = iterator+1;
-        fieldValve[iterator].status = OFF;
-        fieldValve[iterator].cycles = 1;
-        fieldValve[iterator].cyclesExecuted = 1;
-        fieldValve[iterator].isConfigured = true;                
-        fieldValve[iterator].fertigationDelay = 1;
-        fieldValve[iterator].fertigationONperiod = 10;
-        fieldValve[iterator].fertigationInstance = iterator+1;
-        fieldValve[iterator].fertigationStage = OFF;
-        fieldValve[iterator].fertigationValveInterrupted = false;
-        fieldValve[iterator].isFertigationEnabled = true; // true;
+    deleteMsgFromSIMStorage(); // Clear GSM storage memory for new Messages
 
-        saveIrrigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        __delay_ms(100);
-        saveIrrigationValveDueTimeIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        __delay_ms(100);
-        saveIrrigationValveOnOffStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        __delay_ms(100);
-        saveIrrigationValveCycleStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        __delay_ms(100);
-        saveIrrigationValveConfigurationStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        __delay_ms(100);
-        saveFertigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        __delay_ms(100);
-    }
+    /************Fetch Data*************************/
     fetchTimefromRTC(); // Get today's date
     temporaryBytesArray[0] = (currentDD / 10) + 48;
     temporaryBytesArray[1] = (currentDD % 10) + 48;
@@ -2633,29 +2856,47 @@ void actionsOnSystemReset(void) {
     /***************************/
     sendSms(SmsT2, userMobileNo, timeRequired);
     iterator = 0;
-    // for field no. 01 to 09
-    if (iterator<9){
         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
         temporaryBytesArray[1] = iterator + 49; // To store field no. of valve in action 
-    }// for field no. 10 to 12
-    else if (iterator > 8 && iterator < 12) {
-        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
-        temporaryBytesArray[1] = iterator + 39; // To store field no. of valve in action 
-    }
     sendSms(SmsIrr7, userMobileNo, IrrigationData);  // Give diagnostic data
     iterator = 1;
-    if (iterator<9){
         temporaryBytesArray[0] = 48; // To store field no. of valve in action 
         temporaryBytesArray[1] = iterator + 49; // To store field no. of valve in action 
-    }// for field no. 10 to 12
-    else if (iterator > 8 && iterator < 12) {
-        temporaryBytesArray[0] = 49; // To store field no. of valve in action 
-        temporaryBytesArray[1] = iterator + 39; // To store field no. of valve in action 
-    }
     sendSms(SmsIrr7, userMobileNo, IrrigationData);  // Give diagnostic data
-    if (systemAuthenticated) {
+	/************Fetch Data*************************/
+	while (!systemAuthenticated) { // check if System not yet configured
+#ifdef LCD_DISPLAY_ON_H
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);				
+        lcdWriteStringAtCenter("Waiting For User", 2);
+        lcdWriteStringAtCenter("Registration", 3);
+        __delay_ms(3000);
+#endif
+        //setBCDdigit(0x01, 0); // (1.) BCD Indication for Authentication Error 
+        strncpy(pwd, factryPswrd, 6); // consider factory password
+        sleepCount = 65500; // Set Default Sleep count until next sleep count is calculated
+        deepSleep(); // Sleep with default sleep count until system is configured
+        // check if Sleep count executed with interrupt occurred due to new SMS command reception
+        if (newSMSRcvd) {
+            //setBCDdigit(0x02, 1); // (2) BCD Indication for New SMS Received
+            //__delay_ms(500);
+            newSMSRcvd = false; // received cmd is processed										
+            //extractReceivedSms(); // Read received SMS
+            deleteMsgFromSIMStorage();																 
+        }																					 
+    }	
+    if (systemAuthenticated) { // check if system is authenticated and valve action is due
         if (phaseFailure()) { // phase failure detected               
             sleepCount = 65500;
+#ifdef LCD_DISPLAY_ON_H
+            lcdClearLine(2);
+			lcdClearLine(3);
+			lcdClearLine(4);				
+            lcdWriteStringAtCenter("System Restarted With", 2);
+            lcdWriteStringAtCenter("Phase Failure", 3); 
+            lcdWriteStringAtCenter("Suspended All Actions", 4);
+#endif					   
             /***************************/
             sendSms(SmsSR01, userMobileNo, noInfo); // Acknowledge user about System restarted with phase failure
             #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -2713,32 +2954,100 @@ void actionsOnSystemReset(void) {
                 dueValveChecked = true;
                 /***************************/
                 // for field no. 01 to 09
+                /*
                 if (iterator<9){
                     temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                     temporaryBytesArray[1] = iterator + 49; // To store field no. of valve in action 
                 }// for field no. 10 to 12
-                else if (iterator > 8 && iterator < 12) {
+                else if (iterator > 8 && fieldCount) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = iterator + 39; // To store field no. of valve in action 
                 }
                 /***************************/
+                sprintf(temporaryBytesArray,"%d",iterator+1);
                 switch (resetType) {
                 case PowerOnReset:
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);				
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Power Interrupt", 3); 
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    //sprintf(temporaryBytesArray,"%d",currentFieldNo);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif	
                     sendSms(SmsSR02, userMobileNo, fieldNoRequired); // Acknowledge user about system restarted with Valve action
                     break;
                 case LowPowerReset:
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);				
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Low Power", 3); 
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    //sprintf(temporaryBytesArray,"%d",currentFieldNo);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     sendSms(SmsSR03, userMobileNo, fieldNoRequired); // Acknowledge user about system restarted with Valve action
                     break;
                 case HardReset:
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);				
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Diagnostic Mode", 3); 
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    //sprintf(temporaryBytesArray,"%d",currentFieldNo);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     sendSms(SmsSR04, userMobileNo, fieldNoRequired); // Acknowledge user about system restarted with Valve action
                     break;
                 case SoftResest:
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);				
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Phase Detection", 3); 
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    //sprintf(temporaryBytesArray,"%d",currentFieldNo);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     sendSms(SmsSR05, userMobileNo, fieldNoRequired); // Acknowledge user about system restarted with Valve action
                     break;
                 case WDTReset:
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);				
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Timer Time OUT", 3); 
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    //sprintf(temporaryBytesArray,"%d",currentFieldNo);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     sendSms(SmsSR06, userMobileNo, fieldNoRequired); // Acknowledge user about system restarted with Valve action
                     break;
                 case StackReset:
+#ifdef LCD_DISPLAY_ON_H
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);				
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Stack Error", 3); 
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    //sprintf(temporaryBytesArray,"%d",currentFieldNo);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif
                     sendSms(SmsSR07, userMobileNo, fieldNoRequired); // Acknowledge user about system restarted with Valve action
                     break;
                 }
@@ -2798,6 +3107,13 @@ void actionsOnSystemReset(void) {
         }   
     }
     if (isRTCBatteryDrained()) {
+#ifdef LCD_DISPLAY_ON_H   
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("RTC Battery is low", 2);
+        lcdWriteStringAtCenter("Replace RTC battery", 3);
+#endif						  
         /***************************/
         sendSms(SmsRTC1, userMobileNo, noInfo); // Acknowledge user about Please replace RTC battery
         #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -2824,6 +3140,14 @@ void actionsOnSystemReset(void) {
             __delay_ms(1000);
             feedTimeInRTC(); // Feed fetched date from network into RTC
             __delay_ms(1000);
+#ifdef LCD_DISPLAY_ON_H   
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("New RTCBattery Found", 2);
+            lcdWriteStringAtCenter("System Time Synced", 3);
+            lcdWriteStringAtCenter("To Local Time", 4);
+#endif						  
             /***************************/
             sendSms(SmsRTC3, userMobileNo, noInfo); // Acknowledge user about New RTC battery found, system time is set to local time
             #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -2835,6 +3159,14 @@ void actionsOnSystemReset(void) {
             #endif
             /***************************/
         } else {
+#ifdef LCD_DISPLAY_ON_H   
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("New RTCBattery Found", 2);
+            lcdWriteStringAtCenter("Sync System Manually", 3);
+            lcdWriteStringAtCenter("To Local Time", 4);
+#endif						  
             /***************************/
             sendSms(SmsRTC4, userMobileNo, noInfo); // Acknowledge user about New RTC battery found, please set system time manually to local time
             #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -2846,11 +3178,6 @@ void actionsOnSystemReset(void) {
             #endif
             /***************************/  
         }   
-    } else if(gsmSetToLocalTime) {
-        getDateFromGSM(); // Get today's date from Network
-        __delay_ms(1000);
-        feedTimeInRTC(); // Feed fetched date from network into RTC
-        __delay_ms(1000);
     }
 }
 /*************actionsOnSystemReset#End**********/
@@ -2871,6 +3198,11 @@ void actionsOnSleepCountFinish(void) {
             if (fieldValve[field_No].status == ON && fieldValve[field_No].isFertigationEnabled && fieldValve[field_No].fertigationStage == wetPeriod) {
                 __delay_ms(1000);
                 Fert_Motor = ON; // switch on fertigation valve for given field after start period
+#ifdef LCD_DISPLAY_ON_H
+                lcdCreateChar(4, charmap[4]); // Fertigation Icon
+                lcdSetCursor(1,4);
+                lcdWriteChar(4);
+#endif
                 // Injector code             
                 // Initialize all count to zero
                 injector1OnPeriodCnt = CLEAR;
@@ -2937,17 +3269,28 @@ void actionsOnSleepCountFinish(void) {
 
                 /***************************/
                 // for field no. 01 to 09
+                /*
                 if (field_No<9){
                     temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                 }// for field no. 10 to 12
-                else if (field_No > 8 && field_No < 12) {
+                else if (field_No > 8 && field_No < fieldCount) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                 }
                 /***************************/
 
                 /***************************/
+#ifdef LCD_DISPLAY_ON_H   
+                lcdClearLine(2);
+                lcdClearLine(3);
+                lcdClearLine(4);
+                lcdWriteStringAtCenter("Fertigation Started", 2);
+                lcdWriteStringAtCenter("For Field No.", 3);
+                lcdSetCursor(3,17);
+                sprintf(temporaryBytesArray,"%d",field_No+1);
+                lcdWriteStringIndex(temporaryBytesArray,2);
+#endif						  
                 sendSms(SmsFert5, userMobileNo, fieldNoRequired); // Acknowledge user about successful Fertigation started action
                 #ifdef SMS_DELIVERY_REPORT_ON_H
                 sleepCount = 2; // Load sleep count for SMS transmission action
@@ -2963,6 +3306,11 @@ void actionsOnSleepCountFinish(void) {
             else if (fieldValve[field_No].status == ON && fieldValve[field_No].isFertigationEnabled && fieldValve[field_No].fertigationStage == injectPeriod) {
                 __delay_ms(1000);
                 Fert_Motor = OFF; // switch off fertigation valve for given field after on period
+#ifdef LCD_DISPLAY_ON_H
+                lcdCreateChar(0, charmap[0]);// Switch off fertigation icon
+                lcdSetCursor(1,4);
+                lcdWriteChar(0);
+#endif
 				//Switch off all Injectors after completing fertigation on Period																 
                 Irri_Out9 = OFF;
                 Irri_Out10 = OFF;
@@ -2982,11 +3330,12 @@ void actionsOnSleepCountFinish(void) {
                 __delay_ms(100);
                 /***************************/
                 // for field no. 01 to 09
+                /*
                 if (field_No<9){
                     temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                 }// for field no. 10 to 12
-                else if (field_No > 8 && field_No < 12) {
+                else if (field_No > 8 && field_No < fieldCount) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                 }
@@ -2994,6 +3343,17 @@ void actionsOnSleepCountFinish(void) {
 				if (fertigationDry) { // Fertigation executed with low fertigation level  detection
                     fertigationDry = false;
                     /***************************/
+#ifdef LCD_DISPLAY_ON_H   
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("With Low Fert. Level", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif  						  
                     sendSms(SmsFert8, userMobileNo, fieldNoRequired); // Acknowledge user about Fertigation stopped action due to low fertilizer level
                     #ifdef SMS_DELIVERY_REPORT_ON_H
                     sleepCount = 2; // Load sleep count for SMS transmission action
@@ -3007,6 +3367,17 @@ void actionsOnSleepCountFinish(void) {
                     break;
                 } else if (moistureSensorFailed) { // Fertigation executed with level sensor failure
                     moistureSensorFailed = false;
+#ifdef LCD_DISPLAY_ON_H   
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("With Sensor Failure", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif						  
                     /***************************/
                     sendSms(SmsFert7, userMobileNo, fieldNoRequired); // Acknowledge user about successful Fertigation stopped action
                     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -3020,6 +3391,16 @@ void actionsOnSleepCountFinish(void) {
                     /*Send sms*/
                     break;
                 } else {  // Fertigation executed without low level detection and without level sensor failure
+#ifdef LCD_DISPLAY_ON_H   
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("For Field No.", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+#endif						  
                     /***************************/
                     sendSms(SmsFert6, userMobileNo, fieldNoRequired); // Acknowledge user about successful Fertigation stopped action
                     #ifdef SMS_DELIVERY_REPORT_ON_H
@@ -3073,6 +3454,11 @@ void actionsOnSleepCountFinish(void) {
                     }
                     if (fieldValve[field_No].fertigationStage == injectPeriod) {
                         Fert_Motor = OFF; // switch off fertigation valve for given field after on period
+#ifdef LCD_DISPLAY_ON_H
+                        lcdCreateChar(0, charmap[0]); // Switch off fertigation icon
+                        lcdSetCursor(1,4);
+                        lcdWriteChar(0);
+#endif
 						//Switch off all Injectors after completing fertigation on Period
                         Irri_Out9 = OFF;
                         Irri_Out10 = OFF;
@@ -3101,6 +3487,11 @@ void actionsOnSleepCountFinish(void) {
                     break;
                 } else if (fieldValve[field_No].fertigationStage == injectPeriod) {
                     Fert_Motor = OFF; // switch off fertigation valve for given field after on period
+#ifdef LCD_DISPLAY_ON_H
+                    lcdCreateChar(0, charmap[0]); // Switch off fertigation icon
+                    lcdSetCursor(1,4);
+                    lcdWriteChar(0);
+#endif
 					//Switch off all Injectors after completing fertigation on Period
                     Irri_Out9 = OFF;
                     Irri_Out10 = OFF;
@@ -3155,17 +3546,29 @@ void actionsOnDueValve(unsigned char field_No) {
 
         /***************************/
         // for field no. 01 to 09
+        /*
         if (field_No<9){
             temporaryBytesArray[0] = 48; // To store field no. of valve in action 
             temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
         }// for field no. 10 to 12
-        else if (field_No > 8 && field_No < 12) {
+        else if (field_No > 8 && field_No < fieldCount) {
             temporaryBytesArray[0] = 49; // To store field no. of valve in action 
             temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
         }
         /***************************/
 
         /***************************/
+#ifdef LCD_DISPLAY_ON_H   
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Wet Field Detected", 2);
+        lcdWriteStringAtCenter("Irri. Not Started", 3);
+        lcdWriteStringAtCenter("For Field No.", 4);
+        lcdSetCursor(4,17);
+        sprintf(temporaryBytesArray,"%d",field_No+1);
+        lcdWriteStringIndex(temporaryBytesArray,2);
+#endif						  
         sendSms(SmsIrr6, userMobileNo, fieldNoRequired); // Acknowledge user about Irrigation not started due to wet field detection						
         #ifdef SMS_DELIVERY_REPORT_ON_H
         sleepCount = 2; // Load sleep count for SMS transmission action
@@ -3176,7 +3579,7 @@ void actionsOnDueValve(unsigned char field_No) {
         #endif
         /***************************/
     } 
-    else if (!phaseFailure()){ // All phase present
+    else {
         __delay_ms(100);
         activateValve(field_No); // Activate valve for field
         if (!LoraConnectionFailed) { // Skip next block if activation is failed
@@ -3187,6 +3590,11 @@ void actionsOnDueValve(unsigned char field_No) {
 				powerOnMotor(); // Power ON Motor										 
                 __delay_ms(1000);
                 Fert_Motor = ON;
+#ifdef LCD_DISPLAY_ON_H
+                lcdCreateChar(4, charmap[4]); //Fertigation Icon
+                lcdSetCursor(1,4);
+                lcdWriteChar(4);
+#endif
 				// Injector code
                 // Initialize all count to zero
                 injector1OnPeriodCnt = CLEAR;
@@ -3239,17 +3647,28 @@ void actionsOnDueValve(unsigned char field_No) {
                 }				
                 /***************************/
                 // for field no. 01 to 09
+                /*
                 if (field_No<9){
                     temporaryBytesArray[0] = 48; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 49; // To store field no. of valve in action 
                 }// for field no. 10 to 12
-                else if (field_No > 8 && field_No < 12) {
+                else if (field_No > 8 && field_No < fieldCount) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                 }
                 /***************************/
 
                 /***************************/
+#ifdef LCD_DISPLAY_ON_H   
+                lcdClearLine(2);
+                lcdClearLine(3);
+                lcdClearLine(4);
+                lcdWriteStringAtCenter("Fertigation Started", 2);
+                lcdWriteStringAtCenter("For Field No.", 3);
+                lcdSetCursor(3,17);
+                sprintf(temporaryBytesArray,"%d",field_No+1);
+                lcdWriteStringIndex(temporaryBytesArray,2);
+#endif						  
                 sendSms(SmsFert5, userMobileNo, fieldNoRequired); // Acknowledge user about successful Fertigation started action
                 #ifdef SMS_DELIVERY_REPORT_ON_H
                 sleepCount = 2; // Load sleep count for SMS transmission action
@@ -3297,7 +3716,21 @@ The purpose of this function is to delete user data and informed user about dele
 
 ***************************************************************************************************************************/
 void deleteUserData(void) {
+#ifdef LCD_DISPLAY_ON_H   
+    lcdClear();
+    lcdWriteStringAtCenter("System Reset Occurred", 2);
+    lcdWriteStringAtCenter("Factory Code Reset", 3);
+#endif
+    /***************************/
     sendSms(SmsSR14, userMobileNo, noInfo);
+#ifdef SMS_DELIVERY_REPORT_ON_H
+    sleepCount = 2; // Load sleep count for SMS transmission action
+    sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission
+    //setBCDdigit(0x05,0);
+    deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
+    //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
+#endif
+    /***************************/								 
     systemAuthenticated = false;
     saveAuthenticationStatus();
     for (iterator=0; iterator<10; iterator++) {
@@ -3317,7 +3750,21 @@ The purpose of this function is to delete user configured valve data and informe
 
 ***************************************************************************************************************************/
 void deleteValveData(void) {
-    sendSms(SmsSR14, userMobileNo, noInfo);
+#ifdef LCD_DISPLAY_ON_H   
+    lcdClear();
+    lcdWriteStringAtCenter("System Reset Occurred", 2);
+    lcdWriteStringAtCenter("Irri. Data Reset", 3);
+#endif
+    /***************************/
+    sendSms(SmsSR15, userMobileNo, noInfo);
+#ifdef SMS_DELIVERY_REPORT_ON_H
+    sleepCount = 2; // Load sleep count for SMS transmission action
+    sleepCountChangedDueToInterrupt = true; // Sleep count needs to read from memory after SMS transmission
+    //setBCDdigit(0x05,0);
+    deepSleep(); // Sleep until message transmission acknowledge SMS is received from service provider
+    //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
+#endif
+    /***************************/								 
     filtrationDelay1 = 0;
     filtrationDelay2 = 0;
     filtrationDelay3 = 0;

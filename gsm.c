@@ -240,6 +240,16 @@ The purpose of this function is to Notify sender regarding its Action in SMS for
 
  **************************************************************************************************************************/
 void sendSms(const char *message, unsigned char phoneNumber[], unsigned char info) {
+#ifdef LCD_DISPLAY_ON_H
+    lcdCreateChar(0, charmap[0]);
+    lcdSetCursor(1,16); // Switch off SMS icon
+    lcdWriteChar(0);
+#endif
+#ifdef LCD_DISPLAY_ON_H
+    lcdCreateChar(9, charmap[9]); // notification icon
+    lcdSetCursor(1,20);
+    lcdWriteChar(9);				
+#endif
     timer3Count = 30;  // 30 sec window
     //__delay_ms(100);
     transmitStringToGSM("AT+CMGS=\""); // Command to send an SMS message to GSM mobile
@@ -621,6 +631,11 @@ void sendSms(const char *message, unsigned char phoneNumber[], unsigned char inf
     PIR5bits.TMR3IF = SET; //Stop timer thread
     //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
     __delay_ms(500);
+#ifdef LCD_DISPLAY_ON_H
+    lcdCreateChar(0, charmap[0]); // switch off notification icon
+    lcdSetCursor(1,20);
+    lcdWriteChar(0);
+#endif	  
 }
 
 /*************************************************************************************************************************

@@ -1582,7 +1582,7 @@
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmerToGoFilePath"
-                  value="D:/BJU/MPLabXProjects/ProductionCode/BJU_AutoIrri_Lora_DevBranch_New.X/debug/18f67k40/AutoIrrigation_LoraNcDevBranch_New_ptg"/>
+                  value="D:/BJU/MPLabXProjects/ProductionCode/AutoIrrigation_LoraNcDevBranch_New.X/debug/18f67k40/AutoIrrigation_LoraNcDevBranch_New_ptg"/>
         <property key="programmerToGoImageName"
                   value="AutoIrrigation_LoraNcDevBranch_New_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
@@ -1935,7 +1935,7 @@
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmerToGoFilePath"
-                  value="D:/BJU/MPLabXProjects/ProductionCode/BJU_AutoIrri_Lora_DevBranch_New.X/debug/18f67k40_Test/AutoIrrigation_LoraNcDevBranch_New_ptg"/>
+                  value="D:/BJU/MPLabXProjects/ProductionCode/AutoIrrigation_LoraNcDevBranch_New.X/debug/18f67k40_Test/AutoIrrigation_LoraNcDevBranch_New_ptg"/>
         <property key="programmerToGoImageName"
                   value="AutoIrrigation_LoraNcDevBranch_New_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>

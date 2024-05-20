@@ -524,6 +524,32 @@ void savePasswordIntoEeprom(void) {
 
 /*************************************************************************************************************************
 
+This function is called to save Field - Valve Mapping into EEPROM memory
+The purpose of this function is to load Field mapping into assigned memory.
+
+ **************************************************************************************************************************/
+void saveFieldMappingIntoEeprom(void) {
+#ifdef DEBUG_MODE_ON_H
+    //********Debug log#start************//
+    transmitStringToDebug("savePasswordIntoEeprom_IN\r\n");
+    //********Debug log#end**************//
+#endif
+    ////setBCDdigit(0x04,0); //  "4." BCD Indication for EEPROM Memory Write Operation
+    for (iterator = 13; iterator < 37; iterator++) {
+        __delay_ms(50);
+        eepromWrite(eepromAddress[forSystem] + iterator, fieldMap[iterator - 13]);
+    }
+    __delay_ms(50);
+    ////setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
+#ifdef DEBUG_MODE_ON_H
+    //********Debug log#start************//
+    transmitStringToDebug("savePasswordIntoEeprom_OUT\r\n");
+    //********Debug log#end**************//
+#endif
+}
+
+/*************************************************************************************************************************
+
 This function is called to save Factory Set Password into EEPROM memory
 The purpose of this function is to load Factory Set Password into assigned memory.
 
@@ -969,27 +995,32 @@ void loadDataFromEeprom(void) {
     for (iterator = 0; iterator < fieldCount; iterator++) {
         __delay_ms(50);
         readValveDataFromEeprom(eepromAddress[iterator], &fieldValve[iterator]);
-        sprintf(temporaryBytesArray,"%d%c",(iterator+1)*8,0x25);
+        sprintf(temporaryBytesArray,"%d%c",(iterator+1)*6,0x25);
         lcdWriteStringAtCenter(temporaryBytesArray, 3);
     }
     for (iterator = 0; iterator < 10; iterator++) {
         __delay_ms(50);
         userMobileNo[iterator] = eepromRead(eepromAddress[forMobileNo] + iterator);
     }
-    lcdWriteStringAtCenter("97%", 3);
+    lcdWriteStringAtCenter("96%", 3);
     userMobileNo[10] = '\0';
     for (iterator = 0; iterator < 6; iterator++) {
         __delay_ms(50);
         pwd[iterator] = eepromRead(eepromAddress[forPassword] + iterator);
     }
-    lcdWriteStringAtCenter("98%", 3);
+    lcdWriteStringAtCenter("97%", 3);
     pwd[6] = '\0';
     for (iterator = 7; iterator < 13; iterator++) {
         __delay_ms(50);
         factryPswrd[iterator-7] = eepromRead(eepromAddress[forPassword] + iterator);
     }
-    lcdWriteStringAtCenter("99%", 3);
+    lcdWriteStringAtCenter("98%", 3);
     factryPswrd[6] = '\0';
+     for (iterator = 13; iterator < 37; iterator++) {
+        __delay_ms(50);
+        fieldMap[iterator - 13] = eepromRead(eepromAddress[forSystem] + iterator);
+    }
+    lcdWriteStringAtCenter("99%", 3);
     __delay_ms(50);
     systemAuthenticated = eepromRead(eepromAddress[forSystem]);
     __delay_ms(50);

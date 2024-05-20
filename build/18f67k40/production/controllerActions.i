@@ -24609,15 +24609,30 @@ struct FIELDVALVE {
 
 
 
+unsigned char clock[8] = {0x00,0x0e,0x15,0x17,0x11,0x0e,0x00,0x00};
+unsigned char bell[8] = {0x04,0x0e,0x0e,0x0e,0x1f,0x00,0x04,0x00};
+unsigned char irri[8] = {0x15,0x0E,0x15,0x0E,0x04,0x04,0x04,0x00};
+unsigned char fert[8] = {0x04,0x0e,0x1f,0x1f,0x1f,0x0e,0x04,0x04};
+unsigned char sms[8] = {0x00,0x00,0x1F,0x11,0x1B,0x15,0x1F,0x00};
+unsigned char filt[8] = {0x04,0x07,0x1C,0x07,0x1C,0x07,0x1C,0x04};
+unsigned char dry[8] = {0x00,0x00,0x04,0x0a,0x15,0x1f,0x00,0x00};
+unsigned char check[8] = {0x00,0x01,0x03,0x16,0x1c,0x08,0x00,0x00};
+unsigned char phase[8] = {0x02,0x04,0x08,0x18,0x06,0x04,0x08,0x10};
+unsigned char battery[8] = {0x1F,0x11,0x15,0x15,0x11,0x15,0x11,0x1F};
+unsigned char blank[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+unsigned char * charmap[10] = {blank, clock, irri, filt, fert, dry, phase, battery, sms, bell};
+
+
+
 #pragma idata fieldValve
-struct FIELDVALVE fieldValve[12] = {0};
+struct FIELDVALVE fieldValve[16] = {0};
 
 
 
 
 #pragma idata eepromAddress
-const unsigned int eepromAddress[16] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 0x00F0, 0x0120, 0x0150, 0x0180, 0x01B0, 0x01E0, 0x0210, 0x0240, 0x0270, 0x02A0, 0x2D0};
-# 265 "./variableDefinitions.h"
+const unsigned int eepromAddress[22] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 0x00F0, 0x0120, 0x0150, 0x0180, 0x01B0, 0x01E0, 0x0210, 0x0240, 0x0270, 0x02A0, 0x02D0, 0x0300, 0x0330, 0x0360, 0x0390, 0x03C0};
+# 284 "./variableDefinitions.h"
 unsigned int filtrationSeperationTime = 0;
 unsigned int dueDD = 0;
 unsigned int sleepCount = 0;
@@ -24644,7 +24659,7 @@ unsigned int injector4OffPeriodCnt = 0;
 unsigned int noLoadCutOff = 0;
 unsigned int fullLoadCutOff = 0;
 unsigned char userMobileNo[11] = "";
-unsigned char temporaryBytesArray[20] = "";
+unsigned char temporaryBytesArray[26] = "";
 unsigned char null[11] = {'\0'};
 unsigned char pwd[7] = "";
 unsigned char factryPswrd[7] = "";
@@ -24664,7 +24679,7 @@ unsigned char rxCharacter = 0;
 unsigned char msgIndex = 0;
 unsigned char temp = 0;
 unsigned char iterator = 0;
-unsigned char fieldCount = 12;
+unsigned char fieldCount = 16;
 unsigned char resetCount = 0;
 unsigned char startFieldNo = 0;
 unsigned char space = 0x20;
@@ -24691,6 +24706,7 @@ unsigned char filtrationDelay2 = 0;
 unsigned char filtrationDelay3 = 0;
 unsigned char filtrationOnTime = 0;
 unsigned char dryRunCheckCount = 0;
+unsigned char currentFieldNo = 0;
 
 
 
@@ -24819,9 +24835,9 @@ const char SmsFact1[15] = "Factory Key : ";
 
 const char SmsPh1[47] = "Phase failure detected, suspending all actions";
 const char SmsPh2[69] = "Low Phase current detected, actions suspended, please restart system";
-const char SmsPh3[25] = "Phase R failure detected";
-const char SmsPh4[25] = "Phase Y failure detected";
-const char SmsPh5[25] = "Phase B failure detected";
+const char SmsPh3[25] = "Phase loss detected";
+
+
 const char SmsPh6[19] = "All Phase detected";
 
 const char SmsMS1[60] = "Moisture sensor is failed, Irrigation started for field no.";
@@ -24953,6 +24969,7 @@ void saveFactryPswrdIntoEeprom(void);
 void readFactryPswrdFromEeprom(void);
 void saveMotorLoadValuesIntoEeprom(void);
 void readMotorLoadValuesFromEeprom(void);
+void saveFieldMappingIntoEeprom(void);
 # 15 "controllerActions.c" 2
 
 # 1 "./gsm.h" 1
@@ -25011,9 +25028,11 @@ unsigned char bcd2Decimal (unsigned char bcd);
 void lcdInit(void);
 void lcdWriteChar(unsigned char message);
 void lcdWriteString(const char *message);
+void lcdWriteStringIndex(unsigned char *message, unsigned char index);
 void lcdWriteStringAtCenter(const char *message, unsigned char row);
 
 void lcdClear(void);
+void lcdClearLine(unsigned char);
 void LCDhome(void);
 
 void lcdDisplayOff(void);
@@ -25035,16 +25054,6 @@ void lcdSetCursor(unsigned char row, unsigned char col);
 
 __attribute__((inline)) void lcdCommandWrite(unsigned char value);
 __attribute__((inline)) void lcdDataWrite(unsigned char value);
-
-void exerciseDisplay(void);
-void lcdDisplayLeftScroll(const char *);
-void lcdDisplayRightScroll(const char *);
-void lcdDisplayScrolling(const char *);
-void lcdDisplayNoScrolling(const char *);
-void displayOnOff(void);
-void lcdBacklightControl(void);
-void cursorControl(void);
-void autoIncrement(void);
 # 20 "controllerActions.c" 2
 
 
@@ -25337,7 +25346,22 @@ nxtCycle:
                     sleepCount = 1;
                 }
                 else if (newCount < sleepCount) {
-                    sleepCount = (unsigned int) newCount;
+                    sleepCount = (unsigned int)newCount;
+
+                    temporaryBytesArray[13] = (fieldValve[iterator].nextDueDD / 10) + 48;
+                    temporaryBytesArray[14] = (fieldValve[iterator].nextDueDD % 10) + 48;
+                    temporaryBytesArray[15] = '/';
+                    temporaryBytesArray[16] = (fieldValve[iterator].nextDueMM / 10) + 48;
+                    temporaryBytesArray[17] = (fieldValve[iterator].nextDueMM % 10) + 48;
+                    temporaryBytesArray[18] = '/';
+                    temporaryBytesArray[19] = (fieldValve[iterator].nextDueYY / 10) + 48;
+                    temporaryBytesArray[20] = (fieldValve[iterator].nextDueYY % 10) + 48;
+                    temporaryBytesArray[21] = ' ';
+                    temporaryBytesArray[22] = (fieldValve[iterator].motorOnTimeHour / 10) + 48;
+                    temporaryBytesArray[23] = (fieldValve[iterator].motorOnTimeHour % 10) + 48;
+                    temporaryBytesArray[24] = ':';
+                    temporaryBytesArray[25] = (fieldValve[iterator].motorOnTimeMinute / 10) + 48;
+                    temporaryBytesArray[26] = (fieldValve[iterator].motorOnTimeMinute % 10) + 48;
                 }
             }
         }
@@ -25383,7 +25407,7 @@ nxtCycle:
 
     }
 }
-# 413 "controllerActions.c"
+# 428 "controllerActions.c"
 unsigned int days(unsigned char mm, unsigned char yy) {
     unsigned char itr = 0, month[12] = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     unsigned int days = 0;
@@ -25398,7 +25422,7 @@ unsigned int days(unsigned char mm, unsigned char yy) {
     }
     return (days);
 }
-# 438 "controllerActions.c"
+# 453 "controllerActions.c"
 unsigned char fetchFieldNo(unsigned char index) {
 
 
@@ -25406,56 +25430,68 @@ unsigned char fetchFieldNo(unsigned char index) {
 
 
     if (decodedString[index] == '0' && decodedString[index + 1] == '1') {
-# 453 "controllerActions.c"
+# 468 "controllerActions.c"
         return 0;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '2') {
-# 463 "controllerActions.c"
+# 478 "controllerActions.c"
         return 1;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '3') {
-# 473 "controllerActions.c"
+# 488 "controllerActions.c"
         return 2;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '4') {
-# 483 "controllerActions.c"
+# 498 "controllerActions.c"
         return 3;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '5') {
-# 493 "controllerActions.c"
+# 508 "controllerActions.c"
         return 4;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '6') {
-# 503 "controllerActions.c"
+# 518 "controllerActions.c"
         return 5;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '7') {
-# 513 "controllerActions.c"
+# 528 "controllerActions.c"
         return 6;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '8') {
-# 523 "controllerActions.c"
+# 538 "controllerActions.c"
         return 7;
     } else if (decodedString[index] == '0' && decodedString[index + 1] == '9') {
-# 533 "controllerActions.c"
+# 548 "controllerActions.c"
         return 8;
     } else if (decodedString[index] == '1' && decodedString[index + 1] == '0') {
-# 543 "controllerActions.c"
+# 558 "controllerActions.c"
         return 9;
     } else if (decodedString[index] == '1' && decodedString[index + 1] == '1') {
-# 553 "controllerActions.c"
+# 568 "controllerActions.c"
         return 10;
     } else if (decodedString[index] == '1' && decodedString[index + 1] == '2') {
-# 563 "controllerActions.c"
+# 578 "controllerActions.c"
         return 11;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '3') {
+# 588 "controllerActions.c"
+        return 12;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '4') {
+# 598 "controllerActions.c"
+        return 13;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '5') {
+# 608 "controllerActions.c"
+        return 14;
+    } else if (decodedString[index] == '1' && decodedString[index + 1] == '6') {
+# 618 "controllerActions.c"
+        return 15;
     } else {
-# 573 "controllerActions.c"
+# 628 "controllerActions.c"
         return 255;
     }
 
 }
-# 589 "controllerActions.c"
+# 644 "controllerActions.c"
 void extractReceivedSms(void) {
     unsigned char count = 0, onHour = 0, onMinute = 0;
     unsigned int digit = 0;
     timer3Count = 30;
 
-    lcdClear();
-    lcdWriteStringAtCenter("New Message Received", 2);
-    _delay((unsigned long)((1000)*(64000000/4000.0)));
+    lcdCreateChar(8, charmap[8]);
+    lcdSetCursor(1,16);
+    lcdWriteChar(8);
 
 
 
@@ -25487,7 +25523,7 @@ void extractReceivedSms(void) {
 
 
             strcpyCustom((char *) stringToDecode, (const char *) gsmResponse + 63);
-# 636 "controllerActions.c"
+# 691 "controllerActions.c"
             deleteGsmResponse();
             if (isBase64String((unsigned char *) stringToDecode)) {
                 deleteDecodedString();
@@ -25516,41 +25552,47 @@ void extractReceivedSms(void) {
 
                 if (strncmp((char*)(decodedString),(char*)(hook),(4)) == 0) {
 
-                    lcdClear();
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
                     lcdWriteStringAtCenter("User Logged IN", 2);
                     lcdWriteStringAtCenter("System", 3);
 
                     msgIndex = 0;
 
                     sendSms(SmsConnect, userMobileNo, 0);
-# 684 "controllerActions.c"
+# 741 "controllerActions.c"
                     return;
                 }
 
                 else if (strncmp((char*)(decodedString),(char*)(admin),(2)) == 0) {
                     if (strncmp((char*)(decodedString + 3),(char*)(pwd),(6)) == 0) {
 
-                        lcdClear();
-                        lcdWriteStringAtCenter("Login Code", 1);
-                        lcdWriteStringAtCenter("Changed", 2);
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Login Code", 2);
+                        lcdWriteStringAtCenter("Changed", 3);
 
                         strncpy((char*)(pwd),(char*)(decodedString + 10),(6));
                         savePasswordIntoEeprom();
                         msgIndex = 0;
 
                         sendSms(SmsPwd1, userMobileNo, 0);
-# 712 "controllerActions.c"
+# 771 "controllerActions.c"
                         return;
                     } else {
 
-                        lcdClear();
-                        lcdWriteStringAtCenter("Wrong", 1);
-                        lcdWriteStringAtCenter("Login Code", 2);
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Wrong", 2);
+                        lcdWriteStringAtCenter("Login Code", 3);
 
                         msgIndex = 0;
 
                         sendSms(SmsPwd3, userMobileNo, 0);
-# 735 "controllerActions.c"
+# 796 "controllerActions.c"
                         return;
                     }
                 }
@@ -25559,13 +25601,6 @@ void extractReceivedSms(void) {
 
                 else if (strncmp((char*)(decodedString),(char*)(set),(3)) == 0) {
                     iterator = fetchFieldNo(3);
-
-                    lcdClear();
-                    lcdWriteStringAtCenter("Irrigation Data", 1);
-                    lcdWriteStringAtCenter("Configured for Field", 2);
-                    sprintf(temporaryBytesArray,"No: %d",iterator+1);
-                    lcdWriteStringAtCenter(temporaryBytesArray, 3);
-
                     digit = 0;
                     count = 0;
 
@@ -25648,21 +25683,21 @@ void extractReceivedSms(void) {
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     saveFertigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
                     _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-                    if (iterator < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = iterator + 49;
-                    }
-                    else if (iterator > 8 && iterator < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = iterator + 39;
-                    }
-
+# 898 "controllerActions.c"
                     msgIndex = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Irri.Data Configured", 2);
+                    lcdWriteStringAtCenter("For Field No:", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",iterator+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                     sendSms(SmsIrr1, userMobileNo, 2);
-# 859 "controllerActions.c"
+# 924 "controllerActions.c"
                     return;
                 }
 
@@ -25680,21 +25715,21 @@ void extractReceivedSms(void) {
                     }
                     saveIrrigationValveConfigurationStatusIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
                     _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-                    if (iterator < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = iterator + 49;
-                    }
-                    else if (iterator > 8 && iterator < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = iterator + 39;
-                    }
-
+# 953 "controllerActions.c"
                     msgIndex = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Irri. Data Disabled", 2);
+                    lcdWriteStringAtCenter("For Field No:", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",iterator+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                     sendSms(SmsIrr2, userMobileNo, 2);
-# 903 "controllerActions.c"
+# 979 "controllerActions.c"
                     return;
                 }
 
@@ -25705,21 +25740,22 @@ void extractReceivedSms(void) {
                     count = 0;
                     iterator = fetchFieldNo(6);
                     if (fieldValve[iterator].isConfigured == 0) {
-
-
-                        if (iterator < 9) {
-                            temporaryBytesArray[0] = 48;
-                            temporaryBytesArray[1] = iterator + 49;
-                        }
-                        else if (iterator > 8 && iterator < 12) {
-                            temporaryBytesArray[0] = 49;
-                            temporaryBytesArray[1] = iterator + 39;
-                        }
-
+# 1001 "controllerActions.c"
                         msgIndex = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Irri. Not Configured", 2);
+                        lcdWriteStringAtCenter("Fertigation Disabled:", 3);
+                        lcdWriteStringAtCenter("For Field No:", 4);
+                        lcdSetCursor(4,17);
+                        sprintf(temporaryBytesArray,"%d",iterator+1);
+                        lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                         sendSms(SmsFert1, userMobileNo, 2);
-# 935 "controllerActions.c"
+# 1023 "controllerActions.c"
                     } else {
                         for (msgIndex = 9; count < 15; msgIndex++) {
                             if (isNumber(decodedString[msgIndex])) {
@@ -25798,21 +25834,22 @@ void extractReceivedSms(void) {
                                         digit = 0;
                                         if ((fieldValve[iterator].fertigationDelay + fieldValve[iterator].fertigationONperiod) >= fieldValve[iterator].onPeriod) {
                                             fieldValve[iterator].isFertigationEnabled = 0;
-
-
-                                            if (iterator < 9) {
-                                                temporaryBytesArray[0] = 48;
-                                                temporaryBytesArray[1] = iterator + 49;
-                                            }
-                                            else if (iterator > 8 && iterator < 12) {
-                                                temporaryBytesArray[0] = 49;
-                                                temporaryBytesArray[1] = iterator + 39;
-                                            }
-
+# 1113 "controllerActions.c"
                                             msgIndex = 0;
 
+                                            lcdClearLine(2);
+                                            lcdClearLine(3);
+                                            lcdClearLine(4);
+                                            lcdWriteStringAtCenter("Incorrect Data", 2);
+                                            lcdWriteStringAtCenter("Fertigation Disabled:", 3);
+                                            lcdWriteStringAtCenter("For Field No:", 4);
+                                            lcdSetCursor(4,17);
+                                            sprintf(temporaryBytesArray,"%d",iterator+1);
+                                            lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                                             sendSms(SmsFert2, userMobileNo, 2);
-# 1035 "controllerActions.c"
+# 1135 "controllerActions.c"
                                         } else {
                                             fieldValve[iterator].isFertigationEnabled = 1;
                                         }
@@ -25824,21 +25861,21 @@ void extractReceivedSms(void) {
                             _delay((unsigned long)((100)*(64000000/4000.0)));
                             saveFertigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
                             _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-                            if (iterator < 9) {
-                                temporaryBytesArray[0] = 48;
-                                temporaryBytesArray[1] = iterator + 49;
-                            }
-                            else if (iterator > 8 && iterator < 12) {
-                                temporaryBytesArray[0] = 49;
-                                temporaryBytesArray[1] = iterator + 39;
-                            }
-
+# 1158 "controllerActions.c"
                             msgIndex = 0;
 
+                            lcdClearLine(2);
+                            lcdClearLine(3);
+                            lcdClearLine(4);
+                            lcdWriteStringAtCenter("Fert.Data Configured", 2);
+                            lcdWriteStringAtCenter("For Field No:", 3);
+                            lcdSetCursor(3,17);
+                            sprintf(temporaryBytesArray,"%d",iterator+1);
+                            lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                             sendSms(SmsFert3, userMobileNo, 2);
-# 1068 "controllerActions.c"
+# 1179 "controllerActions.c"
                         }
                     }
 
@@ -25859,21 +25896,21 @@ void extractReceivedSms(void) {
                         _delay((unsigned long)((100)*(64000000/4000.0)));
                         saveFertigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
                         _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-                        if (iterator < 9) {
-                            temporaryBytesArray[0] = 48;
-                            temporaryBytesArray[1] = iterator + 49;
-                        }
-                        else if (iterator > 8 && iterator < 12) {
-                            temporaryBytesArray[0] = 49;
-                            temporaryBytesArray[1] = iterator + 39;
-                        }
-
+# 1211 "controllerActions.c"
                         msgIndex = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Fert. Data Disabled", 2);
+                        lcdWriteStringAtCenter("For Field No:", 3);
+                        lcdSetCursor(3,17);
+                        sprintf(temporaryBytesArray,"%d",iterator+1);
+                        lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                         sendSms(SmsFert4, userMobileNo, 2);
-# 1115 "controllerActions.c"
+# 1237 "controllerActions.c"
                         return;
                     }
                 }
@@ -25927,8 +25964,15 @@ void extractReceivedSms(void) {
 
                     msgIndex = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Water Filtration", 2);
+                    lcdWriteStringAtCenter("Sequence Activated", 3);
+
+
                     sendSms(SmsFilt1, userMobileNo, 0);
-# 1182 "controllerActions.c"
+# 1311 "controllerActions.c"
                     return;
                 }
 
@@ -25939,8 +25983,15 @@ void extractReceivedSms(void) {
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     msgIndex = 0;
 
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Water Filtration", 2);
+                    lcdWriteStringAtCenter("Sequence Deactivated", 3);
+
                     sendSms(SmsFilt2, userMobileNo, 0);
-# 1206 "controllerActions.c"
+# 1342 "controllerActions.c"
                     return;
                 }
 
@@ -25948,13 +25999,27 @@ void extractReceivedSms(void) {
                     if (filtrationEnabled) {
                         msgIndex = 0;
 
+
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Fecthing", 2);
+                        lcdWriteStringAtCenter("Filtration Sequence", 3);
+
                         sendSms(SmsFilt4, userMobileNo, 8);
-# 1222 "controllerActions.c"
+# 1365 "controllerActions.c"
                     } else {
                         msgIndex = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Water Filtration", 2);
+                        lcdWriteStringAtCenter("Is Not Enabled", 3);
+
+
                         sendSms(SmsFilt3, userMobileNo, 0);
-# 1234 "controllerActions.c"
+# 1384 "controllerActions.c"
                     }
 
 
@@ -26009,8 +26074,15 @@ void extractReceivedSms(void) {
                         } else {
                             msgIndex = 0;
 
+                            lcdClearLine(2);
+                            lcdClearLine(3);
+                            lcdClearLine(4);
+                            lcdWriteStringAtCenter("Incorrect Local Time", 2);
+                            lcdWriteStringAtCenter("Found", 3);
+
+
                             sendSms(SmsT1, userMobileNo, 0);
-# 1302 "controllerActions.c"
+# 1459 "controllerActions.c"
                             return;
                         }
                     }
@@ -26019,8 +26091,15 @@ void extractReceivedSms(void) {
                     }
                     msgIndex = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Time Synced", 2);
+                    lcdWriteStringAtCenter("To Local Time", 3);
+
+
                     sendSms(SmsRTC2, userMobileNo, 0);
-# 1324 "controllerActions.c"
+# 1488 "controllerActions.c"
                     return;
                 }
 
@@ -26045,8 +26124,16 @@ void extractReceivedSms(void) {
                     temporaryBytesArray[16] = (currentSeconds % 10) + 48;
                     msgIndex = 0;
 
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Current Time:", 2);
+                    lcdSetCursor(3,1);
+                    lcdWriteStringIndex(temporaryBytesArray,17);
+
                     sendSms(SmsT2, userMobileNo, 3);
-# 1362 "controllerActions.c"
+# 1534 "controllerActions.c"
                     return;
                 }
 
@@ -26058,7 +26145,7 @@ void extractReceivedSms(void) {
                         temporaryBytesArray[0] = 48;
                         temporaryBytesArray[1] = iterator + 49;
                     }
-                    else if (iterator > 8 && iterator < 12) {
+                    else if (iterator > 8 && fieldCount) {
                         temporaryBytesArray[0] = 49;
                         temporaryBytesArray[1] = iterator + 39;
                     }
@@ -26066,12 +26153,33 @@ void extractReceivedSms(void) {
                     msgIndex = 0;
                     if (fieldValve[iterator].isConfigured) {
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Fetching Irri.", 2);
+                        lcdWriteStringAtCenter("Data", 3);
+                        lcdWriteStringAtCenter("For Field No:", 4);
+                        lcdSetCursor(4,17);
+                        sprintf(temporaryBytesArray,"%d",iterator+1);
+                        lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                         sendSms(SmsIrr7, userMobileNo, 7);
-# 1390 "controllerActions.c"
+# 1573 "controllerActions.c"
                     } else {
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Irri. not configured", 2);
+                        lcdWriteStringAtCenter("For Field No:", 3);
+                        lcdSetCursor(3,17);
+                        sprintf(temporaryBytesArray,"%d",iterator+1);
+                        lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                         sendSms(SmsIrr3, userMobileNo, 2);
-# 1401 "controllerActions.c"
+# 1594 "controllerActions.c"
                     }
 
 
@@ -26085,8 +26193,16 @@ void extractReceivedSms(void) {
                     if (PORTHbits.RH0 == 1) {
                         msgIndex = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Irri. is Running", 2);
+                        lcdWriteStringAtCenter("Motor Load Cut-Off", 3);
+                        lcdWriteStringAtCenter("Not Set", 4);
+
+
                         sendSms(SmsMotor4, userMobileNo, 0);
-# 1428 "controllerActions.c"
+# 1629 "controllerActions.c"
                         return;
                     }
                     digit = 0;
@@ -26122,43 +26238,66 @@ void extractReceivedSms(void) {
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     msgIndex = 0;
 
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Motor Load Cut-Off", 2);
+                    lcdWriteStringAtCenter("Set Successfully", 3);
+
                     sendSms(SmsMotor2, userMobileNo, 0);
-# 1477 "controllerActions.c"
+# 1685 "controllerActions.c"
                     return;
                 }
                 else if (strncmp((char*)(decodedString),(char*)(getct),(5)) == 0) {
                     msgIndex = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fetching Motor", 2);
+                    lcdWriteStringAtCenter("Load Cut-Off Values", 3);
+
+
                     sendSms(SmsMotor3, userMobileNo, 5);
-# 1496 "controllerActions.c"
+# 1711 "controllerActions.c"
                     return;
                 }
                 else if (strncmp((char*)(decodedString),(char*)(getfreq),(7)) == 0) {
                     iterator = fetchFieldNo(7);
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     isFieldMoistureSensorWetLora(iterator);
-
-
-                    if (iterator < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = iterator + 49;
-                    }
-                    else if (iterator > 8 && iterator < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = iterator + 39;
-                    }
-
+# 1729 "controllerActions.c"
                     if (moistureSensorFailed) {
                         moistureSensorFailed = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Moisture Sensor", 2);
+                        lcdWriteStringAtCenter("Is Failed", 3);
+                        lcdWriteStringAtCenter("For Field No:", 4);
+                        lcdSetCursor(4,17);
+                        sprintf(temporaryBytesArray,"%d",iterator+1);
+                        lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                         sendSms(SmsMS3, userMobileNo, 2);
-# 1525 "controllerActions.c"
+# 1752 "controllerActions.c"
                     } else {
 
                         msgIndex = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Fetching", 2);
+                        lcdWriteStringAtCenter("Moisture Sensor", 3);
+                        lcdWriteStringAtCenter("Frequency", 4);
+
+
                         sendSms(SmsMS2, userMobileNo, 6);
-# 1539 "controllerActions.c"
+# 1774 "controllerActions.c"
                     }
 
 
@@ -26175,8 +26314,16 @@ void extractReceivedSms(void) {
                     if (PORTHbits.RH0 == 1) {
                         msgIndex = 0;
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("Irri. is Running", 2);
+                        lcdWriteStringAtCenter("Motor Load Cut-Off", 3);
+                        lcdWriteStringAtCenter("Not Set", 4);
+
+
                         sendSms(SmsMotor4, userMobileNo, 0);
-# 1569 "controllerActions.c"
+# 1812 "controllerActions.c"
                         return;
                     }
 
@@ -26185,7 +26332,7 @@ void extractReceivedSms(void) {
                         temporaryBytesArray[0] = 48;
                         temporaryBytesArray[1] = iterator + 49;
                     }
-                    else if (iterator > 8 && iterator < 12) {
+                    else if (iterator > 8 && fieldCount) {
                         temporaryBytesArray[0] = 49;
                         temporaryBytesArray[1] = iterator + 39;
                     }
@@ -26199,8 +26346,15 @@ void extractReceivedSms(void) {
                     _delay((unsigned long)((1000)*(64000000/4000.0)));
                     msgIndex = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Motor Load Cut-Off", 2);
+                    lcdWriteStringAtCenter("Set Successfully", 3);
+
+
                     sendSms(SmsMotor3, userMobileNo, 5);
-# 1605 "controllerActions.c"
+# 1855 "controllerActions.c"
                     return;
                 }
 
@@ -26270,7 +26424,7 @@ void extractReceivedSms(void) {
                     msgIndex = 0;
 
                     sendSms(SmsTest, userMobileNo, 0);
-# 1687 "controllerActions.c"
+# 1937 "controllerActions.c"
                     return;
                 }
 
@@ -26280,28 +26434,22 @@ void extractReceivedSms(void) {
                     unsigned char index = 4;
                     while (decodedString[index] != space) {
                         iterator = fetchFieldNo(index);
-                        sprintf(temporaryBytesArray,"No: %d",iterator+1);
-                        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-                        _delay((unsigned long)((1000)*(64000000/4000.0)));
                         fieldMap[iterator*2] = fetchFieldNo(index+2) + 1;
-                        sprintf(temporaryBytesArray,"No: %d",fieldMap[iterator*2]);
-                        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-                        _delay((unsigned long)((1000)*(64000000/4000.0)));
                         fieldMap[(iterator*2)+1] = fetchFieldNo(index+4) + 1;
-                        sprintf(temporaryBytesArray,"No: %d",fieldMap[(iterator*2)+1]);
-                        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-                        _delay((unsigned long)((1000)*(64000000/4000.0)));
                         index = index +6;
                     }
 
-                    lcdClear();
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
                     lcdWriteStringAtCenter("Field Mapping", 2);
                     lcdWriteStringAtCenter("Completed", 3);
 
+                    saveFieldMappingIntoEeprom();
                     msgIndex = 0;
 
-                    sendSms(SmsIrr10, userMobileNo, 1);
-# 1725 "controllerActions.c"
+                    sendSms(SmsIrr10, userMobileNo, 0);
+# 1969 "controllerActions.c"
                 }
             }
 
@@ -26310,14 +26458,16 @@ void extractReceivedSms(void) {
 
                     if (systemAuthenticated) {
 
-                        lcdClear();
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
                         lcdWriteStringAtCenter("User Registration", 2);
                         lcdWriteStringAtCenter("Completed", 3);
 
                         msgIndex = 0;
 
                         sendSms(SmsAU2, userMobileNo, 1);
-# 1748 "controllerActions.c"
+# 1994 "controllerActions.c"
                     }
                     strncpy((char*)(pwd),(char*)(decodedString + 10),(6));
                     strncpy((char*)(userMobileNo),(char*)(temporaryBytesArray),(10));
@@ -26332,33 +26482,44 @@ void extractReceivedSms(void) {
                     _delay((unsigned long)((50)*(64000000/4000.0)));
                     msgIndex = 0;
 
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("User Registration", 2);
+                    lcdWriteStringAtCenter("Completed", 3);
+
                     sendSms(SmsAU1, userMobileNo, 0);
-# 1776 "controllerActions.c"
+# 2029 "controllerActions.c"
                     return;
                 } else {
 
-                    lcdClear();
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
                     lcdWriteStringAtCenter("Failed User", 1);
                     lcdWriteStringAtCenter("Registration", 2);
 
                     msgIndex = 0;
 
                     sendSms(SmsPwd3, temporaryBytesArray, 0);
-# 1799 "controllerActions.c"
+# 2054 "controllerActions.c"
                     strncpy((char*)(temporaryBytesArray),(char*)(null),(10));
                     return;
                 }
             }
             else if (strncmp((char*)(decodedString),(char*)(hook),(4)) == 0) {
 
-                lcdClear();
+                lcdClearLine(2);
+                lcdClearLine(3);
+                lcdClearLine(4);
                 lcdWriteStringAtCenter("Authentication", 1);
                 lcdWriteStringAtCenter("Failed", 2);
 
                 msgIndex = 0;
 
                 sendSms(SmsAU3, temporaryBytesArray, 0);
-# 1825 "controllerActions.c"
+# 2082 "controllerActions.c"
                 strncpy((char*)(temporaryBytesArray),(char*)(null),(10));
                 return;
             }
@@ -26366,7 +26527,7 @@ void extractReceivedSms(void) {
                 msgIndex = 0;
 
                 sendSms(SmsFact1, temporaryBytesArray, 4);
-# 1845 "controllerActions.c"
+# 2102 "controllerActions.c"
                 strncpy((char*)(temporaryBytesArray),(char*)(null),(10));
                 return;
             } else {
@@ -26405,7 +26566,7 @@ void extractReceivedSms(void) {
         return;
     }
 }
-# 1899 "controllerActions.c"
+# 2156 "controllerActions.c"
 _Bool isFieldMoistureSensorWet() {
     unsigned long moistureLevelAvg = 0;
     unsigned long timer1Value = 0;
@@ -26413,7 +26574,7 @@ _Bool isFieldMoistureSensorWet() {
     unsigned char itr = 0, avg = 20;
 
     moistureLevel = 0;
-# 1931 "controllerActions.c"
+# 2188 "controllerActions.c"
     moistureLevel = 0;
     checkMoistureSensor = 1;
     moistureSensorFailed = 0;
@@ -26481,14 +26642,14 @@ _Bool isFieldMoistureSensorWet() {
         return 0;
     }
 }
-# 2014 "controllerActions.c"
+# 2271 "controllerActions.c"
 _Bool isFieldMoistureSensorWetLora(unsigned char FieldNo) {
     unsigned char action;
     loraAttempt = 0;
     action = 0x02;
 
     moistureSensorFailed = 0;
-# 2045 "controllerActions.c"
+# 2302 "controllerActions.c"
     do {
         sendCmdToLora(action, FieldNo);
     } while (loraAttempt < 2);
@@ -26512,9 +26673,9 @@ _Bool isFieldMoistureSensorWetLora(unsigned char FieldNo) {
 
         return 0;
     }
-# 2091 "controllerActions.c"
+# 2348 "controllerActions.c"
 }
-# 2106 "controllerActions.c"
+# 2363 "controllerActions.c"
 _Bool isMotorInNoLoad(void) {
     unsigned int ctOutput = 0;
     unsigned int temp = 0;
@@ -26532,6 +26693,11 @@ _Bool isMotorInNoLoad(void) {
     if (ctOutput > temp && ctOutput <= noLoadCutOff) {
         dryRunDetected = 1;
 
+        lcdCreateChar(5, charmap[5]);
+        lcdSetCursor(1,19);
+        lcdWriteChar(5);
+
+
 
 
 
@@ -26539,6 +26705,11 @@ _Bool isMotorInNoLoad(void) {
         return 1;
     } else if (ctOutput == 0 || (ctOutput > 0 && ctOutput <= temp)) {
         lowPhaseCurrentDetected = 1;
+
+        lcdCreateChar(5, charmap[5]);
+        lcdSetCursor(1,19);
+        lcdWriteChar(5);
+
 
 
 
@@ -26549,6 +26720,11 @@ _Bool isMotorInNoLoad(void) {
         lowPhaseCurrentDetected = 0;
         dryRunDetected = 0;
 
+        lcdCreateChar(0, charmap[0]);
+        lcdSetCursor(1,19);
+        lcdWriteChar(0);
+
+
 
 
 
@@ -26556,7 +26732,7 @@ _Bool isMotorInNoLoad(void) {
         return 0;
     }
 }
-# 2163 "controllerActions.c"
+# 2435 "controllerActions.c"
 void calibrateMotorCurrent(unsigned char loadType, unsigned char FieldNo) {
     unsigned int ctOutput = 0;
     unsigned char itr = 0, limit = 30;
@@ -26711,7 +26887,7 @@ void calibrateMotorCurrent(unsigned char loadType, unsigned char FieldNo) {
 
 
 }
-# 2330 "controllerActions.c"
+# 2602 "controllerActions.c"
 void doDryRunAction(void) {
     unsigned char field_No = 0;
     unsigned int sleepCountVar = 0;
@@ -26763,22 +26939,20 @@ void doDryRunAction(void) {
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     saveIrrigationValveDueTimeIntoEeprom(eepromAddress[field_No], &fieldValve[field_No]);
                     _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-
-                    if (field_No < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = field_No + 49;
-                    }
-                    else if (field_No > 8 && field_No < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = field_No + 39;
-                    }
-
+# 2667 "controllerActions.c"
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Ferti. Postponed", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
 
 
                     sendSms(SmsDR1, userMobileNo, 2);
-# 2404 "controllerActions.c"
+# 2687 "controllerActions.c"
                 } else if (fieldValve[field_No].fertigationStage == 1) {
 
                     fieldValve[field_No].nextDueDD = (unsigned char) dueDD;
@@ -26787,22 +26961,20 @@ void doDryRunAction(void) {
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     saveIrrigationValveDueTimeIntoEeprom(eepromAddress[field_No], &fieldValve[field_No]);
                     _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-
-                    if (field_No < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = field_No + 49;
-                    }
-                    else if (field_No > 8 && field_No < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = field_No + 39;
-                    }
-
+# 2709 "controllerActions.c"
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Ferti. Postponed", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
 
 
                     sendSms(SmsDR2, userMobileNo, 2);
-# 2435 "controllerActions.c"
+# 2729 "controllerActions.c"
                 }
             } else {
                 if (sleepCountVar > (fieldValve[field_No].onPeriod / 2)) {
@@ -26813,51 +26985,38 @@ void doDryRunAction(void) {
                     _delay((unsigned long)((100)*(64000000/4000.0)));
                     saveIrrigationValveDueTimeIntoEeprom(eepromAddress[field_No], &fieldValve[field_No]);
                     _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-
-                    if (field_No < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = field_No + 49;
-                    }
-                    else if (field_No > 8 && field_No < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = field_No + 39;
-                    }
-
+# 2753 "controllerActions.c"
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Irri. Postponed", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
 
 
                     sendSms(SmsDR3, userMobileNo, 2);
-# 2468 "controllerActions.c"
+# 2773 "controllerActions.c"
                 } else {
-
-
-                    if (field_No < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = field_No + 49;
-                    }
-                    else if (field_No > 8 && field_No < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = field_No + 39;
-                    }
-
+# 2787 "controllerActions.c"
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Dry Run detected", 2);
+                    lcdWriteStringAtCenter("Irri. Rescheduled", 3);
+                    lcdWriteStringAtCenter("For Field No:", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
 
 
                     sendSms(SmsDR4, userMobileNo, 2);
-# 2491 "controllerActions.c"
+# 2807 "controllerActions.c"
                 }
             }
-            if (PORTBbits.RB0) {
-
-                sendSms(SmsPh3, userMobileNo, 0);
-# 2504 "controllerActions.c"
-            }
-            else {
-
-                sendSms(SmsPh6, userMobileNo, 0);
-# 2516 "controllerActions.c"
-            }
-
+# 2843 "controllerActions.c"
         } else if ((currentDD == fieldValve[field_No].nextDueDD && currentMM == fieldValve[field_No].nextDueMM && currentYY == fieldValve[field_No].nextDueYY)) {
 
             fieldValve[field_No].nextDueDD = (unsigned char) dueDD;
@@ -26878,7 +27037,7 @@ void doDryRunAction(void) {
 
 
 }
-# 2551 "controllerActions.c"
+# 2876 "controllerActions.c"
 void doLowPhaseAction(void) {
     unsigned char field_No = 0;
 
@@ -26887,8 +27046,16 @@ void doLowPhaseAction(void) {
 
 
 
+    lcdClearLine(2);
+    lcdClearLine(3);
+    lcdClearLine(4);
+    lcdWriteStringAtCenter("Low Phase Current", 2);
+    lcdWriteStringAtCenter("Suspending Actions", 3);
+    lcdWriteStringAtCenter("Restart System", 3);
+
+
     sendSms(SmsPh2, userMobileNo, 0);
-# 2568 "controllerActions.c"
+# 2901 "controllerActions.c"
     if (valveDue) {
         for (field_No = 0; field_No < fieldCount; field_No++) {
             if (fieldValve[field_No].status == 1) {
@@ -26899,26 +27066,28 @@ void doLowPhaseAction(void) {
                 if (fieldValve[field_No].fertigationStage == 2) {
                     PORTHbits.RH2 = 0;
 
+                    lcdCreateChar(0, charmap[0]);
+                    lcdSetCursor(1,4);
+                    lcdWriteChar(0);
+
+
                     PORTFbits.RF3 = 0;
                     PORTFbits.RF4 = 0;
                     PORTFbits.RF5 = 0;
                     PORTFbits.RF6 = 0;
-
-
-
-                    if (field_No < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = field_No + 49;
-                    }
-                    else if (field_No > 8 && field_No < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = field_No + 39;
-                    }
-
+# 2934 "controllerActions.c"
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("For Field No.", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
 
 
                     sendSms(SmsFert6, userMobileNo, 2);
-# 2605 "controllerActions.c"
+# 2953 "controllerActions.c"
                 }
             }
         }
@@ -26930,22 +27099,24 @@ void doLowPhaseAction(void) {
 
 
 }
-# 2629 "controllerActions.c"
+# 2977 "controllerActions.c"
 void doPhaseFailureAction(void) {
     unsigned char field_No = 0;
 
-    lcdClear();
-    lcdWriteStringAtCenter("Phase Failure", 1);
-    lcdWriteStringAtCenter("Detected", 2);
 
 
 
 
 
+    lcdClearLine(2);
+    lcdClearLine(3);
+    lcdClearLine(4);
+    lcdWriteStringAtCenter("Phase Loss Detected", 2);
+    lcdWriteStringAtCenter("Suspending Actions", 3);
 
 
     sendSms(SmsPh1, userMobileNo, 0);
-# 2651 "controllerActions.c"
+# 3001 "controllerActions.c"
     if (valveDue) {
         for (field_No = 0; field_No < fieldCount; field_No++) {
             if (fieldValve[field_No].status == 1) {
@@ -26956,26 +27127,28 @@ void doPhaseFailureAction(void) {
                 if (fieldValve[field_No].fertigationStage == 2) {
                     PORTHbits.RH2 = 0;
 
+                    lcdCreateChar(0, charmap[0]);
+                    lcdSetCursor(1,4);
+                    lcdWriteChar(0);
+
+
                     PORTFbits.RF3 = 0;
                     PORTFbits.RF4 = 0;
                     PORTFbits.RF5 = 0;
                     PORTFbits.RF6 = 0;
-
-
-
-                    if (field_No < 9) {
-                        temporaryBytesArray[0] = 48;
-                        temporaryBytesArray[1] = field_No + 49;
-                    }
-                    else if (field_No > 8 && field_No < 12) {
-                        temporaryBytesArray[0] = 49;
-                        temporaryBytesArray[1] = field_No + 39;
-                    }
-
+# 3034 "controllerActions.c"
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("For Field No.", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
 
 
                     sendSms(SmsFert6, userMobileNo, 2);
-# 2688 "controllerActions.c"
+# 3053 "controllerActions.c"
                 }
             }
         }
@@ -26987,7 +27160,7 @@ void doPhaseFailureAction(void) {
 
 
 }
-# 2715 "controllerActions.c"
+# 3080 "controllerActions.c"
 _Bool isRTCBatteryDrained(void) {
     unsigned int batteryVoltage = 0;
     unsigned int batteryVoltageCutoff = 555;
@@ -27004,6 +27177,11 @@ _Bool isRTCBatteryDrained(void) {
     PORTGbits.RG0 = 0;
     if (batteryVoltage <= batteryVoltageCutoff) {
         lowRTCBatteryDetected = 1;
+
+            lcdCreateChar(7, charmap[7]);
+            lcdSetCursor(1,18);
+            lcdWriteChar(7);
+
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveRTCBatteryStatus();
         _delay((unsigned long)((100)*(64000000/4000.0)));
@@ -27015,6 +27193,11 @@ _Bool isRTCBatteryDrained(void) {
         return 1;
     } else {
 
+            lcdCreateChar(0, charmap[0]);
+            lcdSetCursor(1,18);
+            lcdWriteChar(0);
+
+
 
 
 
@@ -27022,7 +27205,7 @@ _Bool isRTCBatteryDrained(void) {
         return 0;
     }
 }
-# 2766 "controllerActions.c"
+# 3141 "controllerActions.c"
 _Bool phaseFailure(void) {
 
 
@@ -27032,10 +27215,9 @@ _Bool phaseFailure(void) {
     if (!PORTBbits.RB0) {
         phaseFailureDetected = 0;
 
-        lcdClear();
-        lcdWriteStringAtCenter("All Power Phase", 1);
-        lcdWriteStringAtCenter("Detected", 2);
-        _delay((unsigned long)((3000)*(64000000/4000.0)));
+        lcdCreateChar(0, charmap[0]);
+        lcdSetCursor(1,17);
+        lcdWriteChar(0);
 
 
 
@@ -27044,13 +27226,12 @@ _Bool phaseFailure(void) {
 
         return 0;
     } else {
-
-        lcdClear();
-        lcdWriteStringAtCenter("Phase Failure", 1);
-        lcdWriteStringAtCenter("Detected", 2);
-        _delay((unsigned long)((3000)*(64000000/4000.0)));
-
         phaseFailureDetected = 1;
+
+        lcdCreateChar(6, charmap[6]);
+        lcdSetCursor(1,17);
+        lcdWriteChar(6);
+
         phaseFailureActionTaken = 0;
 
 
@@ -27060,7 +27241,7 @@ _Bool phaseFailure(void) {
         return 1;
     }
 }
-# 2815 "controllerActions.c"
+# 3188 "controllerActions.c"
 void powerOnMotor(void) {
 
 
@@ -27069,10 +27250,20 @@ void powerOnMotor(void) {
 
     _delay((unsigned long)((100)*(64000000/4000.0)));
     PORTHbits.RH0 = 1;
+
+        lcdCreateChar(2, charmap[2]);
+        lcdSetCursor(1,2);
+        lcdWriteChar(2);
+
     Timer0Overflow = 0;
     T0CON0bits.T0EN = 1;
     if (filtrationEnabled) {
         filtrationCycleSequence = 1;
+
+        lcdCreateChar(3, charmap[3]);
+        lcdSetCursor(1,3);
+        lcdWriteChar(3);
+
     } else {
         filtrationCycleSequence = 99;
     }
@@ -27090,7 +27281,7 @@ void powerOnMotor(void) {
 
 
 }
-# 2857 "controllerActions.c"
+# 3240 "controllerActions.c"
 void powerOffMotor(void) {
 
 
@@ -27108,13 +27299,23 @@ void powerOffMotor(void) {
     PORTHbits.RH0 = 0;
     _delay((unsigned long)((50)*(64000000/4000.0)));
 
+    lcdCreateChar(0, charmap[0]);
+    lcdSetCursor(1,2);
+    lcdWriteChar(0);
+
+
+    lcdCreateChar(0, charmap[0]);
+    lcdSetCursor(1,3);
+    lcdWriteChar(0);
+
+
 
 
 
 
 
 }
-# 2892 "controllerActions.c"
+# 3285 "controllerActions.c"
 void activateValve(unsigned char FieldNo) {
 
 
@@ -27122,6 +27323,8 @@ void activateValve(unsigned char FieldNo) {
 
 
     unsigned char action;
+ currentFieldNo = FieldNo+1;
+ sprintf(temporaryBytesArray,"%d",FieldNo+1);
     loraAttempt = 0;
     action = 0x00;
     do {
@@ -27136,43 +27339,38 @@ void activateValve(unsigned char FieldNo) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveIrrigationValveOnOffStatusIntoEeprom(eepromAddress[FieldNo], &fieldValve[FieldNo]);
         _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-        if (FieldNo < 9) {
-            temporaryBytesArray[0] = 48;
-            temporaryBytesArray[1] = FieldNo + 49;
-        }
-        else if (FieldNo > 8 && FieldNo < 12) {
-            temporaryBytesArray[0] = 49;
-            temporaryBytesArray[1] = FieldNo + 39;
-        }
-# 2932 "controllerActions.c"
+# 3328 "controllerActions.c"
         if (moistureSensorFailed) {
             moistureSensorFailed = 0;
 
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Started", 2);
+            lcdWriteStringAtCenter("With Sensor Failure", 3);
+            lcdWriteStringAtCenter("For Field No:", 4);
+            lcdSetCursor(4,17);
+
+            lcdWriteStringIndex(temporaryBytesArray,2);
+
 
             sendSms(SmsMS1, userMobileNo, 2);
-# 2946 "controllerActions.c"
-            lcdClear();
-            lcdWriteStringAtCenter("Irrigation Started", 1);
-            lcdWriteStringAtCenter("With Sensor Failure", 2);
-            lcdWriteStringAtCenter("For Field No:", 3);
-            sprintf(temporaryBytesArray,"%d",FieldNo+1);
-            lcdWriteStringAtCenter(temporaryBytesArray, 4);
-            _delay((unsigned long)((2000)*(64000000/4000.0)));
-
+# 3351 "controllerActions.c"
         } else {
 
-            sendSms(SmsIrr4, userMobileNo, 2);
-# 2966 "controllerActions.c"
-            lcdClear();
-            lcdWriteStringAtCenter("Irrigation Started", 1);
-            lcdWriteStringAtCenter("Successfully", 2);
-            lcdWriteStringAtCenter("For Field No:", 3);
-            sprintf(temporaryBytesArray,"%d",FieldNo+1);
-            lcdWriteStringAtCenter(temporaryBytesArray, 4);
-            _delay((unsigned long)((2000)*(64000000/4000.0)));
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Started", 2);
+            lcdWriteStringAtCenter("With No Response", 3);
+            lcdWriteStringAtCenter("For Field No:", 4);
+            lcdSetCursor(4,17);
 
+            lcdWriteStringIndex(temporaryBytesArray,2);
+
+
+            sendSms(SmsIrr4, userMobileNo, 2);
+# 3373 "controllerActions.c"
         }
     } else {
         valveDue = 0;
@@ -27192,30 +27390,20 @@ void activateValve(unsigned char FieldNo) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveIrrigationValveDueTimeIntoEeprom(eepromAddress[FieldNo], &fieldValve[FieldNo]);
         _delay((unsigned long)((100)*(64000000/4000.0)));
+# 3406 "controllerActions.c"
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Irrigation Skipped", 2);
+        lcdWriteStringAtCenter("With No Response", 3);
+        lcdWriteStringAtCenter("For Field No:", 4);
+        lcdSetCursor(4,17);
 
-
-
-        if (FieldNo < 9) {
-            temporaryBytesArray[0] = 48;
-            temporaryBytesArray[1] = FieldNo + 49;
-        }
-        else if (FieldNo > 8 && FieldNo < 12) {
-            temporaryBytesArray[0] = 49;
-            temporaryBytesArray[1] = FieldNo + 39;
-        }
-
+        lcdWriteStringIndex(temporaryBytesArray,2);
 
 
         sendSms(SmsIrr8, userMobileNo, 2);
-# 3017 "controllerActions.c"
-        lcdClear();
-        lcdWriteStringAtCenter("Irrigation Skipped", 1);
-        lcdWriteStringAtCenter("With No Response",2);
-        lcdWriteStringAtCenter("From Field No:",3);
-        sprintf(temporaryBytesArray,"%d",FieldNo+1);
-        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-        _delay((unsigned long)((2000)*(64000000/4000.0)));
-
+# 3426 "controllerActions.c"
     }
 
 
@@ -27223,7 +27411,7 @@ void activateValve(unsigned char FieldNo) {
 
 
 }
-# 3043 "controllerActions.c"
+# 3444 "controllerActions.c"
 void deActivateValve(unsigned char FieldNo) {
 
 
@@ -27237,41 +27425,37 @@ void deActivateValve(unsigned char FieldNo) {
     do {
         sendCmdToLora(action, FieldNo);
     } while (loraAttempt < 2);
-
-
-    if (FieldNo < 9) {
-        temporaryBytesArray[0] = 48;
-        temporaryBytesArray[1] = FieldNo + 49;
-    }
-    else if (FieldNo > 8 && FieldNo < 12) {
-        temporaryBytesArray[0] = 49;
-        temporaryBytesArray[1] = FieldNo + 39;
-    }
-
+# 3469 "controllerActions.c"
+ sprintf(temporaryBytesArray,"%d",FieldNo+1);
     if (!LoraConnectionFailed && loraAttempt == 99) {
-# 3078 "controllerActions.c"
-        sendSms(SmsIrr5, userMobileNo, 2);
-# 3088 "controllerActions.c"
-        lcdClear();
-        lcdWriteStringAtCenter("Irrigation Stopped", 1);
-        lcdWriteStringAtCenter("Successfully",2);
-        lcdWriteStringAtCenter("For Field No:",3);
-        sprintf(temporaryBytesArray,"%d",FieldNo+1);
-        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-        _delay((unsigned long)((2000)*(64000000/4000.0)));
+# 3482 "controllerActions.c"
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Irrigation Stopped", 2);
+        lcdWriteStringAtCenter("Successfully", 3);
+        lcdWriteStringAtCenter("For Field No:", 4);
+        lcdSetCursor(4,17);
 
+        lcdWriteStringIndex(temporaryBytesArray,2);
+
+        sendSms(SmsIrr5, userMobileNo, 2);
+# 3501 "controllerActions.c"
     } else {
 
-        sendSms(SmsIrr9, userMobileNo, 2);
-# 3108 "controllerActions.c"
-        lcdClear();
-        lcdWriteStringAtCenter("Irrigation Stopped", 1);
-        lcdWriteStringAtCenter("With No Response",2);
-        lcdWriteStringAtCenter("From Field No:",3);
-        sprintf(temporaryBytesArray,"%d",FieldNo+1);
-        lcdWriteStringAtCenter(temporaryBytesArray, 4);
-        _delay((unsigned long)((2000)*(64000000/4000.0)));
 
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Irrigation Stopped", 2);
+        lcdWriteStringAtCenter("With No Response", 3);
+        lcdWriteStringAtCenter("For Field No:", 4);
+        lcdSetCursor(4,17);
+
+        lcdWriteStringIndex(temporaryBytesArray,2);
+
+        sendSms(SmsIrr9, userMobileNo, 2);
+# 3523 "controllerActions.c"
     }
 
 
@@ -27279,15 +27463,17 @@ void deActivateValve(unsigned char FieldNo) {
 
 
 }
-# 3134 "controllerActions.c"
+# 3541 "controllerActions.c"
 void deepSleep(void) {
 
     while (sleepCount > 0 && !newSMSRcvd) {
         if (phaseFailureDetected) {
 
-            lcdClear();
-            lcdWriteStringAtCenter("Phase Failure", 1);
-            lcdWriteStringAtCenter("Detected", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Phase Failure", 2);
+            lcdWriteStringAtCenter("Detected", 3);
 
             if (!phaseFailureActionTaken) {
                 doPhaseFailureAction();
@@ -27306,45 +27492,71 @@ void deepSleep(void) {
       sleepCount = 65500;
      }
     }
-            } else {
-
-                lcdClear();
-                lcdWriteStringAtCenter("Irrigation Running", 1);
-                lcdWriteStringAtCenter("For Field No: ", 2);
-
-                lcdWriteStringAtCenter(temporaryBytesArray, 4);
-
-
             }
+
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Running", 2);
+            lcdWriteStringAtCenter("For Field No: ", 3);
+            lcdSetCursor(3,17);
+            sprintf(temporaryBytesArray,"%d",currentFieldNo);
+            lcdWriteStringIndex(temporaryBytesArray,2);
+
         } else if (dryRunDetected) {
 
-            lcdClear();
-            lcdWriteStringAtCenter("Dry Run", 1);
-            lcdWriteStringAtCenter("Detected", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Dry Run", 2);
+            lcdWriteStringAtCenter("Detected", 3);
 
 
         } else if (lowPhaseCurrentDetected) {
 
-            lcdClear();
-            lcdWriteStringAtCenter("Found Low Phase", 1);
-            lcdWriteStringAtCenter("Current", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Found Low Phase", 2);
+            lcdWriteStringAtCenter("Current", 3);
 
 
         } else if (lowRTCBatteryDetected) {
 
-            lcdClear();
-            lcdWriteStringAtCenter("Found Low RTC", 1);
-            lcdWriteStringAtCenter("Battery", 2);
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Found Low RTC", 2);
+            lcdWriteStringAtCenter("Battery", 3);
 
 
         } else if (systemAuthenticated) {
+
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Next Schedule Set On", 2);
+            lcdWriteStringAtCenter("Date:", 3);
+            lcdWriteStringAtCenter(temporaryBytesArray+13, 4);
+
+
 
         }
         PORTHbits.RH3 = 1;
         inSleepMode = 1;
         WDTCON0bits.SWDTEN = 1;
         if (sleepCount > 0 && !newSMSRcvd) {
+
+            lcdCreateChar(1, charmap[1]);
+            lcdSetCursor(1,1);
+            lcdWriteChar(1);
+
             __asm(" sleep");
+
+            lcdCreateChar(0, charmap[0]);
+            lcdSetCursor(1,1);
+            lcdWriteChar(0);
+
         }
         if (valveDue) {
             _delay((unsigned long)((1500)*(64000000/4000.0)));
@@ -27361,7 +27573,7 @@ void deepSleep(void) {
     inSleepMode = 0;
 
 }
-# 3226 "controllerActions.c"
+# 3661 "controllerActions.c"
 void configureController(void) {
 
     BSR = 0x0f;
@@ -27620,7 +27832,7 @@ void configureController(void) {
     _delay((unsigned long)((3000)*(64000000/4000.0)));
 
 }
-# 3494 "controllerActions.c"
+# 3929 "controllerActions.c"
 void setFactoryPincode(void) {
     readDeviceProgramStatusFromEeprom();
     _delay((unsigned long)((50)*(64000000/4000.0)));
@@ -27638,7 +27850,7 @@ void setFactoryPincode(void) {
         saveDeviceProgramStatusIntoEeprom();
     }
 }
-# 3522 "controllerActions.c"
+# 3957 "controllerActions.c"
 unsigned char checkResetType(void) {
     unsigned char resetType = 0;
 
@@ -27674,7 +27886,7 @@ unsigned char checkResetType(void) {
     }
     return resetType;
 }
-# 3568 "controllerActions.c"
+# 4003 "controllerActions.c"
 void hardResetMenu() {
 
     lcdClear();
@@ -27768,14 +27980,13 @@ void hardResetMenu() {
                 lcdClear();
                 lcdWriteStringAtCenter("Calibrating Motor", 2);
                 lcdWriteStringAtCenter("In No Load Condition", 3);
-                _delay((unsigned long)((3000)*(64000000/4000.0)));
 
                 calibrateMotorCurrent(2, 0);
                 PORTHbits.RH0 = 0;
                 msgIndex = 0;
 
                 sendSms(SmsMotor3, userMobileNo, 5);
-# 3681 "controllerActions.c"
+# 4115 "controllerActions.c"
                 break;
             case 2:
                 resetCount = 0x00;
@@ -27784,13 +27995,12 @@ void hardResetMenu() {
                 lcdClear();
                 lcdWriteStringAtCenter("Calibrating Motor", 2);
                 lcdWriteStringAtCenter("Full Load Current", 3);
-                _delay((unsigned long)((3000)*(64000000/4000.0)));
 
                 calibrateMotorCurrent(1, 0);
                 msgIndex = 0;
 
                 sendSms(SmsMotor3, userMobileNo, 5);
-# 3708 "controllerActions.c"
+# 4141 "controllerActions.c"
                 break;
             case 3:
                 resetCount = 0x00;
@@ -27886,7 +28096,7 @@ void hardResetMenu() {
         saveResetCountIntoEeprom();
     }
 }
-# 3814 "controllerActions.c"
+# 4247 "controllerActions.c"
 void actionsOnSystemReset(void) {
     unsigned char resetType = 0;
 
@@ -27901,7 +28111,7 @@ void actionsOnSystemReset(void) {
 
         lcdClear();
         lcdWriteStringAtCenter("System is Booting Up", 2);
-        for (int i = 0; i < 10; i++) {
+        for (unsigned char i = 0; i < 10; i++) {
             sprintf(temporaryBytesArray, "%d%c", (i+1)*10,0x25);
             lcdWriteStringAtCenter(temporaryBytesArray, 3);
             _delay((unsigned long)((2000)*(64000000/4000.0)));
@@ -27916,10 +28126,18 @@ void actionsOnSystemReset(void) {
     configureGSM();
     _delay((unsigned long)((1000)*(64000000/4000.0)));
     setGsmToLocalTime();
+ if(gsmSetToLocalTime) {
+        getDateFromGSM();
+        _delay((unsigned long)((1000)*(64000000/4000.0)));
+        feedTimeInRTC();
+        _delay((unsigned long)((1000)*(64000000/4000.0)));
+    }
     deleteMsgFromSIMStorage();
     while (!systemAuthenticated) {
 
-        lcdClear();
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
         lcdWriteStringAtCenter("Waiting For User", 2);
         lcdWriteStringAtCenter("Registration", 3);
         _delay((unsigned long)((3000)*(64000000/4000.0)));
@@ -27940,6 +28158,14 @@ void actionsOnSystemReset(void) {
     if (systemAuthenticated) {
         if (phaseFailure()) {
             sleepCount = 65500;
+
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("System Restarted With", 2);
+            lcdWriteStringAtCenter("Phase Failure", 3);
+            lcdWriteStringAtCenter("Suspended All Actions", 4);
+
 
             sendSms(SmsSR01, userMobileNo, 0);
 
@@ -27995,39 +28221,96 @@ void actionsOnSystemReset(void) {
             }
             if (valveDue) {
                 dueValveChecked = 1;
-
-
-                if (iterator < 9) {
-                    temporaryBytesArray[0] = 48;
-                    temporaryBytesArray[1] = iterator + 49;
-                }
-                else if (iterator > 8 && iterator < 12) {
-                    temporaryBytesArray[0] = 49;
-                    temporaryBytesArray[1] = iterator + 39;
-                }
-
+# 4383 "controllerActions.c"
+    sprintf(temporaryBytesArray,"%d",iterator+1);
                 switch (resetType) {
                     case 1:
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Power Interrupt", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
                         sendSms(SmsSR02, userMobileNo, 2);
                         break;
                     case 2:
-                        sendSms(SmsSR03, userMobileNo, 2);
-                        break;
-                    case 3:
-                        sendSms(SmsSR04, userMobileNo, 2);
-                        break;
-                    case 4:
-                        sendSms(SmsSR05, userMobileNo, 2);
-                        break;
-                    case 5:
-                        sendSms(SmsSR06, userMobileNo, 2);
-                        break;
-                    case 6:
-                        sendSms(SmsSR07, userMobileNo, 2);
-                        break;
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Low Power", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+                    sendSms(SmsSR03, userMobileNo, 2);
+                    break;
+                case 3:
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Diagnostic Mode", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+                    sendSms(SmsSR04, userMobileNo, 2);
+                    break;
+                case 4:
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Phase Detection", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+                    sendSms(SmsSR05, userMobileNo, 2);
+                    break;
+                case 5:
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Timer Time OUT", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+                    sendSms(SmsSR06, userMobileNo, 2);
+                    break;
+                case 6:
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("System Restarted For", 2);
+                    lcdWriteStringAtCenter("Stack Error", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+                    sendSms(SmsSR07, userMobileNo, 2);
+                    break;
                 }
                 resetType = 0;
-# 3968 "controllerActions.c"
+# 4485 "controllerActions.c"
                 sleepCount = readActiveSleepCountFromEeprom();
             } else {
                 switch (resetType) {
@@ -28051,14 +28334,21 @@ void actionsOnSystemReset(void) {
                         break;
                 }
                 resetType = 0;
-# 4005 "controllerActions.c"
+# 4522 "controllerActions.c"
             }
         }
     }
     if (isRTCBatteryDrained()) {
 
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("RTC Battery is low", 2);
+        lcdWriteStringAtCenter("Replace RTC battery", 3);
+
+
         sendSms(SmsRTC1, userMobileNo, 0);
-# 4019 "controllerActions.c"
+# 4543 "controllerActions.c"
         if (gsmSetToLocalTime) {
             getDateFromGSM();
             _delay((unsigned long)((1000)*(64000000/4000.0)));
@@ -28076,21 +28366,32 @@ void actionsOnSystemReset(void) {
             feedTimeInRTC();
             _delay((unsigned long)((1000)*(64000000/4000.0)));
 
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("New RTCBattery Found", 2);
+            lcdWriteStringAtCenter("System Time Synced", 3);
+            lcdWriteStringAtCenter("To Local Time", 4);
+
+
             sendSms(SmsRTC3, userMobileNo, 0);
-# 4045 "controllerActions.c"
+# 4577 "controllerActions.c"
         } else {
 
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("New RTCBattery Found", 2);
+            lcdWriteStringAtCenter("Sync System Manually", 3);
+            lcdWriteStringAtCenter("To Local Time", 4);
+
+
             sendSms(SmsRTC4, userMobileNo, 0);
-# 4056 "controllerActions.c"
+# 4596 "controllerActions.c"
         }
-    } else if (gsmSetToLocalTime) {
-        getDateFromGSM();
-        _delay((unsigned long)((1000)*(64000000/4000.0)));
-        feedTimeInRTC();
-        _delay((unsigned long)((1000)*(64000000/4000.0)));
     }
 }
-# 4074 "controllerActions.c"
+# 4609 "controllerActions.c"
 void actionsOnSleepCountFinish(void) {
     unsigned char field_No = 0;
     if (valveDue && sleepCount == 0 && !dryRunDetected && !phaseFailureDetected && !onHold && !lowPhaseCurrentDetected) {
@@ -28099,6 +28400,11 @@ void actionsOnSleepCountFinish(void) {
             if (fieldValve[field_No].status == 1 && fieldValve[field_No].isFertigationEnabled && fieldValve[field_No].fertigationStage == 1) {
                 _delay((unsigned long)((1000)*(64000000/4000.0)));
                 PORTHbits.RH2 = 1;
+
+                lcdCreateChar(4, charmap[4]);
+                lcdSetCursor(1,4);
+                lcdWriteChar(4);
+
 
 
                 injector1OnPeriodCnt = 0;
@@ -28162,27 +28468,28 @@ void actionsOnSleepCountFinish(void) {
                 _delay((unsigned long)((100)*(64000000/4000.0)));
                 saveActiveSleepCountIntoEeprom();
                 _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-
-                if (field_No < 9) {
-                    temporaryBytesArray[0] = 48;
-                    temporaryBytesArray[1] = field_No + 49;
-                }
-                else if (field_No > 8 && field_No < 12) {
-                    temporaryBytesArray[0] = 49;
-                    temporaryBytesArray[1] = field_No + 39;
-                }
-
-
+# 4701 "controllerActions.c"
+                lcdClearLine(2);
+                lcdClearLine(3);
+                lcdClearLine(4);
+                lcdWriteStringAtCenter("Fertigation Started", 2);
+                lcdWriteStringAtCenter("For Field No.", 3);
+                lcdSetCursor(3,17);
+                sprintf(temporaryBytesArray,"%d",field_No+1);
+                lcdWriteStringIndex(temporaryBytesArray,2);
 
                 sendSms(SmsFert5, userMobileNo, 2);
-# 4169 "controllerActions.c"
+# 4720 "controllerActions.c"
                 break;
             }
             else if (fieldValve[field_No].status == 1 && fieldValve[field_No].isFertigationEnabled && fieldValve[field_No].fertigationStage == 2) {
                 _delay((unsigned long)((1000)*(64000000/4000.0)));
                 PORTHbits.RH2 = 0;
+
+                lcdCreateChar(0, charmap[0]);
+                lcdSetCursor(1,4);
+                lcdWriteChar(0);
+
 
                 PORTFbits.RF3 = 0;
                 PORTFbits.RF4 = 0;
@@ -28200,33 +28507,55 @@ void actionsOnSleepCountFinish(void) {
                 _delay((unsigned long)((100)*(64000000/4000.0)));
                 saveActiveSleepCountIntoEeprom();
                 _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-                if (field_No < 9) {
-                    temporaryBytesArray[0] = 48;
-                    temporaryBytesArray[1] = field_No + 49;
-                }
-                else if (field_No > 8 && field_No < 12) {
-                    temporaryBytesArray[0] = 49;
-                    temporaryBytesArray[1] = field_No + 39;
-                }
-
+# 4759 "controllerActions.c"
                 if (fertigationDry) {
                     fertigationDry = 0;
 
+
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("With Low Fert. Level", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
                     sendSms(SmsFert8, userMobileNo, 2);
-# 4215 "controllerActions.c"
+# 4783 "controllerActions.c"
                     break;
                 } else if (moistureSensorFailed) {
                     moistureSensorFailed = 0;
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("With Sensor Failure", 3);
+                    lcdWriteStringAtCenter("For Field No.", 4);
+                    lcdSetCursor(4,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                     sendSms(SmsFert7, userMobileNo, 2);
-# 4229 "controllerActions.c"
+# 4808 "controllerActions.c"
                     break;
                 } else {
 
+                    lcdClearLine(2);
+                    lcdClearLine(3);
+                    lcdClearLine(4);
+                    lcdWriteStringAtCenter("Fertigation Stopped", 2);
+                    lcdWriteStringAtCenter("For Field No.", 3);
+                    lcdSetCursor(3,17);
+                    sprintf(temporaryBytesArray,"%d",field_No+1);
+                    lcdWriteStringIndex(temporaryBytesArray,2);
+
+
                     sendSms(SmsFert6, userMobileNo, 2);
-# 4242 "controllerActions.c"
+# 4831 "controllerActions.c"
                     break;
                 }
             }
@@ -28270,6 +28599,11 @@ void actionsOnSleepCountFinish(void) {
                     if (fieldValve[field_No].fertigationStage == 2) {
                         PORTHbits.RH2 = 0;
 
+                        lcdCreateChar(0, charmap[0]);
+                        lcdSetCursor(1,4);
+                        lcdWriteChar(0);
+
+
                         PORTFbits.RF3 = 0;
                         PORTFbits.RF4 = 0;
                         PORTFbits.RF5 = 0;
@@ -28298,6 +28632,11 @@ void actionsOnSleepCountFinish(void) {
                 } else if (fieldValve[field_No].fertigationStage == 2) {
                     PORTHbits.RH2 = 0;
 
+                    lcdCreateChar(0, charmap[0]);
+                    lcdSetCursor(1,4);
+                    lcdWriteChar(0);
+
+
                     PORTFbits.RF3 = 0;
                     PORTFbits.RF4 = 0;
                     PORTFbits.RF5 = 0;
@@ -28315,7 +28654,7 @@ void actionsOnSleepCountFinish(void) {
         }
     }
 }
-# 4340 "controllerActions.c"
+# 4939 "controllerActions.c"
 void actionsOnDueValve(unsigned char field_No) {
     unsigned char last_Field_No = 0;
     wetSensor = 0;
@@ -28339,24 +28678,21 @@ void actionsOnDueValve(unsigned char field_No) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveIrrigationValveDueTimeIntoEeprom(eepromAddress[field_No], &fieldValve[field_No]);
         _delay((unsigned long)((100)*(64000000/4000.0)));
-
-
-
-        if (field_No < 9) {
-            temporaryBytesArray[0] = 48;
-            temporaryBytesArray[1] = field_No + 49;
-        }
-        else if (field_No > 8 && field_No < 12) {
-            temporaryBytesArray[0] = 49;
-            temporaryBytesArray[1] = field_No + 39;
-        }
-
-
+# 4978 "controllerActions.c"
+        lcdClearLine(2);
+        lcdClearLine(3);
+        lcdClearLine(4);
+        lcdWriteStringAtCenter("Wet Field Detected", 2);
+        lcdWriteStringAtCenter("Irri. Not Started", 3);
+        lcdWriteStringAtCenter("For Field No.", 4);
+        lcdSetCursor(4,17);
+        sprintf(temporaryBytesArray,"%d",field_No+1);
+        lcdWriteStringIndex(temporaryBytesArray,2);
 
         sendSms(SmsIrr6, userMobileNo, 2);
-# 4386 "controllerActions.c"
+# 4997 "controllerActions.c"
     }
-    else if (!phaseFailure()) {
+    else {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         activateValve(field_No);
         if (!LoraConnectionFailed) {
@@ -28367,6 +28703,11 @@ void actionsOnDueValve(unsigned char field_No) {
                 powerOnMotor();
                 _delay((unsigned long)((1000)*(64000000/4000.0)));
                 PORTHbits.RH2 = 1;
+
+                lcdCreateChar(4, charmap[4]);
+                lcdSetCursor(1,4);
+                lcdWriteChar(4);
+
 
 
                 injector1OnPeriodCnt = 0;
@@ -28417,21 +28758,18 @@ void actionsOnDueValve(unsigned char field_No) {
                     PORTFbits.RF6 = 1;
                     injector4OnPeriodCnt++;
                 }
-
-
-                if (field_No < 9) {
-                    temporaryBytesArray[0] = 48;
-                    temporaryBytesArray[1] = field_No + 49;
-                }
-                else if (field_No > 8 && field_No < 12) {
-                    temporaryBytesArray[0] = 49;
-                    temporaryBytesArray[1] = field_No + 39;
-                }
-
-
+# 5079 "controllerActions.c"
+                lcdClearLine(2);
+                lcdClearLine(3);
+                lcdClearLine(4);
+                lcdWriteStringAtCenter("Fertigation Started", 2);
+                lcdWriteStringAtCenter("For Field No.", 3);
+                lcdSetCursor(3,17);
+                sprintf(temporaryBytesArray,"%d",field_No+1);
+                lcdWriteStringIndex(temporaryBytesArray,2);
 
                 sendSms(SmsFert5, userMobileNo, 2);
-# 4472 "controllerActions.c"
+# 5099 "controllerActions.c"
             } else if (valveExecuted) {
                 last_Field_No = readFieldIrrigationValveNoFromEeprom();
                 if (last_Field_No != field_No) {
@@ -28456,9 +28794,16 @@ void actionsOnDueValve(unsigned char field_No) {
         }
     }
 }
-# 4507 "controllerActions.c"
+# 5134 "controllerActions.c"
 void deleteUserData(void) {
+
+    lcdClear();
+    lcdWriteStringAtCenter("System Reset Occurred", 2);
+    lcdWriteStringAtCenter("Factory Code Reset", 3);
+
+
     sendSms(SmsSR14, userMobileNo, 0);
+# 5150 "controllerActions.c"
     systemAuthenticated = 0;
     saveAuthenticationStatus();
     for (iterator = 0; iterator < 10; iterator++) {
@@ -28466,9 +28811,16 @@ void deleteUserData(void) {
     }
     saveMobileNoIntoEeprom();
 }
-# 4527 "controllerActions.c"
+# 5168 "controllerActions.c"
 void deleteValveData(void) {
-    sendSms(SmsSR14, userMobileNo, 0);
+
+    lcdClear();
+    lcdWriteStringAtCenter("System Reset Occurred", 2);
+    lcdWriteStringAtCenter("Irri. Data Reset", 3);
+
+
+    sendSms(SmsSR15, userMobileNo, 0);
+# 5184 "controllerActions.c"
     filtrationDelay1 = 0;
     filtrationDelay2 = 0;
     filtrationDelay3 = 0;
@@ -28497,7 +28849,7 @@ void deleteValveData(void) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
     }
 }
-# 4567 "controllerActions.c"
+# 5222 "controllerActions.c"
 void randomPasswordGeneration(void) {
 
 
@@ -28514,7 +28866,7 @@ void randomPasswordGeneration(void) {
     }
     factryPswrd[6] = '\0';
 }
-# 4592 "controllerActions.c"
+# 5247 "controllerActions.c"
 void deleteGsmResponse(void) {
 
 
@@ -28534,7 +28886,7 @@ void deleteGsmResponse(void) {
 
 
 }
-# 4620 "controllerActions.c"
+# 5275 "controllerActions.c"
 void deleteStringToDecode(void) {
 
 
@@ -28553,7 +28905,7 @@ void deleteStringToDecode(void) {
 
 
 }
-# 4647 "controllerActions.c"
+# 5302 "controllerActions.c"
 void deleteDecodedString(void) {
 
 

@@ -24609,15 +24609,30 @@ struct FIELDVALVE {
 
 
 
+unsigned char clock[8] = {0x00,0x0e,0x15,0x17,0x11,0x0e,0x00,0x00};
+unsigned char bell[8] = {0x04,0x0e,0x0e,0x0e,0x1f,0x00,0x04,0x00};
+unsigned char irri[8] = {0x15,0x0E,0x15,0x0E,0x04,0x04,0x04,0x00};
+unsigned char fert[8] = {0x04,0x0e,0x1f,0x1f,0x1f,0x0e,0x04,0x04};
+unsigned char sms[8] = {0x00,0x00,0x1F,0x11,0x1B,0x15,0x1F,0x00};
+unsigned char filt[8] = {0x04,0x07,0x1C,0x07,0x1C,0x07,0x1C,0x04};
+unsigned char dry[8] = {0x00,0x00,0x04,0x0a,0x15,0x1f,0x00,0x00};
+unsigned char check[8] = {0x00,0x01,0x03,0x16,0x1c,0x08,0x00,0x00};
+unsigned char phase[8] = {0x02,0x04,0x08,0x18,0x06,0x04,0x08,0x10};
+unsigned char battery[8] = {0x1F,0x11,0x15,0x15,0x11,0x15,0x11,0x1F};
+unsigned char blank[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+unsigned char * charmap[10] = {blank, clock, irri, filt, fert, dry, phase, battery, sms, bell};
+
+
+
 #pragma idata fieldValve
-struct FIELDVALVE fieldValve[12] = {0};
+struct FIELDVALVE fieldValve[16] = {0};
 
 
 
 
 #pragma idata eepromAddress
-const unsigned int eepromAddress[16] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 0x00F0, 0x0120, 0x0150, 0x0180, 0x01B0, 0x01E0, 0x0210, 0x0240, 0x0270, 0x02A0, 0x2D0};
-# 265 "./variableDefinitions.h"
+const unsigned int eepromAddress[22] = {0x0000, 0x0030, 0x0060, 0x0090, 0x00C0, 0x00F0, 0x0120, 0x0150, 0x0180, 0x01B0, 0x01E0, 0x0210, 0x0240, 0x0270, 0x02A0, 0x02D0, 0x0300, 0x0330, 0x0360, 0x0390, 0x03C0};
+# 284 "./variableDefinitions.h"
 unsigned int filtrationSeperationTime = 0;
 unsigned int dueDD = 0;
 unsigned int sleepCount = 0;
@@ -24644,7 +24659,7 @@ unsigned int injector4OffPeriodCnt = 0;
 unsigned int noLoadCutOff = 0;
 unsigned int fullLoadCutOff = 0;
 unsigned char userMobileNo[11] = "";
-unsigned char temporaryBytesArray[20] = "";
+unsigned char temporaryBytesArray[26] = "";
 unsigned char null[11] = {'\0'};
 unsigned char pwd[7] = "";
 unsigned char factryPswrd[7] = "";
@@ -24664,7 +24679,7 @@ unsigned char rxCharacter = 0;
 unsigned char msgIndex = 0;
 unsigned char temp = 0;
 unsigned char iterator = 0;
-unsigned char fieldCount = 12;
+unsigned char fieldCount = 16;
 unsigned char resetCount = 0;
 unsigned char startFieldNo = 0;
 unsigned char space = 0x20;
@@ -24691,6 +24706,7 @@ unsigned char filtrationDelay2 = 0;
 unsigned char filtrationDelay3 = 0;
 unsigned char filtrationOnTime = 0;
 unsigned char dryRunCheckCount = 0;
+unsigned char currentFieldNo = 0;
 
 
 
@@ -24819,9 +24835,9 @@ const char SmsFact1[15] = "Factory Key : ";
 
 const char SmsPh1[47] = "Phase failure detected, suspending all actions";
 const char SmsPh2[69] = "Low Phase current detected, actions suspended, please restart system";
-const char SmsPh3[25] = "Phase R failure detected";
-const char SmsPh4[25] = "Phase Y failure detected";
-const char SmsPh5[25] = "Phase B failure detected";
+const char SmsPh3[25] = "Phase loss detected";
+
+
 const char SmsPh6[19] = "All Phase detected";
 
 const char SmsMS1[60] = "Moisture sensor is failed, Irrigation started for field no.";
@@ -24947,6 +24963,7 @@ void saveFactryPswrdIntoEeprom(void);
 void readFactryPswrdFromEeprom(void);
 void saveMotorLoadValuesIntoEeprom(void);
 void readMotorLoadValuesFromEeprom(void);
+void saveFieldMappingIntoEeprom(void);
 # 16 "main_2_Test.c" 2
 
 # 1 "./gsm.h" 1
@@ -24997,9 +25014,11 @@ void lcd_i2cWriteByteSingleReg(unsigned char device, unsigned char info);
 void lcdInit(void);
 void lcdWriteChar(unsigned char message);
 void lcdWriteString(const char *message);
+void lcdWriteStringIndex(unsigned char *message, unsigned char index);
 void lcdWriteStringAtCenter(const char *message, unsigned char row);
 
 void lcdClear(void);
+void lcdClearLine(unsigned char);
 void LCDhome(void);
 
 void lcdDisplayOff(void);
@@ -25021,16 +25040,6 @@ void lcdSetCursor(unsigned char row, unsigned char col);
 
 __attribute__((inline)) void lcdCommandWrite(unsigned char value);
 __attribute__((inline)) void lcdDataWrite(unsigned char value);
-
-void exerciseDisplay(void);
-void lcdDisplayLeftScroll(const char *);
-void lcdDisplayRightScroll(const char *);
-void lcdDisplayScrolling(const char *);
-void lcdDisplayNoScrolling(const char *);
-void displayOnOff(void);
-void lcdBacklightControl(void);
-void cursorControl(void);
-void autoIncrement(void);
 # 20 "main_2_Test.c" 2
 # 38 "main_2_Test.c"
 void __attribute__((picinterrupt(("high_priority"))))rxANDiocInterrupt_handler(void) {
@@ -25119,9 +25128,19 @@ void __attribute__((picinterrupt(("high_priority"))))rxANDiocInterrupt_handler(v
                 IOCBF &= (IOCBF ^ 0xFF);
                 phaseFailureDetected = 0;
 
+        lcdCreateChar(0, charmap[0]);
+        lcdSetCursor(1,17);
+        lcdWriteChar(0);
+
+
                 _delay((unsigned long)((2500)*(64000000/4000.0)));_delay((unsigned long)((2500)*(64000000/4000.0)));
                 __asm("reset");
             } else {
+
+        lcdCreateChar(6, charmap[6]);
+        lcdSetCursor(1,17);
+        lcdWriteChar(6);
+
 
                 IOCBF &= (IOCBF ^ 0xFF);
                 phaseFailureDetected = 1;
@@ -25131,7 +25150,7 @@ void __attribute__((picinterrupt(("high_priority"))))rxANDiocInterrupt_handler(v
         PIR0bits.IOCIF = 0;
     }
 }
-# 145 "main_2_Test.c"
+# 155 "main_2_Test.c"
 void __attribute__((picinterrupt(("low_priority")))) timerInterrupt_handler(void) {
 
     if (PIR0bits.TMR0IF) {
@@ -25157,7 +25176,7 @@ void __attribute__((picinterrupt(("low_priority")))) timerInterrupt_handler(void
 
 
 
-                sendSms("Lora is alive", userMobileNo, 0);
+
             }
             else {
 
@@ -25165,10 +25184,10 @@ void __attribute__((picinterrupt(("low_priority")))) timerInterrupt_handler(void
 
 
 
-                sendSms("Lora is not alive", userMobileNo, 0);
+
             }
         }
-# 194 "main_2_Test.c"
+# 204 "main_2_Test.c"
         if (PORTHbits.RH2 == 1) {
             if (PORTFbits.RF3 == 1) {
                 if(injector1OnPeriodCnt == injector1OnPeriod) {
@@ -25338,7 +25357,7 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             wetSensor = 0;
             _delay((unsigned long)((50)*(64000000/4000.0)));
             scanValveScheduleAndGetSleepCount();
-            sendSms("Scan", userMobileNo, 0);
+
             _delay((unsigned long)((50)*(64000000/4000.0)));
             dueValveChecked = 1;
         }
@@ -25349,7 +25368,7 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
 
 
             dueValveChecked = 0;
-            sendSms("due valve", userMobileNo, 0);
+
 
 
             actionsOnDueValve(iterator);
@@ -25368,8 +25387,15 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             deActivateValve(last_Field_No);
             valveExecuted = 0;
 
+            lcdClearLine(2);
+            lcdClearLine(3);
+            lcdClearLine(4);
+            lcdWriteStringAtCenter("Irrigation Completed", 2);
+            lcdWriteStringAtCenter("Motor Switched OFF", 3);
+
+
             sendSms(SmsMotor1, userMobileNo, 0);
-# 402 "main_2_Test.c"
+# 419 "main_2_Test.c"
             startFieldNo = 0;
 
         }
@@ -25378,10 +25404,10 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
             sleepCount = 0;
         }
         if(!LoraConnectionFailed && !wetSensor) {
-            sendSms("sleep", userMobileNo, 0);
+
 
             deepSleep();
-# 421 "main_2_Test.c"
+# 438 "main_2_Test.c"
             if (newSMSRcvd) {
 
 
@@ -25389,7 +25415,6 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
 
 
 
-                _delay((unsigned long)((500)*(64000000/4000.0)));
                 newSMSRcvd = 0;
 
 
@@ -25417,8 +25442,15 @@ nxtVlv: if (!valveDue && !phaseFailureDetected && !lowPhaseCurrentDetected) {
                 if ( !rtcBatteryLevelChecked) {
                     if (isRTCBatteryDrained()){
 
+                        lcdClearLine(2);
+                        lcdClearLine(3);
+                        lcdClearLine(4);
+                        lcdWriteStringAtCenter("RTC Battery is low", 2);
+                        lcdWriteStringAtCenter("Replace RTC battery", 3);
+
+
                         sendSms(SmsRTC1, userMobileNo, 0);
-# 465 "main_2_Test.c"
+# 488 "main_2_Test.c"
                     }
                 }
             }

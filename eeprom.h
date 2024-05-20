@@ -43,6 +43,6 @@ void saveFactryPswrdIntoEeprom(void); // To save factory set password
 void readFactryPswrdFromEeprom(void); // To read factory set password
 void saveMotorLoadValuesIntoEeprom(void); // To save motor load conditions
 void readMotorLoadValuesFromEeprom(void); // To load motor load conditions
-
+void saveFieldMappingIntoEeprom(void); // To Save field mapping 
 #endif
 /* EEPROM_H */

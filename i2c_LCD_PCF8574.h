@@ -18,9 +18,11 @@
 void lcdInit(void);
 void lcdWriteChar(unsigned char message);
 void lcdWriteString(const char *message);
+void lcdWriteStringIndex(unsigned char *message, unsigned char index);
 void lcdWriteStringAtCenter(const char *message, unsigned char row);
 
 void lcdClear(void);
+void lcdClearLine(unsigned char);
 void LCDhome(void);
 
 void lcdDisplayOff(void);
@@ -42,7 +44,7 @@ void lcdSetCursor(unsigned char row, unsigned char col);
 
 inline void lcdCommandWrite(unsigned char value);
 inline void lcdDataWrite(unsigned char value);
-
+/*
 void exerciseDisplay(void);
 void lcdDisplayLeftScroll(const char *);
 void lcdDisplayRightScroll(const char *);
@@ -52,7 +54,7 @@ void displayOnOff(void);
 void lcdBacklightControl(void);
 void cursorControl(void);
 void autoIncrement(void);
-
+*/
 
 #endif
  /* I2C_LCD_PCF8574_H */

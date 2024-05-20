@@ -169,7 +169,7 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
         transmitStringToDebug("No Response from Lora\r\n");
         //********Debug log#end**************//
         #endif
-        sendSms("NR", userMobileNo, noInfo); // Acknowledge user about successful action        
+        //sendSms("NR", userMobileNo, noInfo); // Acknowledge user about successful action        
     }
     else if (isLoraResponseAck(Action,SlaveNo)) {  // correct response from lora slave
         LoraConnectionFailed = false;
@@ -179,7 +179,7 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
         transmitStringToDebug("isLoraResponseAck(Action,FieldNo)== true\r\n");
         //********Debug log#end**************//
         #endif
-        sendSms("CR", userMobileNo, noInfo); // Acknowledge user about successful action
+        //sendSms("CR", userMobileNo, noInfo); // Acknowledge user about successful action
     }
     else {  // error response from lora slave
         LoraConnectionFailed = true;
@@ -189,7 +189,7 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
         transmitStringToDebug("isLoraResponseAck(Action,FieldNo)== off\r\n");
         //********Debug log#end**************//
         #endif
-        sendSms("ER", userMobileNo, noInfo); // Acknowledge user about successful action       
+        //sendSms("ER", userMobileNo, noInfo); // Acknowledge user about successful action       
     }
     deleteDecodedString(); // delete received lora response after processing
     //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
