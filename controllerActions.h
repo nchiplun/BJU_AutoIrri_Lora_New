@@ -49,9 +49,9 @@ char *strcpyCustom(char *restrict dest, const char *restrict src); //custom stri
 void deleteUserData(void);                      // Perform User reset action
 void deleteValveData(void);                     // Perform Valve reset action
 void randomPasswordGeneration(void);            // Function to randomly generates password of length 6
-void deleteGsmResponse(void);                   // This function is called to delete gsm response string
-void deleteStringToDecode(void);                // This function is called to delete StringToDecode string
-void deleteDecodedString(void);                 // This function is called to delete DecodedString string
+void clearGsmResponse(void);                   // This function is called to delete gsm response string
+void clearStringToDecode(void);                // This function is called to delete StringToDecode string
+void clearDecodedString(void);                 // This function is called to delete DecodedString string
 void hardResetMenu(void);                       // This function is called to do diagnostic menu actions on Hard Reset
 unsigned char checkResetType(void);             // This function is called to check type of reset occurred
 void setFactoryPincode(void);                   // This function is called to set factory pincode 

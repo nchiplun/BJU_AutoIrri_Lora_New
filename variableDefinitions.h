@@ -46,8 +46,6 @@
 // include processor files - each processor file is guarded.  
 #include "congfigBits.h"
 
-#define Major "1"
-#define Minor "0"
 
 #define _XTAL_FREQ 64000000
 #define I2C_BAUDRATE 100000
@@ -416,25 +414,25 @@ const char SmsPwd1[32] = "Login code changed successfully"; // Acknowledge user 
 const char SmsPwd2[23] = "Login code not changed";
 const char SmsPwd3[23] = "Wrong login code found"; // Acknowledge user about successful motor off action
 
-const char SmsIrr1[36]  = "Irrigation configured for field no."; // Acknowledge user about successful Irrigation configuration
-const char SmsIrr2[48]  = "Irrigation configuration disabled for field no."; // Acknowledge user about successful Irrigation configuration disable action
-const char SmsIrr3[40]  = "Irrigation not configured for field no."; // Acknowledge user about  Irrigation not configured
-const char SmsIrr4[33]  = "Irrigation started for field no."; // Acknowledge user about successful Irrigation started action
-const char SmsIrr5[33]  = "Irrigation stopped for field no."; // Acknowledge user about successful Irrigation stopped action
-const char SmsIrr6[60]  = "Wet field detected.\r\nIrrigation not started for field no."; // Acknowledge user about Irrigation not started due to wet field detection
-const char SmsIrr7[15]  = "Irrigation No:"; // Send diagnostic data fro irrigation
+const char SmsIrr1[36]  = "Irrigation configured for priority "; // Acknowledge user about successful Irrigation configuration
+const char SmsIrr2[48]  = "Irrigation configuration disabled for priority "; // Acknowledge user about successful Irrigation configuration disable action
+const char SmsIrr3[40]  = "Irrigation not configured for priority "; // Acknowledge user about  Irrigation not configured
+const char SmsIrr4[30]  = "Irrigation started for field "; // Acknowledge user about successful Irrigation started action
+const char SmsIrr5[30]  = "Irrigation stopped for field "; // Acknowledge user about successful Irrigation stopped action
+const char SmsIrr6[57]  = "Wet field detected.\r\nIrrigation not started for field "; // Acknowledge user about Irrigation not started due to wet field detection
+const char SmsIrr7[15]  = "Irrigation No:"; // Send diagnostic data for irrigation
 const char SmsIrr8[51]  = "Irrigation skipped with no response from field no:"; // Acknowledge user about Irrigation skipped due to no response
 const char SmsIrr9[51]  = "Irrigation stopped without response from field no."; // Acknowledge user about Irrigation stopped without response
 const char SmsIrr10[36] = "Irrigation field mapped with valves"; // Acknowledge user about Irrigation valves mapped with respective fields
 
-const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for field no."; // Acknowledge user about Fertigation not configured due to disabled irrigation
-const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for field no."; // Acknowledge user about Fertigation not configured due to incorrect values
-const char SmsFert3[34] = "Fertigation enabled for field no."; // Acknowledge user about successful Fertigation enabled action
-const char SmsFert4[35] = "Fertigation disabled for field no."; // Acknowledge user about successful Fertigation disabled action
-const char SmsFert5[34] = "Fertigation started for field no."; // Acknowledge user about successful Fertigation started action
-const char SmsFert6[34] = "Fertigation stopped for field no."; // Acknowledge user about successful Fertigation stopped action
-const char SmsFert7[71] = "Fertigation stopped with fertilizer level sensor failure for field no."; // Acknowledge user about Fertigation stopped action with sensor failure
-const char SmsFert8[60] = "Fertigation stopped with low fertilizer level for field no."; // Acknowledge user about Fertigation stopped action with low fertilizer level 
+const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for priority "; // Acknowledge user about Fertigation not configured due to disabled irrigation
+const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for priority "; // Acknowledge user about Fertigation not configured due to incorrect values
+const char SmsFert3[34] = "Fertigation enabled for priority "; // Acknowledge user about successful Fertigation enabled action
+const char SmsFert4[35] = "Fertigation disabled for priority "; // Acknowledge user about successful Fertigation disabled action
+const char SmsFert5[31] = "Fertigation started for field "; // Acknowledge user about successful Fertigation started action
+const char SmsFert6[31] = "Fertigation stopped for field "; // Acknowledge user about successful Fertigation stopped action
+const char SmsFert7[68] = "Fertigation stopped with fertilizer level sensor failure for field "; // Acknowledge user about Fertigation stopped action with sensor failure
+const char SmsFert8[57] = "Fertigation stopped with low fertilizer level for field "; // Acknowledge user about Fertigation stopped action with low fertilizer level 
 
 const char SmsFilt1[27] = "Water filtration activated";
 const char SmsFilt2[29] = "Water filtration deactivated"; 
@@ -442,18 +440,18 @@ const char SmsFilt3[32] = "Water Filtration is not enabled";
 const char SmsFilt4[27] = "Water Filtration Sequence:";
 
 const char SmsSR01[60] = "System restarted with phase failure, suspending all actions"; // Acknowledge user about system restarted with Valve action
-const char SmsSR02[78] = "System restarted for Power Interrupt with incomplete Irrigation for field no."; // Acknowledge user about system restarted with Valve action
-const char SmsSR03[75] = "System restarted for Low Power In with incomplete Irrigation for field no."; // Acknowledge user about system restarted with Valve action
-const char SmsSR04[77] = "System restarted in Diagnostic Mode with incomplete Irrigation for field no."; // Acknowledge user about system restarted with Valve action
-const char SmsSR05[82] = "System restarted for All Phase Detection with incomplete Irrigation for field no."; // Acknowledge user about system restarted with Valve action
-const char SmsSR06[74] = "System restarted for WDT Timeout with incomplete Irrigation for field no."; // Acknowledge user about system restarted with Valve action
-const char SmsSR07[74] = "System restarted for Stack Error with incomplete Irrigation for field no."; // Acknowledge user about system restarted with Valve action
-const char SmsSR08[37] = "System restarted for Power Interrupt"; // Acknowledge user about system restarted with Valve action
-const char SmsSR09[31] = "System restarted for Low Power"; // Acknowledge user about system restarted with Valve action
-const char SmsSR10[36] = "System restarted in Diagnostic mode"; // Acknowledge user about system restarted with Valve action
-const char SmsSR11[41] = "System restarted for All Phase Detection"; // Acknowledge user about system restarted with Valve action
-const char SmsSR12[33] = "System restarted for WDT timeout"; // Acknowledge user about system restarted with Valve action
-const char SmsSR13[33] = "System restarted for stack error"; // Acknowledge user about system restarted with Valve action
+const char SmsSR02[75] = "System restarted for Power Interrupt with incomplete Irrigation for field "; // Acknowledge user about system restarted with Valve action
+const char SmsSR03[72] = "System restarted for Low Power In with incomplete Irrigation for field "; // Acknowledge user about system restarted with Valve action
+const char SmsSR04[74] = "System restarted in Diagnostic Mode with incomplete Irrigation for field "; // Acknowledge user about system restarted with Valve action
+const char SmsSR05[79] = "System restarted for All Phase Detection with incomplete Irrigation for field "; // Acknowledge user about system restarted with Valve action
+const char SmsSR06[71] = "System restarted for WDT Timeout with incomplete Irrigation for field "; // Acknowledge user about system restarted with Valve action
+const char SmsSR07[71] = "System restarted for Stack Error with incomplete Irrigation for field "; // Acknowledge user about system restarted with Valve action
+const char SmsSR08[37] = "System restarted for Power Interrupt"; // Acknowledge user about system restarted with No Valve action
+const char SmsSR09[31] = "System restarted for Low Power"; // Acknowledge user about system restarted with No Valve action
+const char SmsSR10[36] = "System restarted in Diagnostic mode"; // Acknowledge user about system restarted with No Valve action
+const char SmsSR11[41] = "System restarted for All Phase Detection"; // Acknowledge user about system restarted with No Valve action
+const char SmsSR12[33] = "System restarted for WDT timeout"; // Acknowledge user about system restarted with No Valve action
+const char SmsSR13[33] = "System restarted for stack error"; // Acknowledge user about system restarted with No Valve action
 const char SmsSR14[59] = "System reset occurred, login code reset to Factory setting"; // Acknowledge user about successful motor off action
 const char SmsSR15[50] = "System reset occurred, Irrigation setting deleted"; // Acknowledge user about successful motor off action
 
@@ -462,10 +460,10 @@ const char SmsRTC2[41] = "System time synced to current local time";
 const char SmsRTC3[56] = "New RTC battery found, system time is set to local time";
 const char SmsRTC4[56] = "New RTC battery found, please sync system time manually"; // Acknowledge user about setting RTC through Mobile App
 
-const char SmsDR1[133] = "Dry Run detected, Motor, Irrigation and Fertigation switched off.\r\nIrrigation scheduled to next day with fertigation for field no."; // Acknowledge user about successful motor off action
-const char SmsDR2[120] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day with fertigation for field no."; // Acknowledge user about successful motor off action
-const char SmsDR3[103] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day for field no."; // Acknowledge user about successful motor off action
-const char SmsDR4[108] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next due date for field no."; // Acknowledge user about successful motor off action
+const char SmsDR1[130] = "Dry Run detected, Motor, Irrigation and Fertigation switched off.\r\nIrrigation scheduled to next day with fertigation for field "; // Acknowledge user about successful motor off action
+const char SmsDR2[117] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day with fertigation for field "; // Acknowledge user about successful motor off action
+const char SmsDR3[100] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day for field "; // Acknowledge user about successful motor off action
+const char SmsDR4[105] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next due date for field "; // Acknowledge user about successful motor off action
 
 const char SmsT1[27] = "Incorrect local time found"; 
 const char SmsT2[15] = "Current Time: "; 
@@ -475,11 +473,11 @@ const char SmsMotor2[35] = "Motorload cut-off set successfully"; // Acknowledge 
 const char SmsMotor3[47] = "NoLoad and FullLoad Motor thresholds set to : "; // Acknowledge user about motor load values
 const char SmsMotor4[49] = "Irrigation is active, Motor load cut-off not set"; // Acknowledge user about Irrigation is active, Motor load cut-off procedure not started
 
-const char SmsConnect[17] = "System Connected"; // Acknowledge user about successful motor off action
+const char SmsConnect[17] = "System Connected"; // Acknowledge user about successful connection
 
 const char SmsTest[19] = "Test Data Injected"; 
 
-const char SmsFact1[15] = "Factory Key : "; // Acknowledge user about successful motor off action
+const char SmsFact1[15] = "Factory Key : "; // Factory key details
 
 const char SmsPh1[47] = "Phase failure detected, suspending all actions"; // Acknowledge user about Phase failure status
 const char SmsPh2[69] = "Low Phase current detected, actions suspended, please restart system"; // Acknowledge user about successful motor off action
@@ -488,9 +486,9 @@ const char SmsPh3[25] = "Phase loss detected"; // Acknowledge user about phase f
 //const char SmsPh5[25] = "Phase B failure detected"; // Acknowledge user about phase failure status
 const char SmsPh6[19] = "All Phase detected"; // Acknowledge user about phase status
 
-const char SmsMS1[60] = "Moisture sensor is failed, Irrigation started for field no."; // Acknowledge user about failure in moisture sensor
-const char SmsMS2[46] = "Moisture sensor frequency value for field no."; // Acknowledge user measured moisture sensor value
-const char SmsMS3[40] = "Moisture sensor is failed for field no."; // Acknowledge user about failure in moisture sensor
+const char SmsMS1[57] = "Moisture sensor is failed, Irrigation started for field "; // Acknowledge user about failure in moisture sensor
+const char SmsMS2[43] = "Moisture sensor frequency value for field "; // Acknowledge user measured moisture sensor value
+const char SmsMS3[37] = "Moisture sensor is failed for field "; // Acknowledge user about failure in moisture sensor
 /***** SMS string definition#end ***************************/
 
 /***** statically allocated initialized user variables#start **/

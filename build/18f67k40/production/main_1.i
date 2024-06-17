@@ -24768,25 +24768,25 @@ const char SmsPwd1[32] = "Login code changed successfully";
 const char SmsPwd2[23] = "Login code not changed";
 const char SmsPwd3[23] = "Wrong login code found";
 
-const char SmsIrr1[36] = "Irrigation configured for field no.";
-const char SmsIrr2[48] = "Irrigation configuration disabled for field no.";
-const char SmsIrr3[40] = "Irrigation not configured for field no.";
-const char SmsIrr4[33] = "Irrigation started for field no.";
-const char SmsIrr5[33] = "Irrigation stopped for field no.";
-const char SmsIrr6[60] = "Wet field detected.\r\nIrrigation not started for field no.";
+const char SmsIrr1[36] = "Irrigation configured for priority ";
+const char SmsIrr2[48] = "Irrigation configuration disabled for priority ";
+const char SmsIrr3[40] = "Irrigation not configured for priority ";
+const char SmsIrr4[30] = "Irrigation started for field ";
+const char SmsIrr5[30] = "Irrigation stopped for field ";
+const char SmsIrr6[57] = "Wet field detected.\r\nIrrigation not started for field ";
 const char SmsIrr7[15] = "Irrigation No:";
 const char SmsIrr8[51] = "Irrigation skipped with no response from field no:";
 const char SmsIrr9[51] = "Irrigation stopped without response from field no.";
 const char SmsIrr10[36] = "Irrigation field mapped with valves";
 
-const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for field no.";
-const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for field no.";
-const char SmsFert3[34] = "Fertigation enabled for field no.";
-const char SmsFert4[35] = "Fertigation disabled for field no.";
-const char SmsFert5[34] = "Fertigation started for field no.";
-const char SmsFert6[34] = "Fertigation stopped for field no.";
-const char SmsFert7[71] = "Fertigation stopped with fertilizer level sensor failure for field no.";
-const char SmsFert8[60] = "Fertigation stopped with low fertilizer level for field no.";
+const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for priority ";
+const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for priority ";
+const char SmsFert3[34] = "Fertigation enabled for priority ";
+const char SmsFert4[35] = "Fertigation disabled for priority ";
+const char SmsFert5[31] = "Fertigation started for field ";
+const char SmsFert6[31] = "Fertigation stopped for field ";
+const char SmsFert7[68] = "Fertigation stopped with fertilizer level sensor failure for field ";
+const char SmsFert8[57] = "Fertigation stopped with low fertilizer level for field ";
 
 const char SmsFilt1[27] = "Water filtration activated";
 const char SmsFilt2[29] = "Water filtration deactivated";
@@ -24794,12 +24794,12 @@ const char SmsFilt3[32] = "Water Filtration is not enabled";
 const char SmsFilt4[27] = "Water Filtration Sequence:";
 
 const char SmsSR01[60] = "System restarted with phase failure, suspending all actions";
-const char SmsSR02[78] = "System restarted for Power Interrupt with incomplete Irrigation for field no.";
-const char SmsSR03[75] = "System restarted for Low Power In with incomplete Irrigation for field no.";
-const char SmsSR04[77] = "System restarted in Diagnostic Mode with incomplete Irrigation for field no.";
-const char SmsSR05[82] = "System restarted for All Phase Detection with incomplete Irrigation for field no.";
-const char SmsSR06[74] = "System restarted for WDT Timeout with incomplete Irrigation for field no.";
-const char SmsSR07[74] = "System restarted for Stack Error with incomplete Irrigation for field no.";
+const char SmsSR02[75] = "System restarted for Power Interrupt with incomplete Irrigation for field ";
+const char SmsSR03[72] = "System restarted for Low Power In with incomplete Irrigation for field ";
+const char SmsSR04[74] = "System restarted in Diagnostic Mode with incomplete Irrigation for field ";
+const char SmsSR05[79] = "System restarted for All Phase Detection with incomplete Irrigation for field ";
+const char SmsSR06[71] = "System restarted for WDT Timeout with incomplete Irrigation for field ";
+const char SmsSR07[71] = "System restarted for Stack Error with incomplete Irrigation for field ";
 const char SmsSR08[37] = "System restarted for Power Interrupt";
 const char SmsSR09[31] = "System restarted for Low Power";
 const char SmsSR10[36] = "System restarted in Diagnostic mode";
@@ -24814,10 +24814,10 @@ const char SmsRTC2[41] = "System time synced to current local time";
 const char SmsRTC3[56] = "New RTC battery found, system time is set to local time";
 const char SmsRTC4[56] = "New RTC battery found, please sync system time manually";
 
-const char SmsDR1[133] = "Dry Run detected, Motor, Irrigation and Fertigation switched off.\r\nIrrigation scheduled to next day with fertigation for field no.";
-const char SmsDR2[120] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day with fertigation for field no.";
-const char SmsDR3[103] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day for field no.";
-const char SmsDR4[108] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next due date for field no.";
+const char SmsDR1[130] = "Dry Run detected, Motor, Irrigation and Fertigation switched off.\r\nIrrigation scheduled to next day with fertigation for field ";
+const char SmsDR2[117] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day with fertigation for field ";
+const char SmsDR3[100] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day for field ";
+const char SmsDR4[105] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next due date for field ";
 
 const char SmsT1[27] = "Incorrect local time found";
 const char SmsT2[15] = "Current Time: ";
@@ -24840,9 +24840,9 @@ const char SmsPh3[25] = "Phase loss detected";
 
 const char SmsPh6[19] = "All Phase detected";
 
-const char SmsMS1[60] = "Moisture sensor is failed, Irrigation started for field no.";
-const char SmsMS2[46] = "Moisture sensor frequency value for field no.";
-const char SmsMS3[40] = "Moisture sensor is failed for field no.";
+const char SmsMS1[57] = "Moisture sensor is failed, Irrigation started for field ";
+const char SmsMS2[43] = "Moisture sensor frequency value for field ";
+const char SmsMS3[37] = "Moisture sensor is failed for field ";
 
 
 
@@ -24922,9 +24922,9 @@ char *strcpyCustom(char *restrict dest, const char *restrict src);
 void deleteUserData(void);
 void deleteValveData(void);
 void randomPasswordGeneration(void);
-void deleteGsmResponse(void);
-void deleteStringToDecode(void);
-void deleteDecodedString(void);
+void clearGsmResponse(void);
+void clearStringToDecode(void);
+void clearDecodedString(void);
 void hardResetMenu(void);
 unsigned char checkResetType(void);
 void setFactoryPincode(void);
@@ -25167,7 +25167,7 @@ void __attribute__((picinterrupt(("low_priority")))) timerInterrupt_handler(void
                 dryRunCheckCount++;
             }
             if (strncmp((char*)(decodedString+1),(char*)(alive),(5)) == 0 && strncmp((char*)(decodedString+6),(char*)(slave),(5)) == 0) {
-                deleteDecodedString();
+                clearDecodedString();
                 loraAliveCount++;
             }
             if (loraAliveCountCheck <= loraAliveCount+1) {

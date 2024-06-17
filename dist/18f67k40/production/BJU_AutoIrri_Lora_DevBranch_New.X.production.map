@@ -5,10 +5,10 @@ Linker command line:
 -W-3 --edf=C:\Program Files\Microchip\xc8\v2.35\pic\dat\en_msgs.txt -cn \
   -h+dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.sym \
   --cmf=dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.cmf \
-  -z -Q18F67K40 -oC:\Users\nandu\AppData\Local\Temp\xcAsheg.4 \
+  -z -Q18F67K40 -oC:\Users\nandu\AppData\Local\Temp\xcAsp1o.4 \
   --defsym=__MPLAB_BUILD=1 \
   -Mdist/18f67k40/production/BJU_AutoIrri_Lora_DevBranch_New.X.production.map \
-  --md=C:\Users\nandu\AppData\Local\Temp\xcAsheg.dat -E1 -ver=XC8 Compiler \
+  --md=C:\Users\nandu\AppData\Local\Temp\xcAsp1o.dat -E1 -ver=XC8 Compiler \
   --acfsm=1493 -ACODE=00h-01FFFFh -ACONST=00h-01FFFFh \
   -ASMALLCONST=0E00h-0EFFhx498 -AMEDIUMCONST=0E00h-0FFFFh,010E00h-01FFFFh \
   -ACOMRAM=01h-05Fh -AABS1=00h-0DE9h -ABIGRAM=01h-0DE9h \
@@ -28,7 +28,7 @@ Linker command line:
   -pfarbss=FARRAM,fardata=FARRAM,nvFARRAM=FARRAM \
   -pintsave_regs=BIGRAM,bigbss=BIGRAM,bigdata=BIGRAM -pbss=RAM \
   -pidata=CODE,irdata=CODE,ibigdata=CODE,ifardata=CODE -prparam=COMRAM \
-  C:\Users\nandu\AppData\Local\Temp\xcAsheg.o \
+  C:\Users\nandu\AppData\Local\Temp\xcAsp1o.o \
   dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.o 
 
 Object code version is 3.11
@@ -38,7 +38,7 @@ Machine type is 18F67K40
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\nandu\AppData\Local\Temp\xcAsheg.o
+C:\Users\nandu\AppData\Local\Temp\xcAsp1o.o
                 idloc                            200000   200000       10        0       5
                 config                           300000   300000        C        0       4
                 init                                634      634        4        C       0
@@ -50,7 +50,7 @@ dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.o
                 idloc                            200000   200000       10        0       5
                 config                           300000   300000        C        0       4
                 temp                                 46       46        1        1       1
-                mediumconst                        E8A6     E8A6     175A     7453       0
+                mediumconst                        E8E2     E8E2     171E     7471       0
                 text156                            17CC     17CC       14      BAA       0
                 text155                            17B8     17B8       14      BAA       0
                 text154                            183A     183A       12      BAA       0
@@ -400,7 +400,7 @@ TOTAL           Name                               Link     Load   Length     Sp
         CLASS   SMALLCONST     
 
         CLASS   MEDIUMCONST    
-                mediumconst                        E8A6     E8A6     175A         0
+                mediumconst                        E8E2     E8E2     171E         0
 
         CLASS   COMRAM         
                 temp                                 46       46        1         1
@@ -489,7 +489,7 @@ SEGMENTS        Name                           Load    Length   Top    Selector 
                 bssBANK4                       000400  0000E1  0004E1       400       1  BANK4   
                 bssBIGRAM                      0004E1  0002D0  0007B1       4E1       1  BIGRAM  
                 text121                        001754  00015A  0018AE       BAA       0  CODE    
-                mediumconst                    00E8A6  00175A  010000      7453       0  MEDIUMCO
+                mediumconst                    00E8E2  00171E  010000      7471       0  MEDIUMCO
                 text26                         010000  010000  020000      8000       0  CODE    
                 eeprom_data                    310000  0003C0  3103C0    310000       0  EEDATA  
 
@@ -514,21 +514,21 @@ UNUSED ADDRESS RANGES
         CODE             000004-000007                4
                          00000E-000017                A
                          001753-001753                1
-                         0018AE-00E8A5             CFF8
+                         0018AE-00E8E1             D034
         COMRAM           000047-00005F               19
         CONST            000004-000007                4
                          00000E-000017                A
                          001753-001753                1
-                         0018AE-00E8A5             CFF8
+                         0018AE-00E8E1             D034
         EEDATA           3103C0-3103FF               40
         MEDIUMCONST      001753-001753                1
-                         0018AE-00E8A5             CFF8
+                         0018AE-00E8E1             D034
         RAM              0000E7-0000FF               19
                          0003FF-0003FF                1
                          0007B1-000DE9              100
         SFR              000DEF-000FFF              100
         SMALLCONST       001753-001753                1
-                         0018AE-00E8A5              100
+                         0018AE-00E8E1              100
 
                                   Symbol Table
 
@@ -696,70 +696,70 @@ _SSP2DATPPS                                               (abs)        000E1D
 _SSP2STAT                                                 (abs)        000ED8
 _SSP2STATbits                                             (abs)        000ED8
 _SmsAU1                                                   mediumconst  00F512
-_SmsAU2                                                   mediumconst  00F047
+_SmsAU2                                                   mediumconst  00F059
 _SmsAU3                                                   mediumconst  00F529
-_SmsAU4                                                   mediumconst  00E8A7
+_SmsAU4                                                   mediumconst  00E8E3
 _SmsConnect                                               mediumconst  00F552
-_SmsDR1                                                   mediumconst  00E96C
-_SmsDR2                                                   mediumconst  00E9F1
-_SmsDR3                                                   mediumconst  00EAD5
-_SmsDR4                                                   mediumconst  00EA69
+_SmsDR1                                                   mediumconst  00E9A8
+_SmsDR2                                                   mediumconst  00EA2A
+_SmsDR3                                                   mediumconst  00EB08
+_SmsDR4                                                   mediumconst  00EA9F
 _SmsFact1                                                 mediumconst  00F563
-_SmsFert1                                                 mediumconst  00ED94
-_SmsFert2                                                 mediumconst  00EFA9
-_SmsFert3                                                 mediumconst  00F388
-_SmsFert4                                                 mediumconst  00F321
-_SmsFert5                                                 mediumconst  00F366
-_SmsFert6                                                 mediumconst  00F344
-_SmsFert7                                                 mediumconst  00ED08
-_SmsFert8                                                 mediumconst  00EE4C
+_SmsFert1                                                 mediumconst  00EDAF
+_SmsFert2                                                 mediumconst  00EFBB
+_SmsFert3                                                 mediumconst  00F350
+_SmsFert4                                                 mediumconst  00F32D
+_SmsFert5                                                 mediumconst  00F432
+_SmsFert6                                                 mediumconst  00F413
+_SmsFert7                                                 mediumconst  00ED6B
+_SmsFert8                                                 mediumconst  00EED9
 _SmsFilt1                                                 mediumconst  00F4E0
 _SmsFilt2                                                 mediumconst  00F48D
-_SmsFilt3                                                 mediumconst  00F42E
+_SmsFilt3                                                 mediumconst  00F3B4
 _SmsFilt4                                                 mediumconst  00F4C5
-_SmsIrr1                                                  mediumconst  00F2DA
-_SmsIrr10                                                 mediumconst  00F2B6
-_SmsIrr2                                                  mediumconst  00F10F
-_SmsIrr3                                                  mediumconst  00F245
-_SmsIrr4                                                  mediumconst  00F40D
-_SmsIrr5                                                  mediumconst  00F3EC
-_SmsIrr6                                                  mediumconst  00EE88
+_SmsIrr1                                                  mediumconst  00F2E6
+_SmsIrr10                                                 mediumconst  00F2C2
+_SmsIrr2                                                  mediumconst  00F121
+_SmsIrr3                                                  mediumconst  00F22C
+_SmsIrr4                                                  mediumconst  00F46F
+_SmsIrr5                                                  mediumconst  00F451
+_SmsIrr6                                                  mediumconst  00EF12
 _SmsIrr7                                                  mediumconst  00F581
-_SmsIrr8                                                  mediumconst  00F014
-_SmsIrr9                                                  mediumconst  00EFE1
-_SmsMS1                                                   mediumconst  00EDD4
-_SmsMS2                                                   mediumconst  00F19D
-_SmsMS3                                                   mediumconst  00F21D
-_SmsMotor1                                                mediumconst  00EEFF
-_SmsMotor2                                                mediumconst  00F2FE
-_SmsMotor3                                                mediumconst  00F16E
-_SmsMotor4                                                mediumconst  00F0DE
-_SmsPh1                                                   mediumconst  00F13F
-_SmsPh2                                                   mediumconst  00ED4F
-_SmsPh3                                                   mediumconst  00E913
-_SmsPh6                                                   mediumconst  00E943
-_SmsPwd1                                                  mediumconst  00F44E
-_SmsPwd2                                                  mediumconst  00E92C
+_SmsIrr8                                                  mediumconst  00F026
+_SmsIrr9                                                  mediumconst  00EFF3
+_SmsMS1                                                   mediumconst  00EEA0
+_SmsMS2                                                   mediumconst  00F1AF
+_SmsMS3                                                   mediumconst  00F254
+_SmsMotor1                                                mediumconst  00EE66
+_SmsMotor2                                                mediumconst  00F30A
+_SmsMotor3                                                mediumconst  00F180
+_SmsMotor4                                                mediumconst  00F0F0
+_SmsPh1                                                   mediumconst  00F151
+_SmsPh2                                                   mediumconst  00ED26
+_SmsPh3                                                   mediumconst  00E94F
+_SmsPh6                                                   mediumconst  00E97F
+_SmsPwd1                                                  mediumconst  00F3D4
+_SmsPwd2                                                  mediumconst  00E968
 _SmsPwd3                                                  mediumconst  00F4FB
-_SmsRTC1                                                  mediumconst  00F07A
-_SmsRTC2                                                  mediumconst  00F1CB
-_SmsRTC3                                                  mediumconst  00EF71
-_SmsRTC4                                                  mediumconst  00EF39
-_SmsSR01                                                  mediumconst  00EE10
-_SmsSR02                                                  mediumconst  00EB8E
-_SmsSR03                                                  mediumconst  00EC29
-_SmsSR04                                                  mediumconst  00EBDC
-_SmsSR05                                                  mediumconst  00EB3C
-_SmsSR06                                                  mediumconst  00ECBE
-_SmsSR07                                                  mediumconst  00EC74
-_SmsSR08                                                  mediumconst  00F26D
-_SmsSR09                                                  mediumconst  00F46E
-_SmsSR10                                                  mediumconst  00F292
-_SmsSR11                                                  mediumconst  00F1F4
-_SmsSR12                                                  mediumconst  00F3CB
-_SmsSR13                                                  mediumconst  00F3AA
-_SmsSR14                                                  mediumconst  00EEC4
-_SmsSR15                                                  mediumconst  00F0AC
+_SmsRTC1                                                  mediumconst  00F08C
+_SmsRTC2                                                  mediumconst  00F1DA
+_SmsRTC3                                                  mediumconst  00EF83
+_SmsRTC4                                                  mediumconst  00EF4B
+_SmsSR01                                                  mediumconst  00EDEF
+_SmsSR02                                                  mediumconst  00EBBB
+_SmsSR03                                                  mediumconst  00EC50
+_SmsSR04                                                  mediumconst  00EC06
+_SmsSR05                                                  mediumconst  00EB6C
+_SmsSR06                                                  mediumconst  00ECDF
+_SmsSR07                                                  mediumconst  00EC98
+_SmsSR08                                                  mediumconst  00F279
+_SmsSR09                                                  mediumconst  00F3F4
+_SmsSR10                                                  mediumconst  00F29E
+_SmsSR11                                                  mediumconst  00F203
+_SmsSR12                                                  mediumconst  00F393
+_SmsSR13                                                  mediumconst  00F372
+_SmsSR14                                                  mediumconst  00EE2B
+_SmsSR15                                                  mediumconst  00F0BE
 _SmsT1                                                    mediumconst  00F4AA
 _SmsT2                                                    mediumconst  00F572
 _SmsTest                                                  mediumconst  00F53F
@@ -1108,7 +1108,7 @@ __Lintentry                                               intentry     000000
 __Lintret                                                 intret       000000
 __Lintsave_regs                                           intsave_regs 000000
 __Lirdata                                                 irdata       000000
-__Lmediumconst                                            mediumconst  00E8A6
+__Lmediumconst                                            mediumconst  00E8E2
 __LnvFARRAM                                               nvFARRAM     000000
 __Lnvbit                                                  nvbit        000000
 __Lnvrram                                                 nvrram       000000
@@ -1343,70 +1343,70 @@ __displayfunction                                         bssBANK0     0000D1
 __end_of_LCDpulseEnableNeg                                text120      001552
 __end_of_LCDwritePCF8574                                  text121      001768
 __end_of_SmsAU1                                           mediumconst  00F529
-__end_of_SmsAU2                                           mediumconst  00F07A
+__end_of_SmsAU2                                           mediumconst  00F08C
 __end_of_SmsAU3                                           mediumconst  00F53F
-__end_of_SmsAU4                                           mediumconst  00E8E7
+__end_of_SmsAU4                                           mediumconst  00E923
 __end_of_SmsConnect                                       mediumconst  00F563
-__end_of_SmsDR1                                           mediumconst  00E9F1
-__end_of_SmsDR2                                           mediumconst  00EA69
-__end_of_SmsDR3                                           mediumconst  00EB3C
-__end_of_SmsDR4                                           mediumconst  00EAD5
+__end_of_SmsDR1                                           mediumconst  00EA2A
+__end_of_SmsDR2                                           mediumconst  00EA9F
+__end_of_SmsDR3                                           mediumconst  00EB6C
+__end_of_SmsDR4                                           mediumconst  00EB08
 __end_of_SmsFact1                                         mediumconst  00F572
-__end_of_SmsFert1                                         mediumconst  00EDD4
-__end_of_SmsFert2                                         mediumconst  00EFE1
-__end_of_SmsFert3                                         mediumconst  00F3AA
-__end_of_SmsFert4                                         mediumconst  00F344
-__end_of_SmsFert5                                         mediumconst  00F388
-__end_of_SmsFert6                                         mediumconst  00F366
-__end_of_SmsFert7                                         mediumconst  00ED4F
-__end_of_SmsFert8                                         mediumconst  00EE88
+__end_of_SmsFert1                                         mediumconst  00EDEF
+__end_of_SmsFert2                                         mediumconst  00EFF3
+__end_of_SmsFert3                                         mediumconst  00F372
+__end_of_SmsFert4                                         mediumconst  00F350
+__end_of_SmsFert5                                         mediumconst  00F451
+__end_of_SmsFert6                                         mediumconst  00F432
+__end_of_SmsFert7                                         mediumconst  00EDAF
+__end_of_SmsFert8                                         mediumconst  00EF12
 __end_of_SmsFilt1                                         mediumconst  00F4FB
 __end_of_SmsFilt2                                         mediumconst  00F4AA
-__end_of_SmsFilt3                                         mediumconst  00F44E
+__end_of_SmsFilt3                                         mediumconst  00F3D4
 __end_of_SmsFilt4                                         mediumconst  00F4E0
-__end_of_SmsIrr1                                          mediumconst  00F2FE
-__end_of_SmsIrr10                                         mediumconst  00F2DA
-__end_of_SmsIrr2                                          mediumconst  00F13F
-__end_of_SmsIrr3                                          mediumconst  00F26D
-__end_of_SmsIrr4                                          mediumconst  00F42E
-__end_of_SmsIrr5                                          mediumconst  00F40D
-__end_of_SmsIrr6                                          mediumconst  00EEC4
+__end_of_SmsIrr1                                          mediumconst  00F30A
+__end_of_SmsIrr10                                         mediumconst  00F2E6
+__end_of_SmsIrr2                                          mediumconst  00F151
+__end_of_SmsIrr3                                          mediumconst  00F254
+__end_of_SmsIrr4                                          mediumconst  00F48D
+__end_of_SmsIrr5                                          mediumconst  00F46F
+__end_of_SmsIrr6                                          mediumconst  00EF4B
 __end_of_SmsIrr7                                          mediumconst  00F590
-__end_of_SmsIrr8                                          mediumconst  00F047
-__end_of_SmsIrr9                                          mediumconst  00F014
-__end_of_SmsMS1                                           mediumconst  00EE10
-__end_of_SmsMS2                                           mediumconst  00F1CB
-__end_of_SmsMS3                                           mediumconst  00F245
-__end_of_SmsMotor1                                        mediumconst  00EF39
-__end_of_SmsMotor2                                        mediumconst  00F321
-__end_of_SmsMotor3                                        mediumconst  00F19D
-__end_of_SmsMotor4                                        mediumconst  00F10F
-__end_of_SmsPh1                                           mediumconst  00F16E
-__end_of_SmsPh2                                           mediumconst  00ED94
-__end_of_SmsPh3                                           mediumconst  00E92C
-__end_of_SmsPh6                                           mediumconst  00E956
-__end_of_SmsPwd1                                          mediumconst  00F46E
-__end_of_SmsPwd2                                          mediumconst  00E943
+__end_of_SmsIrr8                                          mediumconst  00F059
+__end_of_SmsIrr9                                          mediumconst  00F026
+__end_of_SmsMS1                                           mediumconst  00EED9
+__end_of_SmsMS2                                           mediumconst  00F1DA
+__end_of_SmsMS3                                           mediumconst  00F279
+__end_of_SmsMotor1                                        mediumconst  00EEA0
+__end_of_SmsMotor2                                        mediumconst  00F32D
+__end_of_SmsMotor3                                        mediumconst  00F1AF
+__end_of_SmsMotor4                                        mediumconst  00F121
+__end_of_SmsPh1                                           mediumconst  00F180
+__end_of_SmsPh2                                           mediumconst  00ED6B
+__end_of_SmsPh3                                           mediumconst  00E968
+__end_of_SmsPh6                                           mediumconst  00E992
+__end_of_SmsPwd1                                          mediumconst  00F3F4
+__end_of_SmsPwd2                                          mediumconst  00E97F
 __end_of_SmsPwd3                                          mediumconst  00F512
-__end_of_SmsRTC1                                          mediumconst  00F0AC
-__end_of_SmsRTC2                                          mediumconst  00F1F4
-__end_of_SmsRTC3                                          mediumconst  00EFA9
-__end_of_SmsRTC4                                          mediumconst  00EF71
-__end_of_SmsSR01                                          mediumconst  00EE4C
-__end_of_SmsSR02                                          mediumconst  00EBDC
-__end_of_SmsSR03                                          mediumconst  00EC74
-__end_of_SmsSR04                                          mediumconst  00EC29
-__end_of_SmsSR05                                          mediumconst  00EB8E
-__end_of_SmsSR06                                          mediumconst  00ED08
-__end_of_SmsSR07                                          mediumconst  00ECBE
-__end_of_SmsSR08                                          mediumconst  00F292
-__end_of_SmsSR09                                          mediumconst  00F48D
-__end_of_SmsSR10                                          mediumconst  00F2B6
-__end_of_SmsSR11                                          mediumconst  00F21D
-__end_of_SmsSR12                                          mediumconst  00F3EC
-__end_of_SmsSR13                                          mediumconst  00F3CB
-__end_of_SmsSR14                                          mediumconst  00EEFF
-__end_of_SmsSR15                                          mediumconst  00F0DE
+__end_of_SmsRTC1                                          mediumconst  00F0BE
+__end_of_SmsRTC2                                          mediumconst  00F203
+__end_of_SmsRTC3                                          mediumconst  00EFBB
+__end_of_SmsRTC4                                          mediumconst  00EF83
+__end_of_SmsSR01                                          mediumconst  00EE2B
+__end_of_SmsSR02                                          mediumconst  00EC06
+__end_of_SmsSR03                                          mediumconst  00EC98
+__end_of_SmsSR04                                          mediumconst  00EC50
+__end_of_SmsSR05                                          mediumconst  00EBBB
+__end_of_SmsSR06                                          mediumconst  00ED26
+__end_of_SmsSR07                                          mediumconst  00ECDF
+__end_of_SmsSR08                                          mediumconst  00F29E
+__end_of_SmsSR09                                          mediumconst  00F413
+__end_of_SmsSR10                                          mediumconst  00F2C2
+__end_of_SmsSR11                                          mediumconst  00F22C
+__end_of_SmsSR12                                          mediumconst  00F3B4
+__end_of_SmsSR13                                          mediumconst  00F393
+__end_of_SmsSR14                                          mediumconst  00EE66
+__end_of_SmsSR15                                          mediumconst  00F0F0
 __end_of_SmsT1                                            mediumconst  00F4C5
 __end_of_SmsT2                                            mediumconst  00F581
 __end_of_SmsTest                                          mediumconst  00F552
@@ -1433,7 +1433,10 @@ __end_of_bcd2Decimal                                      text135      001698
 __end_of_calibrateMotorCurrent                            text42       019DEE
 __end_of_checkResetType                                   text60       01E4A4
 __end_of_checkSignalStrength                              text25       01AB80
-__end_of_cmti                                             mediumconst  00E964
+__end_of_clearDecodedString                               text103      001412
+__end_of_clearGsmResponse                                 text41       020000
+__end_of_clearStringToDecode                              text40       0013E0
+__end_of_cmti                                             mediumconst  00E9A0
 __end_of_configureController                              text55       01C654
 __end_of_configureGSM                                     text54       01DD68
 __end_of_countryCode                                      mediumconst  00F61D
@@ -1444,10 +1447,7 @@ __end_of_days                                             text2        01EA70
 __end_of_deActivateValve                                  text73       01E206
 __end_of_decimal2BCD                                      text39       0012D6
 __end_of_deepSleep                                        text45       01BF98
-__end_of_deleteDecodedString                              text103      001412
-__end_of_deleteGsmResponse                                text41       020000
 __end_of_deleteMsgFromSIMStorage                          text44       000F70
-__end_of_deleteStringToDecode                             text40       0013E0
 __end_of_deleteUserData                                   text24       0006BA
 __end_of_deleteValveData                                  text23       01CE4C
 __end_of_disable                                          mediumconst  00F5BC
@@ -1455,7 +1455,7 @@ __end_of_doDryRunAction                                   text51       017D10
 __end_of_doLowPhaseAction                                 text50       01D860
 __end_of_doPhaseFailureAction                             text49       01DBC6
 __end_of_dtoa                                             text78       01C93E
-__end_of_eepromAddress                                    mediumconst  00E913
+__end_of_eepromAddress                                    mediumconst  00E94F
 __end_of_eepromRead                                       text70       0015F0
 __end_of_eepromWrite                                      text109      00137A
 __end_of_enable                                           mediumconst  00F5DF
@@ -1477,7 +1477,7 @@ __end_of_getfreq                                          mediumconst  00F5A4
 __end_of_hardResetMenu                                    text18       018474
 __end_of_hold                                             mediumconst  00F60C
 __end_of_hook                                             mediumconst  00F611
-__end_of_idle                                             mediumconst  00E969
+__end_of_idle                                             mediumconst  00E9A5
 __end_of_inject                                           mediumconst  00F5D1
 __end_of_isBase64String                                   text37       001062
 __end_of_isFieldMoistureSensorWetLora                     text72       01FB4A
@@ -1510,7 +1510,7 @@ __end_of_main                                             text0        01D2BA
 __end_of_map                                              mediumconst  00F625
 __end_of_master                                           mediumconst  00F5CA
 __end_of_off                                              mediumconst  00F619
-__end_of_ok                                               mediumconst  00E96C
+__end_of_ok                                               mediumconst  00E9A8
 __end_of_on                                               mediumconst  00F62C
 __end_of_pad                                              text79       01F37C
 __end_of_phaseFailure                                     text15       000968
@@ -1582,7 +1582,7 @@ __end_of_txByte                                           text91       0016EC
 __end_of_txByteLora                                       text97       001706
 __end_of_vfpfcnvrt                                        text77       01D096
 __end_of_vfprintf                                         text76       000896
-__end_ofi1_deleteDecodedString                            text139      001444
+__end_ofi1_clearDecodedString                             text139      001444
 __end_ofi1_strncmp                                        text138      01E954
 __end_ofi2_LCDpulseEnableNeg                              text148      001614
 __end_ofi2_LCDwritePCF8574                                text149      00185C
@@ -1602,7 +1602,7 @@ __entrymodeset                                            bssCOMRAM    000008
 __functionset                                             bssBANK1     00012A
 __initialization                                          cinit        01F444
 __lcdBacklightval                                         bssCOMRAM    000005
-__mediumconst                                             mediumconst  00E8A6
+__mediumconst                                             mediumconst  00E8E2
 __numlines                                                bssCOMRAM    000006
 __pbssBANK0                                               bssBANK0     0000C7
 __pbssBANK1                                               bssBANK1     000100
@@ -1627,7 +1627,7 @@ __pidataBANK3                                             idataBANK3   01F05C
 __pintcode                                                intcode      000008
 __pintcode_body                                           intcode_body 01BF98
 __pintcodelo                                              intcodelo    000018
-__pmediumconst                                            mediumconst  00E8A6
+__pmediumconst                                            mediumconst  00E8E2
 __ptext0                                                  text0        01D096
 __ptext1                                                  text1        0168D2
 __ptext10                                                 text10       0014FE
@@ -1806,9 +1806,12 @@ _checkLoraConnection                                      bssBANK1     00012D
 _checkMoistureSensor                                      bssBANK1     000137
 _checkResetType                                           text60       01E36C
 _checkSignalStrength                                      text25       01A73E
+_clearDecodedString                                       text103      0013E0
+_clearGsmResponse                                         text41       01FFCA
+_clearStringToDecode                                      text40       0013AE
 _clock                                                    dataBANK1    0001F7
 _cmdRceived                                               bssBANK1     00012E
-_cmti                                                     mediumconst  00E956
+_cmti                                                     mediumconst  00E992
 _cmtiCmd                                                  bssBANK1     00012F
 _configureController                                      text55       01C34E
 _configureGSM                                             text54       01DBC6
@@ -1832,10 +1835,7 @@ _deActivateValve                                          text73       01E088
 _decimal2BCD                                              text39       001298
 _decodedString                                            bssBANK2     000218
 _deepSleep                                                text45       01BBC8
-_deleteDecodedString                                      text103      0013E0
-_deleteGsmResponse                                        text41       01FFCA
 _deleteMsgFromSIMStorage                                  text44       000F1E
-_deleteStringToDecode                                     text40       0013AE
 _deleteUserData                                           text24       000638
 _deleteValveData                                          text23       01CBF4
 _disable                                                  mediumconst  00F5B4
@@ -1851,7 +1851,7 @@ _dueDD                                                    bssBANK0     0000CF
 _dueMM                                                    bssBANK0     0000DA
 _dueValveChecked                                          bssBANK1     000133
 _dueYY                                                    bssBANK0     0000DB
-_eepromAddress                                            mediumconst  00E8E7
+_eepromAddress                                            mediumconst  00E923
 _eepromRead                                               text70       0015CA
 _eepromWrite                                              text109      001346
 _enable                                                   mediumconst  00F5D8
@@ -1894,7 +1894,7 @@ _higher8bits                                              bssBANK0     0000C9
 _hold                                                     mediumconst  00F607
 _hook                                                     mediumconst  00F60C
 _hundredsDigit                                            bssBANK1     00013B
-_idle                                                     mediumconst  00E964
+_idle                                                     mediumconst  00E9A0
 _inSleepMode                                              bssBANK1     000134
 _inject                                                   mediumconst  00F5CA
 _injector1Cycle                                           bssBANK1     000147
@@ -1968,7 +1968,7 @@ _noLoadCutOff                                             bssBANK1     000106
 _nout                                                     bssBANK1     000100
 _null                                                     bssBANK1     000162
 _off                                                      mediumconst  00F615
-_ok                                                       mediumconst  00E969
+_ok                                                       mediumconst  00E9A5
 _on                                                       mediumconst  00F629
 _onHold                                                   bssCOMRAM    00000E
 _pad                                                      text79       01F2B4
@@ -2145,7 +2145,7 @@ getDueDate@month                                          cstackBANK0  000082
 getDueDate@offset                                         cstackBANK0  000097
 getDueDate@remDays                                        cstackBANK0  000091
 getDueDate@yearDays                                       cstackBANK0  000095
-i1_deleteDecodedString                                    text139      001412
+i1_clearDecodedString                                     text139      001412
 i1_strncmp                                                text138      01E82E
 i1strncmp@_l                                              cstackBANK0  000060
 i1strncmp@_r                                              cstackBANK0  000062
@@ -2474,114 +2474,114 @@ C:\Program Files\Microchip\xc8\v2.35\pic\sources\c99\common\Umul32.c
 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c99\common\Umul32.c estimated size: 108
 
 shared
-		_SmsDR1        		MEDIUMCONST    	E96C	0000	133
-		_SmsSR11       		MEDIUMCONST    	F1F4	0000	41
-		_SmsIrr1       		MEDIUMCONST    	F2DA	0000	36
-		_SmsIrr10      		MEDIUMCONST    	F2B6	0000	36
+		_SmsDR1        		MEDIUMCONST    	E9A8	0000	130
+		_SmsSR11       		MEDIUMCONST    	F203	0000	41
+		_SmsIrr1       		MEDIUMCONST    	F2E6	0000	36
+		_SmsIrr10      		MEDIUMCONST    	F2C2	0000	36
 		_extract       		MEDIUMCONST    	F5A4	0000	8
 		_SmsT2         		MEDIUMCONST    	F572	0000	15
 		_SmsPwd3       		MEDIUMCONST    	F4FB	0000	23
-		_SmsDR4        		MEDIUMCONST    	EA69	0000	108
-		_SmsSR03       		MEDIUMCONST    	EC29	0000	75
+		_SmsDR4        		MEDIUMCONST    	EA9F	0000	105
+		_SmsSR03       		MEDIUMCONST    	EC50	0000	72
 		i2_lcdCreateChar		CODE           	1062	0000	78
 		i2_lcdSend     		CODE           	15A2	0000	40
 		i2_lcd_i2cWait 		CODE           	14D2	0000	44
 		i2_lcd_i2cStop 		CODE           	1828	0000	18
-		_SmsSR14       		MEDIUMCONST    	EEC4	0000	59
-		_SmsIrr4       		MEDIUMCONST    	F40D	0000	33
+		_SmsSR14       		MEDIUMCONST    	EE2B	0000	59
+		_SmsIrr4       		MEDIUMCONST    	F46F	0000	30
 		_map           		MEDIUMCONST    	F621	0000	4
 		_fdata         		MEDIUMCONST    	F5F7	0000	6
-		_SmsSR06       		MEDIUMCONST    	ECBE	0000	74
-		i1_deleteDecodedString		CODE           	1412	0000	50
+		_SmsSR06       		MEDIUMCONST    	ECDF	0000	71
 		i1_strncmp     		CODE           	1E82E	0000	294
 		_disable       		MEDIUMCONST    	F5B4	0000	8
 		_SmsIrr7       		MEDIUMCONST    	F581	0000	15
-		_SmsRTC2       		MEDIUMCONST    	F1CB	0000	41
+		_SmsRTC2       		MEDIUMCONST    	F1DA	0000	41
 		_getfreq       		MEDIUMCONST    	F59C	0000	8
 		_SmsTest       		MEDIUMCONST    	F53F	0000	19
-		_SmsPh2        		MEDIUMCONST    	ED4F	0000	69
-		_SmsSR09       		MEDIUMCONST    	F46E	0000	31
-		_SmsMotor1     		MEDIUMCONST    	EEFF	0000	58
-		_SmsMotor2     		MEDIUMCONST    	F2FE	0000	35
-		_SmsMotor3     		MEDIUMCONST    	F16E	0000	47
-		_SmsMotor4     		MEDIUMCONST    	F0DE	0000	49
+		_SmsPh2        		MEDIUMCONST    	ED26	0000	69
+		_SmsSR09       		MEDIUMCONST    	F3F4	0000	31
+		_SmsMotor1     		MEDIUMCONST    	EE66	0000	58
+		_SmsMotor2     		MEDIUMCONST    	F30A	0000	35
+		_SmsMotor3     		MEDIUMCONST    	F180	0000	47
+		_SmsMotor4     		MEDIUMCONST    	F0F0	0000	49
 		i2_lcd_i2cWrite		CODE           	1720	0000	26
 		i2_lcd_i2cStart		CODE           	183A	0000	18
 		_feed          		MEDIUMCONST    	F5FD	0000	5
 		_SmsFilt1      		MEDIUMCONST    	F4E0	0000	27
 		_SmsFilt2      		MEDIUMCONST    	F48D	0000	29
-		_SmsFilt3      		MEDIUMCONST    	F42E	0000	32
+		_SmsFilt3      		MEDIUMCONST    	F3B4	0000	32
 		_SmsFilt4      		MEDIUMCONST    	F4C5	0000	27
 		_active        		MEDIUMCONST    	F5D1	0000	7
 		_SmsAU1        		MEDIUMCONST    	F512	0000	23
 		_slave         		MEDIUMCONST    	F5EB	0000	6
-		_SmsAU4        		MEDIUMCONST    	E8A7	0000	64
-		_SmsMS2        		MEDIUMCONST    	F19D	0000	46
-		_SmsSR10       		MEDIUMCONST    	F292	0000	36
-		_SmsPwd2       		MEDIUMCONST    	E92C	0000	23
+		_SmsAU4        		MEDIUMCONST    	E8E3	0000	64
+		_SmsMS2        		MEDIUMCONST    	F1AF	0000	43
+		_SmsSR10       		MEDIUMCONST    	F29E	0000	36
+		_SmsPwd2       		MEDIUMCONST    	E968	0000	23
 		i2_lcdSetCursor		CODE           	0CC8	0000	90
-		_eepromAddress 		MEDIUMCONST    	E8E7	0000	44
-		_SmsDR2        		MEDIUMCONST    	E9F1	0000	120
-		_SmsSR02       		MEDIUMCONST    	EB8E	0000	78
+		_eepromAddress 		MEDIUMCONST    	E923	0000	44
+		_SmsDR2        		MEDIUMCONST    	EA2A	0000	117
+		_SmsSR02       		MEDIUMCONST    	EBBB	0000	75
 		_sensor        		MEDIUMCONST    	F5BC	0000	7
-		_SmsSR13       		MEDIUMCONST    	F3AA	0000	33
+		_SmsSR13       		MEDIUMCONST    	F372	0000	33
 		_enable        		MEDIUMCONST    	F5D8	0000	7
-		_SmsIrr3       		MEDIUMCONST    	F245	0000	40
+		_SmsIrr3       		MEDIUMCONST    	F22C	0000	40
 		_countryCode   		MEDIUMCONST    	F619	0000	4
 		_set           		MEDIUMCONST    	F625	0000	4
-		_SmsSR05       		MEDIUMCONST    	EB3C	0000	82
+		_SmsSR05       		MEDIUMCONST    	EB6C	0000	79
 		i2_lcdDataWrite		CODE           	1886	0000	14
 		_alive         		MEDIUMCONST    	F5DF	0000	6
-		_cmti          		MEDIUMCONST    	E956	0000	14
+		_cmti          		MEDIUMCONST    	E992	0000	14
 		__initialization		CODE           	1F444	0000	188
-		_SmsIrr6       		MEDIUMCONST    	EE88	0000	60
-		_SmsRTC1       		MEDIUMCONST    	F07A	0000	50
-		_SmsSR08       		MEDIUMCONST    	F26D	0000	37
+		_SmsIrr6       		MEDIUMCONST    	EF12	0000	57
+		_SmsRTC1       		MEDIUMCONST    	F08C	0000	50
+		_SmsSR08       		MEDIUMCONST    	F279	0000	37
 		_hook          		MEDIUMCONST    	F60C	0000	5
-		_SmsPh3        		MEDIUMCONST    	E913	0000	25
-		_ok            		MEDIUMCONST    	E969	0000	3
-		_SmsIrr9       		MEDIUMCONST    	EFE1	0000	51
-		_SmsRTC4       		MEDIUMCONST    	EF39	0000	56
-		_SmsPh6        		MEDIUMCONST    	E943	0000	19
+		_SmsPh3        		MEDIUMCONST    	E94F	0000	25
+		_ok            		MEDIUMCONST    	E9A5	0000	3
+		_SmsIrr9       		MEDIUMCONST    	EFF3	0000	51
+		_SmsRTC4       		MEDIUMCONST    	EF4B	0000	56
+		i1_clearDecodedString		CODE           	1412	0000	50
+		_SmsPh6        		MEDIUMCONST    	E97F	0000	19
 		_dactive       		MEDIUMCONST    	F5AC	0000	8
 		_ct            		MEDIUMCONST    	F62C	0000	3
 		_on            		MEDIUMCONST    	F629	0000	3
 		_SmsConnect    		MEDIUMCONST    	F552	0000	17
-		_SmsAU2        		MEDIUMCONST    	F047	0000	51
+		_SmsAU2        		MEDIUMCONST    	F059	0000	51
 		_error         		MEDIUMCONST    	F5E5	0000	6
-		_SmsFert1      		MEDIUMCONST    	ED94	0000	64
-		_SmsFert2      		MEDIUMCONST    	EFA9	0000	56
-		_SmsFert3      		MEDIUMCONST    	F388	0000	34
-		_SmsFert4      		MEDIUMCONST    	F321	0000	35
-		_SmsFert5      		MEDIUMCONST    	F366	0000	34
-		_SmsFert6      		MEDIUMCONST    	F344	0000	34
-		_SmsFert7      		MEDIUMCONST    	ED08	0000	71
-		_SmsFert8      		MEDIUMCONST    	EE4C	0000	60
-		_idle          		MEDIUMCONST    	E964	0000	5
-		_SmsMS3        		MEDIUMCONST    	F21D	0000	40
+		_SmsFert1      		MEDIUMCONST    	EDAF	0000	64
+		_SmsFert2      		MEDIUMCONST    	EFBB	0000	56
+		_SmsFert3      		MEDIUMCONST    	F350	0000	34
+		_SmsFert4      		MEDIUMCONST    	F32D	0000	35
+		_SmsFert5      		MEDIUMCONST    	F432	0000	31
+		_SmsFert6      		MEDIUMCONST    	F413	0000	31
+		_SmsFert7      		MEDIUMCONST    	ED6B	0000	68
+		_SmsFert8      		MEDIUMCONST    	EED9	0000	57
+		_idle          		MEDIUMCONST    	E9A0	0000	5
+		_SmsMS3        		MEDIUMCONST    	F254	0000	37
 		i2_lcdWriteChar		CODE           	18A2	0000	10
-		_SmsPwd1       		MEDIUMCONST    	F44E	0000	32
-		_SmsSR01       		MEDIUMCONST    	EE10	0000	60
+		_SmsPwd1       		MEDIUMCONST    	F3D4	0000	32
+		_SmsSR01       		MEDIUMCONST    	EDEF	0000	60
 		_inject        		MEDIUMCONST    	F5CA	0000	7
 		i2_lcdCommandWrite		CODE           	1894	0000	14
-		_SmsDR3        		MEDIUMCONST    	EAD5	0000	103
-		_SmsSR12       		MEDIUMCONST    	F3CB	0000	33
-		_SmsIrr2       		MEDIUMCONST    	F10F	0000	48
-		_SmsSR04       		MEDIUMCONST    	EBDC	0000	77
+		_SmsDR3        		MEDIUMCONST    	EB08	0000	100
+		_SmsSR12       		MEDIUMCONST    	F393	0000	33
+		_SmsIrr2       		MEDIUMCONST    	F121	0000	48
+		_SmsSR04       		MEDIUMCONST    	EC06	0000	74
 		i2_lcd_i2cWriteByteSingleReg		CODE           	1636	0000	34
 		_getct         		MEDIUMCONST    	F5F1	0000	6
-		_SmsSR15       		MEDIUMCONST    	F0AC	0000	50
+		_SmsSR15       		MEDIUMCONST    	F0BE	0000	50
 		_secret        		MEDIUMCONST    	F590	0000	12
-		_SmsIrr5       		MEDIUMCONST    	F3EC	0000	33
+		_SmsIrr5       		MEDIUMCONST    	F451	0000	30
 		_SmsFact1      		MEDIUMCONST    	F563	0000	15
 		_hold          		MEDIUMCONST    	F607	0000	5
 		_master        		MEDIUMCONST    	F5C3	0000	7
 		_ack           		MEDIUMCONST    	F611	0000	4
 		_off           		MEDIUMCONST    	F615	0000	4
-		_SmsSR07       		MEDIUMCONST    	EC74	0000	74
-		_SmsPh1        		MEDIUMCONST    	F13F	0000	47
-		_SmsIrr8       		MEDIUMCONST    	F014	0000	51
-		_SmsRTC3       		MEDIUMCONST    	EF71	0000	56
+		_SmsSR07       		MEDIUMCONST    	EC98	0000	71
+		_SmsPh1        		MEDIUMCONST    	F151	0000	47
+		_SmsIrr8       		MEDIUMCONST    	F026	0000	51
+		_SmsRTC3       		MEDIUMCONST    	EF83	0000	56
 		_admin         		MEDIUMCONST    	F62F	0000	3
 		_SmsT1         		MEDIUMCONST    	F4AA	0000	27
 		_setct         		MEDIUMCONST    	F61D	0000	4
@@ -2590,9 +2590,9 @@ shared
 		i2_LCDpulseEnableNeg		CODE           	15F0	0000	36
 		i2_lcdWrite4Bits		CODE           	17A4	0000	20
 		_SmsAU3        		MEDIUMCONST    	F529	0000	22
-		_SmsMS1        		MEDIUMCONST    	EDD4	0000	60
+		_SmsMS1        		MEDIUMCONST    	EEA0	0000	57
 
-shared estimated size: 4457
+shared estimated size: 4397
 
 ADC.c
 		_getADCResult  		CODE           	10B0	0000	72
@@ -2636,9 +2636,9 @@ controllerActions.c
 		_fetchFieldNo  		CODE           	1AFB8	0000	1066
 		_isRTCBatteryDrained		CODE           	1EB54	0000	220
 		_actionsOnSleepCountFinish		CODE           	140E6	0000	3846
+		_clearDecodedString		CODE           	13E0	0000	50
 		_actionsOnSystemReset		CODE           	15C94	0000	3134
 		_deepSleep     		CODE           	1BBC8	0000	976
-		_deleteDecodedString		CODE           	13E0	0000	50
 		_setFactoryPincode		CODE           	1FC7C	0000	144
 		_calibrateMotorCurrent		CODE           	198C2	0000	1324
 		_strcpyCustom  		CODE           	1FBE8	0000	148
@@ -2646,9 +2646,9 @@ controllerActions.c
 		_doPhaseFailureAction		CODE           	1DA18	0000	430
 		_randomPasswordGeneration		CODE           	1FB4A	0000	158
 		_configureController		CODE           	1C34E	0000	774
+		_clearGsmResponse		CODE           	1FFCA	0000	54
 		_deActivateValve		CODE           	1E088	0000	382
 		_getDateFromGSM		CODE           	1D4B0	0000	496
-		_deleteGsmResponse		CODE           	1FFCA	0000	54
 		_powerOffMotor 		CODE           	1F50A	0000	198
 		_actionsOnDueValve		CODE           	18B72	0000	1786
 		_checkResetType		CODE           	1E36C	0000	312
@@ -2656,10 +2656,10 @@ controllerActions.c
 		_scanValveScheduleAndGetSleepCount		CODE           	168D2	0000	2742
 		_extractReceivedSms		CODE           	10000	0000	12164
 		_isBase64String		CODE           	1014	0000	78
+		_clearStringToDecode		CODE           	13AE	0000	50
 		_phaseFailure  		CODE           	0902	0000	102
 		_getDueDate    		CODE           	19DEE	0000	1212
 		_activateValve 		CODE           	1A2AA	0000	1172
-		_deleteStringToDecode		CODE           	13AE	0000	50
 		_hardResetMenu 		CODE           	17D10	0000	1892
 		_powerOnMotor  		CODE           	1F696	0000	184
 

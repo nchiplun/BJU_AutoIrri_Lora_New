@@ -24768,25 +24768,25 @@ const char SmsPwd1[32] = "Login code changed successfully";
 const char SmsPwd2[23] = "Login code not changed";
 const char SmsPwd3[23] = "Wrong login code found";
 
-const char SmsIrr1[36] = "Irrigation configured for field no.";
-const char SmsIrr2[48] = "Irrigation configuration disabled for field no.";
-const char SmsIrr3[40] = "Irrigation not configured for field no.";
-const char SmsIrr4[33] = "Irrigation started for field no.";
-const char SmsIrr5[33] = "Irrigation stopped for field no.";
-const char SmsIrr6[60] = "Wet field detected.\r\nIrrigation not started for field no.";
+const char SmsIrr1[36] = "Irrigation configured for priority ";
+const char SmsIrr2[48] = "Irrigation configuration disabled for priority ";
+const char SmsIrr3[40] = "Irrigation not configured for priority ";
+const char SmsIrr4[30] = "Irrigation started for field ";
+const char SmsIrr5[30] = "Irrigation stopped for field ";
+const char SmsIrr6[57] = "Wet field detected.\r\nIrrigation not started for field ";
 const char SmsIrr7[15] = "Irrigation No:";
 const char SmsIrr8[51] = "Irrigation skipped with no response from field no:";
 const char SmsIrr9[51] = "Irrigation stopped without response from field no.";
 const char SmsIrr10[36] = "Irrigation field mapped with valves";
 
-const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for field no.";
-const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for field no.";
-const char SmsFert3[34] = "Fertigation enabled for field no.";
-const char SmsFert4[35] = "Fertigation disabled for field no.";
-const char SmsFert5[34] = "Fertigation started for field no.";
-const char SmsFert6[34] = "Fertigation stopped for field no.";
-const char SmsFert7[71] = "Fertigation stopped with fertilizer level sensor failure for field no.";
-const char SmsFert8[60] = "Fertigation stopped with low fertilizer level for field no.";
+const char SmsFert1[64] = "Irrigation is not Active. Fertigation not enabled for priority ";
+const char SmsFert2[56] = "Incorrect values. Fertigation not enabled for priority ";
+const char SmsFert3[34] = "Fertigation enabled for priority ";
+const char SmsFert4[35] = "Fertigation disabled for priority ";
+const char SmsFert5[31] = "Fertigation started for field ";
+const char SmsFert6[31] = "Fertigation stopped for field ";
+const char SmsFert7[68] = "Fertigation stopped with fertilizer level sensor failure for field ";
+const char SmsFert8[57] = "Fertigation stopped with low fertilizer level for field ";
 
 const char SmsFilt1[27] = "Water filtration activated";
 const char SmsFilt2[29] = "Water filtration deactivated";
@@ -24794,12 +24794,12 @@ const char SmsFilt3[32] = "Water Filtration is not enabled";
 const char SmsFilt4[27] = "Water Filtration Sequence:";
 
 const char SmsSR01[60] = "System restarted with phase failure, suspending all actions";
-const char SmsSR02[78] = "System restarted for Power Interrupt with incomplete Irrigation for field no.";
-const char SmsSR03[75] = "System restarted for Low Power In with incomplete Irrigation for field no.";
-const char SmsSR04[77] = "System restarted in Diagnostic Mode with incomplete Irrigation for field no.";
-const char SmsSR05[82] = "System restarted for All Phase Detection with incomplete Irrigation for field no.";
-const char SmsSR06[74] = "System restarted for WDT Timeout with incomplete Irrigation for field no.";
-const char SmsSR07[74] = "System restarted for Stack Error with incomplete Irrigation for field no.";
+const char SmsSR02[75] = "System restarted for Power Interrupt with incomplete Irrigation for field ";
+const char SmsSR03[72] = "System restarted for Low Power In with incomplete Irrigation for field ";
+const char SmsSR04[74] = "System restarted in Diagnostic Mode with incomplete Irrigation for field ";
+const char SmsSR05[79] = "System restarted for All Phase Detection with incomplete Irrigation for field ";
+const char SmsSR06[71] = "System restarted for WDT Timeout with incomplete Irrigation for field ";
+const char SmsSR07[71] = "System restarted for Stack Error with incomplete Irrigation for field ";
 const char SmsSR08[37] = "System restarted for Power Interrupt";
 const char SmsSR09[31] = "System restarted for Low Power";
 const char SmsSR10[36] = "System restarted in Diagnostic mode";
@@ -24814,10 +24814,10 @@ const char SmsRTC2[41] = "System time synced to current local time";
 const char SmsRTC3[56] = "New RTC battery found, system time is set to local time";
 const char SmsRTC4[56] = "New RTC battery found, please sync system time manually";
 
-const char SmsDR1[133] = "Dry Run detected, Motor, Irrigation and Fertigation switched off.\r\nIrrigation scheduled to next day with fertigation for field no.";
-const char SmsDR2[120] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day with fertigation for field no.";
-const char SmsDR3[103] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day for field no.";
-const char SmsDR4[108] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next due date for field no.";
+const char SmsDR1[130] = "Dry Run detected, Motor, Irrigation and Fertigation switched off.\r\nIrrigation scheduled to next day with fertigation for field ";
+const char SmsDR2[117] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day with fertigation for field ";
+const char SmsDR3[100] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next day for field ";
+const char SmsDR4[105] = "Dry Run detected, Motor and Irrigation switched off.\r\nIrrigation scheduled to next due date for field ";
 
 const char SmsT1[27] = "Incorrect local time found";
 const char SmsT2[15] = "Current Time: ";
@@ -24840,9 +24840,9 @@ const char SmsPh3[25] = "Phase loss detected";
 
 const char SmsPh6[19] = "All Phase detected";
 
-const char SmsMS1[60] = "Moisture sensor is failed, Irrigation started for field no.";
-const char SmsMS2[46] = "Moisture sensor frequency value for field no.";
-const char SmsMS3[40] = "Moisture sensor is failed for field no.";
+const char SmsMS1[57] = "Moisture sensor is failed, Irrigation started for field ";
+const char SmsMS2[43] = "Moisture sensor frequency value for field ";
+const char SmsMS3[37] = "Moisture sensor is failed for field ";
 
 
 
@@ -24928,9 +24928,9 @@ char *strcpyCustom(char *restrict dest, const char *restrict src);
 void deleteUserData(void);
 void deleteValveData(void);
 void randomPasswordGeneration(void);
-void deleteGsmResponse(void);
-void deleteStringToDecode(void);
-void deleteDecodedString(void);
+void clearGsmResponse(void);
+void clearStringToDecode(void);
+void clearDecodedString(void);
 void hardResetMenu(void);
 unsigned char checkResetType(void);
 void setFactoryPincode(void);
@@ -25519,14 +25519,14 @@ void extractReceivedSms(void) {
 
         if (strncmp((char*)(gsmResponse + 21),(char*)(countryCode),(3)) == 0) {
             strncpy((char*)(temporaryBytesArray),(char*)(gsmResponse + 24),(10));
-            deleteStringToDecode();
+            clearStringToDecode();
 
 
             strcpyCustom((char *) stringToDecode, (const char *) gsmResponse + 63);
 # 691 "controllerActions.c"
-            deleteGsmResponse();
+            clearGsmResponse();
             if (isBase64String((unsigned char *) stringToDecode)) {
-                deleteDecodedString();
+                clearDecodedString();
                 base64Decoder();
             } else {
 
@@ -26542,7 +26542,7 @@ void extractReceivedSms(void) {
                 return;
             }
         } else {
-            deleteGsmResponse();
+            clearGsmResponse();
 
             _delay((unsigned long)((1000)*(64000000/4000.0)));
 
@@ -26554,7 +26554,7 @@ void extractReceivedSms(void) {
             return;
         }
     } else {
-        deleteGsmResponse();
+        clearGsmResponse();
 
         _delay((unsigned long)((2000)*(64000000/4000.0)));
 
@@ -27339,7 +27339,7 @@ void activateValve(unsigned char FieldNo) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveIrrigationValveOnOffStatusIntoEeprom(eepromAddress[FieldNo], &fieldValve[FieldNo]);
         _delay((unsigned long)((100)*(64000000/4000.0)));
-# 3328 "controllerActions.c"
+# 3329 "controllerActions.c"
         if (moistureSensorFailed) {
             moistureSensorFailed = 0;
 
@@ -27355,7 +27355,7 @@ void activateValve(unsigned char FieldNo) {
 
 
             sendSms(SmsMS1, userMobileNo, 2);
-# 3351 "controllerActions.c"
+# 3352 "controllerActions.c"
         } else {
 
             lcdClearLine(2);
@@ -27370,7 +27370,7 @@ void activateValve(unsigned char FieldNo) {
 
 
             sendSms(SmsIrr4, userMobileNo, 2);
-# 3373 "controllerActions.c"
+# 3374 "controllerActions.c"
         }
     } else {
         valveDue = 0;
@@ -27390,7 +27390,7 @@ void activateValve(unsigned char FieldNo) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveIrrigationValveDueTimeIntoEeprom(eepromAddress[FieldNo], &fieldValve[FieldNo]);
         _delay((unsigned long)((100)*(64000000/4000.0)));
-# 3406 "controllerActions.c"
+# 3407 "controllerActions.c"
         lcdClearLine(2);
         lcdClearLine(3);
         lcdClearLine(4);
@@ -27403,7 +27403,7 @@ void activateValve(unsigned char FieldNo) {
 
 
         sendSms(SmsIrr8, userMobileNo, 2);
-# 3426 "controllerActions.c"
+# 3427 "controllerActions.c"
     }
 
 
@@ -27411,7 +27411,7 @@ void activateValve(unsigned char FieldNo) {
 
 
 }
-# 3444 "controllerActions.c"
+# 3445 "controllerActions.c"
 void deActivateValve(unsigned char FieldNo) {
 
 
@@ -27425,10 +27425,10 @@ void deActivateValve(unsigned char FieldNo) {
     do {
         sendCmdToLora(action, FieldNo);
     } while (loraAttempt < 2);
-# 3469 "controllerActions.c"
+# 3471 "controllerActions.c"
  sprintf(temporaryBytesArray,"%d",FieldNo+1);
     if (!LoraConnectionFailed && loraAttempt == 99) {
-# 3482 "controllerActions.c"
+# 3484 "controllerActions.c"
         lcdClearLine(2);
         lcdClearLine(3);
         lcdClearLine(4);
@@ -27440,7 +27440,7 @@ void deActivateValve(unsigned char FieldNo) {
         lcdWriteStringIndex(temporaryBytesArray,2);
 
         sendSms(SmsIrr5, userMobileNo, 2);
-# 3501 "controllerActions.c"
+# 3503 "controllerActions.c"
     } else {
 
 
@@ -27455,7 +27455,7 @@ void deActivateValve(unsigned char FieldNo) {
         lcdWriteStringIndex(temporaryBytesArray,2);
 
         sendSms(SmsIrr9, userMobileNo, 2);
-# 3523 "controllerActions.c"
+# 3525 "controllerActions.c"
     }
 
 
@@ -27463,7 +27463,7 @@ void deActivateValve(unsigned char FieldNo) {
 
 
 }
-# 3541 "controllerActions.c"
+# 3543 "controllerActions.c"
 void deepSleep(void) {
 
     while (sleepCount > 0 && !newSMSRcvd) {
@@ -27573,7 +27573,7 @@ void deepSleep(void) {
     inSleepMode = 0;
 
 }
-# 3661 "controllerActions.c"
+# 3663 "controllerActions.c"
 void configureController(void) {
 
     BSR = 0x0f;
@@ -27832,7 +27832,7 @@ void configureController(void) {
     _delay((unsigned long)((3000)*(64000000/4000.0)));
 
 }
-# 3929 "controllerActions.c"
+# 3931 "controllerActions.c"
 void setFactoryPincode(void) {
     readDeviceProgramStatusFromEeprom();
     _delay((unsigned long)((50)*(64000000/4000.0)));
@@ -27850,7 +27850,7 @@ void setFactoryPincode(void) {
         saveDeviceProgramStatusIntoEeprom();
     }
 }
-# 3957 "controllerActions.c"
+# 3959 "controllerActions.c"
 unsigned char checkResetType(void) {
     unsigned char resetType = 0;
 
@@ -27886,7 +27886,7 @@ unsigned char checkResetType(void) {
     }
     return resetType;
 }
-# 4003 "controllerActions.c"
+# 4005 "controllerActions.c"
 void hardResetMenu() {
 
     lcdClear();
@@ -27986,7 +27986,7 @@ void hardResetMenu() {
                 msgIndex = 0;
 
                 sendSms(SmsMotor3, userMobileNo, 5);
-# 4115 "controllerActions.c"
+# 4117 "controllerActions.c"
                 break;
             case 2:
                 resetCount = 0x00;
@@ -28000,7 +28000,7 @@ void hardResetMenu() {
                 msgIndex = 0;
 
                 sendSms(SmsMotor3, userMobileNo, 5);
-# 4141 "controllerActions.c"
+# 4143 "controllerActions.c"
                 break;
             case 3:
                 resetCount = 0x00;
@@ -28096,7 +28096,7 @@ void hardResetMenu() {
         saveResetCountIntoEeprom();
     }
 }
-# 4247 "controllerActions.c"
+# 4249 "controllerActions.c"
 void actionsOnSystemReset(void) {
     unsigned char resetType = 0;
 
@@ -28221,7 +28221,7 @@ void actionsOnSystemReset(void) {
             }
             if (valveDue) {
                 dueValveChecked = 1;
-# 4383 "controllerActions.c"
+# 4385 "controllerActions.c"
     sprintf(temporaryBytesArray,"%d",iterator+1);
                 switch (resetType) {
                     case 1:
@@ -28310,7 +28310,7 @@ void actionsOnSystemReset(void) {
                     break;
                 }
                 resetType = 0;
-# 4485 "controllerActions.c"
+# 4487 "controllerActions.c"
                 sleepCount = readActiveSleepCountFromEeprom();
             } else {
                 switch (resetType) {
@@ -28334,7 +28334,7 @@ void actionsOnSystemReset(void) {
                         break;
                 }
                 resetType = 0;
-# 4522 "controllerActions.c"
+# 4524 "controllerActions.c"
             }
         }
     }
@@ -28348,7 +28348,7 @@ void actionsOnSystemReset(void) {
 
 
         sendSms(SmsRTC1, userMobileNo, 0);
-# 4543 "controllerActions.c"
+# 4545 "controllerActions.c"
         if (gsmSetToLocalTime) {
             getDateFromGSM();
             _delay((unsigned long)((1000)*(64000000/4000.0)));
@@ -28375,7 +28375,7 @@ void actionsOnSystemReset(void) {
 
 
             sendSms(SmsRTC3, userMobileNo, 0);
-# 4577 "controllerActions.c"
+# 4579 "controllerActions.c"
         } else {
 
             lcdClearLine(2);
@@ -28387,11 +28387,11 @@ void actionsOnSystemReset(void) {
 
 
             sendSms(SmsRTC4, userMobileNo, 0);
-# 4596 "controllerActions.c"
+# 4598 "controllerActions.c"
         }
     }
 }
-# 4609 "controllerActions.c"
+# 4611 "controllerActions.c"
 void actionsOnSleepCountFinish(void) {
     unsigned char field_No = 0;
     if (valveDue && sleepCount == 0 && !dryRunDetected && !phaseFailureDetected && !onHold && !lowPhaseCurrentDetected) {
@@ -28468,7 +28468,7 @@ void actionsOnSleepCountFinish(void) {
                 _delay((unsigned long)((100)*(64000000/4000.0)));
                 saveActiveSleepCountIntoEeprom();
                 _delay((unsigned long)((100)*(64000000/4000.0)));
-# 4701 "controllerActions.c"
+# 4704 "controllerActions.c"
                 lcdClearLine(2);
                 lcdClearLine(3);
                 lcdClearLine(4);
@@ -28479,7 +28479,7 @@ void actionsOnSleepCountFinish(void) {
                 lcdWriteStringIndex(temporaryBytesArray,2);
 
                 sendSms(SmsFert5, userMobileNo, 2);
-# 4720 "controllerActions.c"
+# 4723 "controllerActions.c"
                 break;
             }
             else if (fieldValve[field_No].status == 1 && fieldValve[field_No].isFertigationEnabled && fieldValve[field_No].fertigationStage == 2) {
@@ -28507,7 +28507,7 @@ void actionsOnSleepCountFinish(void) {
                 _delay((unsigned long)((100)*(64000000/4000.0)));
                 saveActiveSleepCountIntoEeprom();
                 _delay((unsigned long)((100)*(64000000/4000.0)));
-# 4759 "controllerActions.c"
+# 4763 "controllerActions.c"
                 if (fertigationDry) {
                     fertigationDry = 0;
 
@@ -28523,7 +28523,7 @@ void actionsOnSleepCountFinish(void) {
                     lcdWriteStringIndex(temporaryBytesArray,2);
 
                     sendSms(SmsFert8, userMobileNo, 2);
-# 4783 "controllerActions.c"
+# 4787 "controllerActions.c"
                     break;
                 } else if (moistureSensorFailed) {
                     moistureSensorFailed = 0;
@@ -28540,7 +28540,7 @@ void actionsOnSleepCountFinish(void) {
 
 
                     sendSms(SmsFert7, userMobileNo, 2);
-# 4808 "controllerActions.c"
+# 4812 "controllerActions.c"
                     break;
                 } else {
 
@@ -28555,7 +28555,7 @@ void actionsOnSleepCountFinish(void) {
 
 
                     sendSms(SmsFert6, userMobileNo, 2);
-# 4831 "controllerActions.c"
+# 4835 "controllerActions.c"
                     break;
                 }
             }
@@ -28654,7 +28654,7 @@ void actionsOnSleepCountFinish(void) {
         }
     }
 }
-# 4939 "controllerActions.c"
+# 4943 "controllerActions.c"
 void actionsOnDueValve(unsigned char field_No) {
     unsigned char last_Field_No = 0;
     wetSensor = 0;
@@ -28678,7 +28678,7 @@ void actionsOnDueValve(unsigned char field_No) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
         saveIrrigationValveDueTimeIntoEeprom(eepromAddress[field_No], &fieldValve[field_No]);
         _delay((unsigned long)((100)*(64000000/4000.0)));
-# 4978 "controllerActions.c"
+# 4983 "controllerActions.c"
         lcdClearLine(2);
         lcdClearLine(3);
         lcdClearLine(4);
@@ -28690,7 +28690,7 @@ void actionsOnDueValve(unsigned char field_No) {
         lcdWriteStringIndex(temporaryBytesArray,2);
 
         sendSms(SmsIrr6, userMobileNo, 2);
-# 4997 "controllerActions.c"
+# 5002 "controllerActions.c"
     }
     else {
         _delay((unsigned long)((100)*(64000000/4000.0)));
@@ -28758,7 +28758,7 @@ void actionsOnDueValve(unsigned char field_No) {
                     PORTFbits.RF6 = 1;
                     injector4OnPeriodCnt++;
                 }
-# 5079 "controllerActions.c"
+# 5085 "controllerActions.c"
                 lcdClearLine(2);
                 lcdClearLine(3);
                 lcdClearLine(4);
@@ -28769,7 +28769,7 @@ void actionsOnDueValve(unsigned char field_No) {
                 lcdWriteStringIndex(temporaryBytesArray,2);
 
                 sendSms(SmsFert5, userMobileNo, 2);
-# 5099 "controllerActions.c"
+# 5105 "controllerActions.c"
             } else if (valveExecuted) {
                 last_Field_No = readFieldIrrigationValveNoFromEeprom();
                 if (last_Field_No != field_No) {
@@ -28794,7 +28794,7 @@ void actionsOnDueValve(unsigned char field_No) {
         }
     }
 }
-# 5134 "controllerActions.c"
+# 5140 "controllerActions.c"
 void deleteUserData(void) {
 
     lcdClear();
@@ -28803,7 +28803,7 @@ void deleteUserData(void) {
 
 
     sendSms(SmsSR14, userMobileNo, 0);
-# 5150 "controllerActions.c"
+# 5156 "controllerActions.c"
     systemAuthenticated = 0;
     saveAuthenticationStatus();
     for (iterator = 0; iterator < 10; iterator++) {
@@ -28811,7 +28811,7 @@ void deleteUserData(void) {
     }
     saveMobileNoIntoEeprom();
 }
-# 5168 "controllerActions.c"
+# 5174 "controllerActions.c"
 void deleteValveData(void) {
 
     lcdClear();
@@ -28820,7 +28820,7 @@ void deleteValveData(void) {
 
 
     sendSms(SmsSR15, userMobileNo, 0);
-# 5184 "controllerActions.c"
+# 5190 "controllerActions.c"
     filtrationDelay1 = 0;
     filtrationDelay2 = 0;
     filtrationDelay3 = 0;
@@ -28849,7 +28849,7 @@ void deleteValveData(void) {
         _delay((unsigned long)((100)*(64000000/4000.0)));
     }
 }
-# 5222 "controllerActions.c"
+# 5228 "controllerActions.c"
 void randomPasswordGeneration(void) {
 
 
@@ -28866,8 +28866,8 @@ void randomPasswordGeneration(void) {
     }
     factryPswrd[6] = '\0';
 }
-# 5247 "controllerActions.c"
-void deleteGsmResponse(void) {
+# 5253 "controllerActions.c"
+void clearGsmResponse(void) {
 
 
 
@@ -28886,8 +28886,8 @@ void deleteGsmResponse(void) {
 
 
 }
-# 5275 "controllerActions.c"
-void deleteStringToDecode(void) {
+# 5281 "controllerActions.c"
+void clearStringToDecode(void) {
 
 
 
@@ -28905,8 +28905,8 @@ void deleteStringToDecode(void) {
 
 
 }
-# 5302 "controllerActions.c"
-void deleteDecodedString(void) {
+# 5308 "controllerActions.c"
+void clearDecodedString(void) {
 
 
 

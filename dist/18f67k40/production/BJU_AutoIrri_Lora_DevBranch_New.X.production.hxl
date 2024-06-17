@@ -13,7 +13,7 @@
   8h - Dh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
   18h - 1752h		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
   1754h - 18ADh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
-  E8A6h - FFFEh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
+  E8E2h - FFFEh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
   10000h - 1FFFFh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
   200000h - 20000Fh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
   300000h - 30000Bh		(dist/18f67k40/production\BJU_AutoIrri_Lora_DevBranch_New.X.production.hex)
@@ -22,7 +22,7 @@
   4h - 7h
   Eh - 17h
   1753h - 1753h
-  18AEh - E8A5h
+  18AEh - E8E1h
   FFFFh - FFFFh
   20000h - 1FFFFFh
   200010h - 2FFFFFh
@@ -431,11 +431,7 @@
 00001890 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 000018A0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 -- --
 ----------------------------------------------------------
-0000E8A0 | -- -- -- -- -- -- H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
-0000E8B0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
-0000E8C0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
-0000E8D0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
-0000E8E0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+0000E8E0 | -- -- H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 0000E8F0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 0000E900 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 0000E910 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1

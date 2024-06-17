@@ -168,7 +168,7 @@ void __interrupt(low_priority) timerInterrupt_handler(void) {
                 dryRunCheckCount++;
             }
             if (strncmp(decodedString+1, alive, 5) == 0 && strncmp(decodedString+6, slave, 5) == 0) {
-                deleteDecodedString();
+                clearDecodedString();
                 loraAliveCount++;  //increment for each alive message               
             }
             if (loraAliveCountCheck <= loraAliveCount+1) { // check if alive count for each sleep is incremented

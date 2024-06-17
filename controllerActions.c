@@ -304,10 +304,10 @@ nxtCycle:
             /*** Due date is over passed without taking action on valves ***/
             // if year over passes || if month  over passes || if day over passes || if hour over passes ||if minute over passes
             if ((currentYY > fieldValve[iterator].nextDueYY) || (currentMM > fieldValve[iterator].nextDueMM && currentYY == fieldValve[iterator].nextDueYY) || (currentDD > fieldValve[iterator].nextDueDD && currentMM == fieldValve[iterator].nextDueMM && currentYY == fieldValve[iterator].nextDueYY) || (currentHour > fieldValve[iterator].motorOnTimeHour && currentDD == fieldValve[iterator].nextDueDD && currentMM == fieldValve[iterator].nextDueMM && currentYY == fieldValve[iterator].nextDueYY) || (currentMinutes >= fieldValve[iterator].motorOnTimeMinute && currentHour == fieldValve[iterator].motorOnTimeHour && currentDD == fieldValve[iterator].nextDueDD && currentMM == fieldValve[iterator].nextDueMM && currentYY == fieldValve[iterator].nextDueYY)) {
-                valveDue = true; // Set Value Due
+                valveDue = true; // Set Valve Due
                 break;
             } else if (fieldValve[iterator].cyclesExecuted < fieldValve[iterator].cycles) {
-                valveDue = true; // Set Value Due
+                valveDue = true; // Set Valve Due
                 break;
             }// Due Date is yet to come find the sleep count to reach the Due date	
             else {
@@ -676,7 +676,7 @@ void extractReceivedSms(void) {
         // ADD indication if infinite
         if (strncmp(gsmResponse + 21, countryCode, 3) == 0) {
             strncpy(temporaryBytesArray, gsmResponse + 24, 10); // Save received sender no. as temp user
-            deleteStringToDecode();
+            clearStringToDecode();
             /*Decode received  Base64 format message*/
 #ifdef Encryption_ON_H
             strcpyCustom((char *) stringToDecode, (const char *) gsmResponse + 63);
@@ -688,12 +688,12 @@ void extractReceivedSms(void) {
             transmitStringToDebug("\r\n");
             //********Debug log#end**************//
 #endif
-            deleteGsmResponse();
+            clearGsmResponse();
             if (isBase64String((unsigned char *) stringToDecode)) {
-                deleteDecodedString();
+                clearDecodedString();
                 base64Decoder();
             } else {
-                //deleteGsmResponse();
+                //clearGsmResponse();
                 //setBCDdigit(0x05, 0); // (5.) BCD indication for Incorrect SMS format
                 __delay_ms(2000);
                 /***************************/
@@ -2113,7 +2113,7 @@ void extractReceivedSms(void) {
                 return;
             }
         } else {
-            deleteGsmResponse();
+            clearGsmResponse();
             //setBCDdigit(0x07, 0); // (7.) BCD indication for sms from non gsm no.
             __delay_ms(1000);
             /***************************/
@@ -2125,7 +2125,7 @@ void extractReceivedSms(void) {
             return;
         }
     } else {
-        deleteGsmResponse();
+        clearGsmResponse();
         //setBCDdigit(0x08, 0); // (8.) BCD indication for Incorrect SMS storage no.
         __delay_ms(2000);
         /***************************/
@@ -3316,6 +3316,7 @@ void activateValve(unsigned char FieldNo) {
             temporaryBytesArray[0] = 49; // To store field no. of valve in action 
             temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
         }
+        */ 
         /***************************/
 #ifdef DEBUG_MODE_ON_H
         //********Debug log#start************//
@@ -3400,7 +3401,7 @@ void activateValve(unsigned char FieldNo) {
         else if (FieldNo > 8 && FieldNo < fieldCount) {
             temporaryBytesArray[0] = 49; // To store field no. of valve in action 
             temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
-        }
+        }*/
         /***************************/        
 #ifdef LCD_DISPLAY_ON_H        
         lcdClearLine(2);
@@ -3465,6 +3466,7 @@ void deActivateValve(unsigned char FieldNo) {
         temporaryBytesArray[0] = 49; // To store field no. of valve in action 
         temporaryBytesArray[1] = FieldNo + 39; // To store field no. of valve in action 
     }
+    */ 
     /***************************/
 	sprintf(temporaryBytesArray,"%d",FieldNo+1);
     if (!LoraConnectionFailed && loraAttempt == 99) { // Successful Valve DeActivation
@@ -4694,6 +4696,7 @@ void actionsOnSleepCountFinish(void) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                 }
+                */ 
                 /***************************/
 
                 /***************************/
@@ -4755,6 +4758,7 @@ void actionsOnSleepCountFinish(void) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                 }
+                */ 
                 /***************************/
                 if (fertigationDry) { // Fertigation executed with low fertigation level  detection
                     fertigationDry = false;
@@ -4971,6 +4975,7 @@ void actionsOnDueValve(unsigned char field_No) {
             temporaryBytesArray[0] = 49; // To store field no. of valve in action 
             temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
         }
+        */ 
         /***************************/
 
         /***************************/
@@ -5072,6 +5077,7 @@ void actionsOnDueValve(unsigned char field_No) {
                     temporaryBytesArray[0] = 49; // To store field no. of valve in action 
                     temporaryBytesArray[1] = field_No + 39; // To store field no. of valve in action 
                 }
+                */ 
                 /***************************/
 
                 /***************************/
@@ -5207,7 +5213,7 @@ void deleteValveData(void) {
         __delay_ms(100);
         saveFertigationValveValuesIntoEeprom(eepromAddress[iterator], &fieldValve[iterator]);
         __delay_ms(100);
-    }
+    }					  
 }
 /*************deleteValveDataOnRequest#End**********/
 
@@ -5219,7 +5225,7 @@ This function is called to generate 6 digit password
 The purpose of this function is to randomly generate password of length 6
 
  ***************************************************************************************************************************/
-void randomPasswordGeneration(void) {
+void randomPasswordGeneration(void) {					  
     // Seed the random-number generator
     // with current time so that the
     // numbers will be different every time
@@ -5233,22 +5239,22 @@ void randomPasswordGeneration(void) {
     for (iterator = 0; iterator < 6; iterator++) {
         factryPswrd[iterator] = numbers[rand() % 10];
     }
-    factryPswrd[6] = '\0';
+    factryPswrd[6] = '\0';					  
 }
 
-/*************delete gsmResponse string#Start**********/
+/*************clear gsmResponse string#Start**********/
 
 /*************************************************************************************************************************
 
-This function is called to delete gsm response string
+This function is called to clear gsm response string
 The purpose of this function is to enter null values in gsm response
 
  ***************************************************************************************************************************/
-void deleteGsmResponse(void) {
+void clearGsmResponse(void) {
     /***************************/
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
-    transmitStringToDebug("deleteGsmResponse_IN\r\n");
+    transmitStringToDebug("clearGsmResponse_IN\r\n");
     //********Debug log#end**************//
 #endif
     // Iterate over the range [0, N]
@@ -5259,24 +5265,24 @@ void deleteGsmResponse(void) {
     /***************************/
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
-    transmitStringToDebug("deleteGsmResponse_OUT\r\n");
+    transmitStringToDebug("clearGsmResponse_OUT\r\n");
     //********Debug log#end**************//
 #endif
 }
 
-/*************delete StringToDecode string#Start**********/
+/*************clear StringToDecode string#Start**********/
 
 /*************************************************************************************************************************
 
-This function is called to delete stringToDecode  string
+This function is called to clear stringToDecode  string
 The purpose of this function is to enter null values in stringToDecode
 
  ***************************************************************************************************************************/
-void deleteStringToDecode(void) {
+void clearStringToDecode(void) {
     /***************************/
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
-    transmitStringToDebug("deleteStringToDecode_IN\r\n");
+    transmitStringToDebug("clearStringToDecode_IN\r\n");
     //********Debug log#end**************//
 #endif
     // Iterate over the range [0, N]
@@ -5286,24 +5292,24 @@ void deleteStringToDecode(void) {
     /***************************/
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
-    transmitStringToDebug("deleteStringToDecode_OUT\r\n");
+    transmitStringToDebug("clearStringToDecode_OUT\r\n");
     //********Debug log#end**************//
 #endif
 }
 
-/*************delete Decoded string#Start**********/
+/*************clear Decoded string#Start**********/
 
 /*************************************************************************************************************************
 
-This function is called to delete Decoded string
+This function is called to clear Decoded string
 The purpose of this function is to enter null values in Decoded string
 
  ***************************************************************************************************************************/
-void deleteDecodedString(void) {
+void clearDecodedString(void) {
     /***************************/
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
-    transmitStringToDebug("deleteDecodedString_IN\r\n");
+    transmitStringToDebug("clearDecodedString_IN\r\n");
     //********Debug log#end**************//
 #endif
     // Iterate over the range [0, N]
@@ -5313,7 +5319,7 @@ void deleteDecodedString(void) {
     /***************************/
 #ifdef DEBUG_MODE_ON_H
     //********Debug log#start************//
-    transmitStringToDebug("deleteDecodedString_OUT\r\n");
+    transmitStringToDebug("clearDecodedString_OUT\r\n");
     //********Debug log#end**************//
 #endif
 }

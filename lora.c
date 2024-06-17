@@ -187,7 +187,7 @@ void sendCmdToLora(unsigned char Action, unsigned char FieldNo) {
         //********Debug log#end**************//
         #endif
     }
-    deleteDecodedString(); // delete received lora response after processing
+    clearDecodedString(); // delete received lora response after processing
     //setBCDdigit(0x0F,0); // Blank "." BCD Indication for Normal Condition
     __delay_ms(500);
     

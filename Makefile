@@ -51,7 +51,7 @@ RANLIB=ranlib
 
 Major = 0
 Minor1= 8
-Minor2= 2
+Minor2= 4
 
 
 # build

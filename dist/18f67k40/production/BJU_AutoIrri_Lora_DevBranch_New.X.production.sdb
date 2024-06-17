@@ -118,37 +118,37 @@
 [v _powerOffMotor powerOffMotor `(v  1 e 1 0 ]
 "3285
 [v _activateValve activateValve `(v  1 e 1 0 ]
-"3444
+"3445
 [v _deActivateValve deActivateValve `(v  1 e 1 0 ]
-"3541
+"3543
 [v _deepSleep deepSleep `(v  1 e 1 0 ]
-"3661
+"3663
 [v _configureController configureController `(v  1 e 1 0 ]
-"3929
+"3931
 [v _setFactoryPincode setFactoryPincode `(v  1 e 1 0 ]
-"3957
+"3959
 [v _checkResetType checkResetType `(uc  1 e 1 0 ]
-"4003
+"4005
 [v _hardResetMenu hardResetMenu `(v  1 e 1 0 ]
-"4247
+"4249
 [v _actionsOnSystemReset actionsOnSystemReset `(v  1 e 1 0 ]
-"4609
+"4611
 [v _actionsOnSleepCountFinish actionsOnSleepCountFinish `(v  1 e 1 0 ]
-"4939
+"4943
 [v _actionsOnDueValve actionsOnDueValve `(v  1 e 1 0 ]
-"5134
+"5140
 [v _deleteUserData deleteUserData `(v  1 e 1 0 ]
-"5168
+"5174
 [v _deleteValveData deleteValveData `(v  1 e 1 0 ]
-"5222
+"5228
 [v _randomPasswordGeneration randomPasswordGeneration `(v  1 e 1 0 ]
-"5247
-[v _deleteGsmResponse deleteGsmResponse `(v  1 e 1 0 ]
-"5275
-[v _deleteStringToDecode deleteStringToDecode `(v  1 e 1 0 ]
-"5302
-[v _deleteDecodedString deleteDecodedString `(v  1 e 1 0 ]
-[v i1_deleteDecodedString deleteDecodedString `(v  1 e 1 0 ]
+"5253
+[v _clearGsmResponse clearGsmResponse `(v  1 e 1 0 ]
+"5281
+[v _clearStringToDecode clearStringToDecode `(v  1 e 1 0 ]
+"5308
+[v _clearDecodedString clearDecodedString `(v  1 e 1 0 ]
+[v i1_clearDecodedString clearDecodedString `(v  1 e 1 0 ]
 "91 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\dataEncryption.c
 [v _base64Decoder base64Decoder `(v  1 e 1 0 ]
 "27 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\eeprom.c
@@ -565,11 +565,11 @@
 "421
 [v _SmsIrr3 SmsIrr3 `C[40]uc  1 e 40 0 ]
 "422
-[v _SmsIrr4 SmsIrr4 `C[33]uc  1 e 33 0 ]
+[v _SmsIrr4 SmsIrr4 `C[30]uc  1 e 30 0 ]
 "423
-[v _SmsIrr5 SmsIrr5 `C[33]uc  1 e 33 0 ]
+[v _SmsIrr5 SmsIrr5 `C[30]uc  1 e 30 0 ]
 "424
-[v _SmsIrr6 SmsIrr6 `C[60]uc  1 e 60 0 ]
+[v _SmsIrr6 SmsIrr6 `C[57]uc  1 e 57 0 ]
 "425
 [v _SmsIrr7 SmsIrr7 `C[15]uc  1 e 15 0 ]
 "426
@@ -587,13 +587,13 @@
 "433
 [v _SmsFert4 SmsFert4 `C[35]uc  1 e 35 0 ]
 "434
-[v _SmsFert5 SmsFert5 `C[34]uc  1 e 34 0 ]
+[v _SmsFert5 SmsFert5 `C[31]uc  1 e 31 0 ]
 "435
-[v _SmsFert6 SmsFert6 `C[34]uc  1 e 34 0 ]
+[v _SmsFert6 SmsFert6 `C[31]uc  1 e 31 0 ]
 "436
-[v _SmsFert7 SmsFert7 `C[71]uc  1 e 71 0 ]
+[v _SmsFert7 SmsFert7 `C[68]uc  1 e 68 0 ]
 "437
-[v _SmsFert8 SmsFert8 `C[60]uc  1 e 60 0 ]
+[v _SmsFert8 SmsFert8 `C[57]uc  1 e 57 0 ]
 "439
 [v _SmsFilt1 SmsFilt1 `C[27]uc  1 e 27 0 ]
 "440
@@ -605,17 +605,17 @@
 "444
 [v _SmsSR01 SmsSR01 `C[60]uc  1 e 60 0 ]
 "445
-[v _SmsSR02 SmsSR02 `C[78]uc  1 e 78 0 ]
+[v _SmsSR02 SmsSR02 `C[75]uc  1 e 75 0 ]
 "446
-[v _SmsSR03 SmsSR03 `C[75]uc  1 e 75 0 ]
+[v _SmsSR03 SmsSR03 `C[72]uc  1 e 72 0 ]
 "447
-[v _SmsSR04 SmsSR04 `C[77]uc  1 e 77 0 ]
+[v _SmsSR04 SmsSR04 `C[74]uc  1 e 74 0 ]
 "448
-[v _SmsSR05 SmsSR05 `C[82]uc  1 e 82 0 ]
+[v _SmsSR05 SmsSR05 `C[79]uc  1 e 79 0 ]
 "449
-[v _SmsSR06 SmsSR06 `C[74]uc  1 e 74 0 ]
+[v _SmsSR06 SmsSR06 `C[71]uc  1 e 71 0 ]
 "450
-[v _SmsSR07 SmsSR07 `C[74]uc  1 e 74 0 ]
+[v _SmsSR07 SmsSR07 `C[71]uc  1 e 71 0 ]
 "451
 [v _SmsSR08 SmsSR08 `C[37]uc  1 e 37 0 ]
 "452
@@ -641,13 +641,13 @@
 "463
 [v _SmsRTC4 SmsRTC4 `C[56]uc  1 e 56 0 ]
 "465
-[v _SmsDR1 SmsDR1 `C[133]uc  1 e 133 0 ]
+[v _SmsDR1 SmsDR1 `C[130]uc  1 e 130 0 ]
 "466
-[v _SmsDR2 SmsDR2 `C[120]uc  1 e 120 0 ]
+[v _SmsDR2 SmsDR2 `C[117]uc  1 e 117 0 ]
 "467
-[v _SmsDR3 SmsDR3 `C[103]uc  1 e 103 0 ]
+[v _SmsDR3 SmsDR3 `C[100]uc  1 e 100 0 ]
 "468
-[v _SmsDR4 SmsDR4 `C[108]uc  1 e 108 0 ]
+[v _SmsDR4 SmsDR4 `C[105]uc  1 e 105 0 ]
 "470
 [v _SmsT1 SmsT1 `C[27]uc  1 e 27 0 ]
 "471
@@ -671,11 +671,11 @@
 "485
 [v _SmsPh2 SmsPh2 `C[69]uc  1 e 69 0 ]
 "491
-[v _SmsMS1 SmsMS1 `C[60]uc  1 e 60 0 ]
+[v _SmsMS1 SmsMS1 `C[57]uc  1 e 57 0 ]
 "492
-[v _SmsMS2 SmsMS2 `C[46]uc  1 e 46 0 ]
+[v _SmsMS2 SmsMS2 `C[43]uc  1 e 43 0 ]
 "493
-[v _SmsMS3 SmsMS3 `C[40]uc  1 e 40 0 ]
+[v _SmsMS3 SmsMS3 `C[37]uc  1 e 37 0 ]
 "498
 [v _gsmResponse gsmResponse `[200]uc  1 e 200 0 ]
 "499
@@ -1996,14 +1996,14 @@
 [v days@mm mm `uc  1 a 1 51 ]
 "441
 } 0
-"4247
+"4249
 [v _actionsOnSystemReset actionsOnSystemReset `(v  1 e 1 0 ]
 {
-"4261
+"4263
 [v actionsOnSystemReset@i i `uc  1 a 1 21 ]
-"4248
+"4250
 [v actionsOnSystemReset@resetType resetType `uc  1 a 1 22 ]
-"4598
+"4600
 } 0
 "161 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\gsm.c
 [v _setGsmToLocalTime setGsmToLocalTime `(v  1 e 1 0 ]
@@ -2014,10 +2014,10 @@
 [v setGsmToLocalTime@i i `i  1 a 2 56 ]
 "213
 } 0
-"3929 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"3931 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _setFactoryPincode setFactoryPincode `(v  1 e 1 0 ]
 {
-"3945
+"3947
 } 0
 "557 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\eeprom.c
 [v _saveFactryPswrdIntoEeprom saveFactryPswrdIntoEeprom `(v  1 e 1 0 ]
@@ -2034,14 +2034,14 @@
 {
 "755
 } 0
-"5222 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"5228 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _randomPasswordGeneration randomPasswordGeneration `(v  1 e 1 0 ]
 {
-"5230
+"5236
 [v randomPasswordGeneration@numbers numbers `[11]uc  1 a 11 51 ]
-"5227
+"5233
 [v randomPasswordGeneration@F15323 F15323 `[11]uc  1 s 11 F15323 ]
-"5237
+"5243
 } 0
 "6 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c99\common\rand.c
 [v _srand srand `(v  1 e 1 0 ]
@@ -2095,10 +2095,10 @@
 {
 "890
 } 0
-"4003 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"4005 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _hardResetMenu hardResetMenu `(v  1 e 1 0 ]
 {
-"4235
+"4237
 } 0
 "609 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\eeprom.c
 [v _saveResetCountIntoEeprom saveResetCountIntoEeprom `(v  1 e 1 0 ]
@@ -2123,15 +2123,15 @@
 {
 "707
 } 0
-"5168 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"5174 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _deleteValveData deleteValveData `(v  1 e 1 0 ]
 {
-"5211
+"5217
 } 0
-"5134
+"5140
 [v _deleteUserData deleteUserData `(v  1 e 1 0 ]
 {
-"5156
+"5162
 } 0
 "663 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\gsm.c
 [v _checkSignalStrength checkSignalStrength `(v  1 e 1 0 ]
@@ -2248,15 +2248,15 @@
 [v decimal2BCD@decimal decimal `uc  1 a 1 49 ]
 "68
 } 0
-"5275 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
-[v _deleteStringToDecode deleteStringToDecode `(v  1 e 1 0 ]
+"5281 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+[v _clearStringToDecode clearStringToDecode `(v  1 e 1 0 ]
 {
-"5292
+"5298
 } 0
-"5247
-[v _deleteGsmResponse deleteGsmResponse `(v  1 e 1 0 ]
+"5253
+[v _clearGsmResponse clearGsmResponse `(v  1 e 1 0 ]
 {
-"5265
+"5271
 } 0
 "2435
 [v _calibrateMotorCurrent calibrateMotorCurrent `(v  1 e 1 0 ]
@@ -2295,10 +2295,10 @@
 {
 "234
 } 0
-"3541 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"3543 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _deepSleep deepSleep `(v  1 e 1 0 ]
 {
-"3649
+"3651
 } 0
 "2363
 [v _isMotorInNoLoad isMotorInNoLoad `(a  1 e 1 0 ]
@@ -2362,10 +2362,10 @@
 {
 "129
 } 0
-"3661 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"3663 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _configureController configureController `(v  1 e 1 0 ]
 {
-"3918
+"3920
 } 0
 "172 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\i2c_LCD_PCF8574.c
 [v _lcdInit lcdInit `(v  1 e 1 0 ]
@@ -2387,19 +2387,19 @@
 {
 "266
 } 0
-"3957 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"3959 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _checkResetType checkResetType `(uc  1 e 1 0 ]
 {
-"3958
+"3960
 [v checkResetType@resetType resetType `uc  1 a 1 25 ]
-"3991
+"3993
 } 0
-"4609
+"4611
 [v _actionsOnSleepCountFinish actionsOnSleepCountFinish `(v  1 e 1 0 ]
 {
-"4610
+"4612
 [v actionsOnSleepCountFinish@field_No field_No `uc  1 a 1 102 ]
-"4928
+"4932
 } 0
 "898 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\eeprom.c
 [v _saveIrrigationValveNoIntoEeprom saveIrrigationValveNoIntoEeprom `(v  1 e 1 0 ]
@@ -2441,17 +2441,17 @@
 {
 "811
 } 0
-"4939 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+"4943 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
 [v _actionsOnDueValve actionsOnDueValve `(v  1 e 1 0 ]
 {
 [v actionsOnDueValve@field_No field_No `uc  1 a 1 wreg ]
-"4940
+"4944
 [v actionsOnDueValve@last_Field_No last_Field_No `uc  1 a 1 19 ]
-"4939
+"4943
 [v actionsOnDueValve@field_No field_No `uc  1 a 1 wreg ]
-"4941
+"4945
 [v actionsOnDueValve@field_No field_No `uc  1 a 1 20 ]
-"5122
+"5128
 } 0
 "957 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\eeprom.c
 [v _readFieldIrrigationValveNoFromEeprom readFieldIrrigationValveNoFromEeprom `(uc  1 e 1 0 ]
@@ -2483,17 +2483,17 @@
 [v isFieldMoistureSensorWetLora@FieldNo FieldNo `uc  1 a 1 58 ]
 "2348
 } 0
-"3444
+"3445
 [v _deActivateValve deActivateValve `(v  1 e 1 0 ]
 {
 [v deActivateValve@FieldNo FieldNo `uc  1 a 1 wreg ]
-"3451
-[v deActivateValve@action action `uc  1 a 1 2 ]
-"3444
-[v deActivateValve@FieldNo FieldNo `uc  1 a 1 wreg ]
 "3452
+[v deActivateValve@action action `uc  1 a 1 2 ]
+"3445
+[v deActivateValve@FieldNo FieldNo `uc  1 a 1 wreg ]
+"3453
 [v deActivateValve@FieldNo FieldNo `uc  1 a 1 3 ]
-"3529
+"3531
 } 0
 "3285
 [v _activateValve activateValve `(v  1 e 1 0 ]
@@ -2505,7 +2505,7 @@
 [v activateValve@FieldNo FieldNo `uc  1 a 1 wreg ]
 "3292
 [v activateValve@FieldNo FieldNo `uc  1 a 1 5 ]
-"3432
+"3433
 } 0
 "9 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c99\common\nf_sprintf.c
 [v _sprintf sprintf `(i  1 e 2 0 ]
@@ -2799,10 +2799,10 @@
 [v ___wmul@multiplicand multiplicand `ui  1 p 2 27 ]
 "53
 } 0
-"5302 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
-[v _deleteDecodedString deleteDecodedString `(v  1 e 1 0 ]
+"5308 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+[v _clearDecodedString clearDecodedString `(v  1 e 1 0 ]
 {
-"5319
+"5325
 } 0
 "7 C:\Program Files\Microchip\xc8\v2.35\pic\sources\c99\common\lwdiv.c
 [v ___lwdiv __lwdiv `(ui  1 e 2 0 ]
@@ -3112,10 +3112,10 @@
 [v i1strncmp@n n `ui  1 p 2 4 ]
 "9
 } 0
-"5302 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
-[v i1_deleteDecodedString deleteDecodedString `(v  1 e 1 0 ]
+"5308 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\controllerActions.c
+[v i1_clearDecodedString clearDecodedString `(v  1 e 1 0 ]
 {
-"5319
+"5325
 } 0
 "38 D:\BJU\MPLabXProjects\ProductionCode\BJU_AutoIrri_Lora_DevBranch_New.X\main_1.c
 [v _rxANDiocInterrupt_handler rxANDiocInterrupt_handler `IIH(v  1 e 1 0 ]
